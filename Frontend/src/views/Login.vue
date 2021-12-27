@@ -4,14 +4,14 @@
       <div class="login-form">
         <div class="main-div">
           <div class="panel">
-            <div id="nav">
-              <router-link to="/">
+            <!-- <div id="nav">
+              <router-link to="/login">
                 <div class="conexionBar test hover">Connexion</div>
               </router-link>
               <router-link to="/signup">
                 <div class="conexionBar hover">Inscription</div>
               </router-link>
-            </div>
+            </div> -->
           </div>
           <div class="contenerInput">
             <form id="Login">
@@ -110,11 +110,10 @@ export default {
 .contenerInput {
   background: #ffffff none repeat scroll 0 0;
   border-radius: 2px;
-  margin: 10px auto 30px;
-
-  padding: 20px 50px 50px 51px;
+  padding: 30px;
 }
 body#LoginForm {
+  margin-top: 50px;
   background-image: url("https://hdwallsource.com/img/2014/9/blur-26347-27038-hd-wallpapers.jpg");
   background-repeat: no-repeat;
   background-position: center;
@@ -196,5 +195,3 @@ body#LoginForm {
   text-decoration: none;
 }
 </style>
-
-<style lang="scss"></style>

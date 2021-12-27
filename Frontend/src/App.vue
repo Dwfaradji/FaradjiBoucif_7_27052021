@@ -1,10 +1,22 @@
 <template>
-  <div id="nav">
+  <div id="app" class="container-fluid"> 
+      <Header />
     <!-- <router-link to="/">Connexion</router-link> |
     <router-link to="/signup">Inscription</router-link> -->
+    <router-view />
   </div>
-  <router-view />
+  
 </template>
+
+<script >
+
+import Header from './components/Header';
+export default {
+  components: {
+    Header
+  }}
+
+</script>
 
 <style lang="scss">
 #app {

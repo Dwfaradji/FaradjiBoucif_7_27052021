@@ -4,14 +4,6 @@
       <div class="login-form">
         <div class="main-div">
           <div class="panel">
-            <div id="nav">
-              <router-link to="/">
-                <div class="conexionBar test hover">Connexion</div>
-              </router-link>
-              <router-link to="/signup">
-                <div class="conexionBar hover">Inscription</div>
-              </router-link>
-            </div>
           </div>
           <div class="contenerInput">
             <form id="Login">
@@ -59,7 +51,7 @@
               <p>
                 <small>
                   Vous avez déjà un compte,
-                  <router-link to="/">Connecter-vous</router-link>
+                  <router-link to="/login">Connecter-vous</router-link>
                 </small>
               </p>
               <button

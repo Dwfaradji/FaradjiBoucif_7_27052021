@@ -17,31 +17,68 @@ export default {
   }}
 
 </script>
+<style >
 
-<style lang="scss">
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  max-width: 100%;
+}
+body {
+  background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding:32px;
+}
+img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+.card {
+  max-width: 100%;
+  width: 540px;
+  background:white;
+  border-radius: 16px;
+  padding:32px;
+}
+.card__title {
+  text-align:center;
+  font-weight: 800;
+}
+.card__subtitle {
   text-align: center;
-  color: #2c3e50;
+  color:#666;
+  font-weight: 500;
 }
-
-#nav {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  border-bottom: 1px solid black;
-  width: 100%;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    text-decoration: none;
-
-    &.router-link-exact-active {
-      color: #f50324;
-    }
+  .button {
+    background: #2196F3;
+    color:white;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 15px;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    transition: .4s background-color;
   }
-}
+  .card__action {
+    color:#2196F3;
+    text-decoration: underline;
+  }
+  .card__action:hover {
+    cursor:pointer;
+  }
+  .button:hover {
+    cursor:pointer;
+    background: #1976D2;
+  }
+  .button--disabled {
+    background:#cecece;
+    color:#ececec
+  }
+  .button--disabled:hover {
+    cursor:not-allowed;
+    background:#cecece;
+  }
 </style>

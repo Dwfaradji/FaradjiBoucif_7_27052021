@@ -1,197 +1,171 @@
 <template>
-  <body id="LoginForm">
-    <div class="container">
-      <div class="login-form">
-        <div class="main-div">
-          <div class="panel">
-            <!-- <div id="nav">
-              <router-link to="/login">
-                <div class="conexionBar test hover">Connexion</div>
-              </router-link>
-              <router-link to="/signup">
-                <div class="conexionBar hover">Inscription</div>
-              </router-link>
-            </div> -->
-          </div>
-          <div class="contenerInput">
-            <form id="Login">
-              <div class="form-group">
-                <input
-                  type="email"
-                  class="form-control"
-                  id="inputEmail"
-                  placeholder="Adresse email"
-                  v-model="dataLogin.email"
-                />
-              </div>
+  <div class="card">
+    <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
+    <h1 class="card__title" v-else>Inscription</h1>
+    <p class="card__subtitle" v-if="mode == 'login'">
+      Tu n'as pas encore de compte ?
 
-              <div class="form-group">
-                <input
-                  type="password"
-                  class="form-control"
-                  id="inputPassword"
-                  placeholder="Mot de passe"
-                  v-model="dataLogin.password"
-                />
-              </div>
-              <div class="forgot">
-                <a href="reset.html">Mot de passe oublié ?</a>
-              </div>
-              <p>
-                <small>
-                  Vous n'avez pas encore de compte,
-                  <router-link to="/signup">Enregistrez-vous</router-link>
-                </small>
-              </p>
-
-              <button
-                @click.prevent="logIn"
-                type="submit"
-                class="btn btn-primary"
-              >
-                Se Connecter
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+      <span class="card__action" @click="switchToCreateAccount()"
+        >Créer un compte</span
+      >
+    </p>
+    <p class="card__subtitle" v-else>
+      Tu as déjà un compte ?
+      <span class="card__action" @click="switchToLogin()">Se connecter</span>
+    </p>
+    <div class="form-row">
+      <input
+        v-model="email"
+        class="form-row__input"
+        type="text"
+        placeholder="Adresse mail"
+      />
     </div>
-  </body>
+    <div class="form-row" v-if="mode == 'create'">
+      <input
+        v-model="prenom"
+        class="form-row__input"
+        type="text"
+        placeholder="Prénom"
+      />
+      <input
+        v-model="nom"
+        class="form-row__input"
+        type="text"
+        placeholder="Nom"
+      />
+    </div>
+    <div class="form-row">
+      <input
+        v-model="password"
+        class="form-row__input"
+        type="password"
+        placeholder="Mot de passe"
+      />
+    </div>
+    <div class="form-row" v-if="mode == `login` && status == `error_login`">
+      Adresse mail et/ou mot de passe incorrect
+    </div>
+    <div class="form-row">
+      <button
+        @click="login()"
+        class="button"
+        :class="{ 'button--disabled': !validatedFields }"
+        v-if="mode == `login`"
+      >
+        <span v-if="status == `loading`">Connexion en cours....</span>
+        <span v-else> Connexion</span>
+      </button>
+      <button
+        @click="createAccount()"
+        class="button"
+        :class="{ 'button--disabled': !validatedFields }"
+        v-else
+      >
+        S'inscrire
+      </button>
+    </div>
+  </div>
 </template>
+
 <script>
-import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
-  data() {
+  name: "Login",
+  data: function () {
     return {
-      dataLogin: {
-        email: null,
-        password: null,
-      },
-      msg: "",
+      mode: "login",
+      email: "",
+      prenom: "",
+      nom: "",
+      password: "",
     };
   },
   computed: {
-    ...mapState(["user"]),
+    validatedFields: function () {
+      if (this.mode == "create") {
+        if (
+          this.email != "" &&
+          this.prenom != "" &&
+          this.nom != "" &&
+          this.password != ""
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (this.email != "" && this.password != "") {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
+    ...mapState(["status"]),
   },
   methods: {
-    logIn() {
-      if (
-        //TO DO : Vérifier par Regex
-        this.dataLogin.email !== null ||
-        this.dataLogin.password !== null
-      ) {
-        axios
-          .post("http://localhost:3000/api/user/login", this.dataLogin)
-          .then((response) => {
-            localStorage.setItem("token", response.data.token);
-            location.replace(location.origin);
-          })
-          .catch((error) => console.log(error));
-      } else {
-        console.log("oops !");
-      }
+    switchToCreateAccount: function () {
+      this.mode = "create";
+    },
+    switchToLogin: function () {
+      this.mode = "login";
+    },
+    createAccount: function () {
+      console.log(this.email, this.nom, this.prenom, this.password);
+      this.$store
+        .dispatch("createAccount", {
+          email: this.email,
+          nom: this.nom,
+          prenom: this.prenom,
+          password: this.password,
+        })
+        .then(function (response) {
+          console.log(response);
+        }),
+        function (error) {
+          console.log(error);
+        };
+    },
+    login: function () {
+      const self = this;
+      console.log(this.email, this.password);
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then(function () {
+          self.$router.push("/wall/");
+        }),
+        function (error) {
+          console.log(error);
+        };
     },
   },
 };
 </script>
 
-<style lang="scss">
-.test {
-  border-right: 1px solid black;
+<style scoped>
+.form-row {
+  display: flex;
+  margin: 16px 0px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.hover:hover {
-  background-color: rgb(206, 206, 206);
+.form-row__input {
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #f2f2f2;
+  font-weight: 500;
+  font-size: 16px;
+  flex: 1;
+  min-width: 100px;
+  color: black;
 }
-.conexionBar {
-  padding: 10px;
-}
-.contenerInput {
-  background: #ffffff none repeat scroll 0 0;
-  border-radius: 2px;
-  padding: 30px;
-}
-body#LoginForm {
-  margin-top: 50px;
-  background-image: url("https://hdwallsource.com/img/2014/9/blur-26347-27038-hd-wallpapers.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  padding: 10px;
-}
-
-.form-heading {
-  color: #fff;
-  font-size: 23px;
-}
-.panel h2 {
-  color: #444444;
-  font-size: 18px;
-  margin: 0 0 8px 0;
-}
-.panel p {
-  color: #777777;
-  font-size: 14px;
-
-  line-height: 24px;
-}
-.login-form .form-control {
-  background: #f7f7f7 none repeat scroll 0 0;
-  border: 1px solid #d4d4d4;
-  border-radius: 4px;
-  font-size: 14px;
-  height: 50px;
-  line-height: 50px;
-}
-.main-div {
-  background: #ffffff none repeat scroll 0 0;
-  border-radius: 2px;
-  margin: 10px auto 30px;
-  max-width: 38%;
-  box-shadow: 15px 15px 15px;
-}
-
-.login-form .form-group {
-  margin-bottom: 10px;
-}
-.login-form {
-  text-align: center;
-}
-.forgot a {
-  color: #777777;
-  font-size: 14px;
-  text-decoration: underline;
-}
-.login-form .btn.btn-primary {
-  background: #f0ad4e none repeat scroll 0 0;
-  border-color: #f0ad4e;
-  color: #ffffff;
-  font-size: 14px;
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
-  padding: 0;
-}
-.forgot {
-  text-align: left;
-  margin-bottom: 30px;
-}
-.botto-text {
-  color: #ffffff;
-  font-size: 14px;
-  margin: auto;
-}
-.login-form .btn.btn-primary.reset {
-  background: #ff9900 none repeat scroll 0 0;
-}
-.back {
-  text-align: left;
-  margin-top: 10px;
-}
-.back a {
-  color: #444444;
-  font-size: 13px;
-  text-decoration: none;
+.form-row__input::placeholder {
+  color: #aaaaaa;
 }
 </style>

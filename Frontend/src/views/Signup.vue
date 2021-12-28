@@ -3,8 +3,7 @@
     <div class="container">
       <div class="login-form">
         <div class="main-div">
-          <div class="panel">
-          </div>
+          <div class="panel"></div>
           <div class="contenerInput">
             <form id="Login">
               <div class="form-group">
@@ -67,18 +66,12 @@
       </div>
     </div>
   </body>
-
-  <!-- <div
-      className="password-conf error"
-      ref="{refSignupPasswordConfirmationError}"
-    ></div> -->
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { mapState } from "vuex";
+<script >
+// import { mapState } from "vuex";
 import axios from "axios";
-@Options({
+export default {
   data() {
     return {
       dataSignup: {
@@ -86,7 +79,6 @@ import axios from "axios";
         lastName: null,
         email: null,
         password: null,
-        confirmPassword: null,
       },
     };
   },
@@ -99,9 +91,9 @@ import axios from "axios";
     msg: String,
     name: String,
   },
-  computed: {
-    ...mapState(["user"]),
-  },
+  // computed: {
+  //   ...mapState(["user"]),
+  // },
   methods: {
     sendSignup() {
       const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
@@ -113,6 +105,7 @@ import axios from "axios";
           this.dataSignup.lastName !== null ||
           this.dataSignup.email !== null ||
           this.dataSignup.password !== null) &&
+
         usernameRegex.test(this.dataSignup.firstName) &&
         usernameRegex.test(this.dataSignup.lastName) &&
         regexEmail.test(this.dataSignup.email) &&
@@ -126,7 +119,7 @@ import axios from "axios";
             this.dataSignup.firstName = null;
             this.dataSignup.lastName = null;
             this.dataSignup.email = null;
-            this.dataSignup.password = null;
+            // this.dataSignup.password = null;
           })
           .catch((error) => console.log(error));
       } else {
@@ -134,8 +127,5 @@ import axios from "axios";
       }
     },
   },
-})
-export default class Signup extends Vue {
-  msg!: string;
-}
+};
 </script>

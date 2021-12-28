@@ -1,5 +1,6 @@
 <template>
   <nav class="row navbar navbar-expand-lg navbar-light bg-light fixed-top px-4">
+    
     <button
       class="navbar-toggler"
       type="button"
@@ -11,8 +12,8 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <router-link class="navbar-brand" to="/">
-      <img class="w-50" src="../assets/icon-left-font-monochrome-black.svg" alt="Logo Groupomania" />
+    <router-link class="navbar-brand " to="/">
+      <img class="w-50 col-6 row" src="../assets/icon-left-font-monochrome-black.svg" alt="Logo Groupomania" />
     </router-link>
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarToggle">
@@ -38,23 +39,22 @@
     </div>
   </nav>
 </template>
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
 
-@Options({
-	methods: {
-    disconnect() {
-      localStorage.clear();
-      location.replace(location.origin);
-    },
-  },
+<script>
+export default {
   props: {
     msg: String,
   },
-})
-export default class Header extends Vue {}
-</script>
+methods:{
+disconnect() {
+  console.log("déconnecter");
+  
+    },
 
+}
+  
+};
+</script>
 <style lang='scss'>
 nav {
   position: fixed;

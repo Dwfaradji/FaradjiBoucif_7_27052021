@@ -1,18 +1,19 @@
 <template>
   <div id="wall" class="wall">
     <CreatePost />
-
+    <Post />
   </div>
 </template>
 
 <script>
 import CreatePost from "../components/CreatePost";
+import Post from "../components/Post";
 
 export default {
   name: "Mur",
   components: {
     CreatePost,
-
+    Post,
   },
 };
 </script>

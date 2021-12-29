@@ -113,6 +113,7 @@ export default {
       this.mode = "login";
     },
     createAccount: function () {
+      const test = this;
       console.log(this.email, this.nom, this.prenom, this.password);
       this.$store
         .dispatch("createAccount", {
@@ -122,6 +123,7 @@ export default {
           password: this.password,
         })
         .then(function (response) {
+          test.$router.push("/wall/");
           console.log(response);
         }),
         function (error) {

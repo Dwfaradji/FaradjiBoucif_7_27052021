@@ -1,5 +1,5 @@
-<template>
-  <body id="LoginForm">
+
+  <!-- <body id="LoginForm">
     <div class="container">
       <div class="login-form">
         <div class="main-div">
@@ -65,67 +65,65 @@
         </div>
       </div>
     </div>
-  </body>
-</template>
+  </body> -->
 
-<script >
-// import { mapState } from "vuex";
-import axios from "axios";
-export default {
-  data() {
-    return {
-      dataSignup: {
-        firstName: null,
-        lastName: null,
-        email: null,
-        password: null,
-      },
-    };
-  },
-  props: {
-    firstName: String,
-    lastName: String,
-    email: String,
-    password: String,
-    confirmPassword: String,
-    msg: String,
-    name: String,
-  },
-  // computed: {
-  //   ...mapState(["user"]),
-  // },
-  methods: {
-    sendSignup() {
-      const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
-      const regexEmail =
-        /^[a-z0-9!#$ %& '*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&' * +/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g;
-      const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
-      if (
-        (this.dataSignup.firstName !== null ||
-          this.dataSignup.lastName !== null ||
-          this.dataSignup.email !== null ||
-          this.dataSignup.password !== null) &&
 
-        usernameRegex.test(this.dataSignup.firstName) &&
-        usernameRegex.test(this.dataSignup.lastName) &&
-        regexEmail.test(this.dataSignup.email) &&
-        regexPassword.test(this.dataSignup.password)
-      ) {
-        axios
-          .post("http://localhost:3000/api/user/signup", this.dataSignup)
-          .then((response) => {
-            console.log(response);
-            //Réinitialisation
-            this.dataSignup.firstName = null;
-            this.dataSignup.lastName = null;
-            this.dataSignup.email = null;
-            // this.dataSignup.password = null;
-          })
-          .catch((error) => console.log(error));
-      } else {
-        alert("oops ! Un problème est survenue avec vos saisies");
-      }
-    },
-  },
-};
-</script>
+
+// // import { mapState } from "vuex";
+// import axios from "axios";
+// export default {
+//   data() {
+//     return {
+//       dataSignup: {
+//         firstName: null,
+//         lastName: null,
+//         email: null,
+//         password: null,
+//       },
+//     };
+//   },
+//   props: {
+//     firstName: String,
+//     lastName: String,
+//     email: String,
+//     password: String,
+//     confirmPassword: String,
+//     msg: String,
+//     name: String,
+//   },
+
+//   methods: {
+//     sendSignup() {
+//       const regexPassword = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,64})/;
+//       const regexEmail =
+//         /^[a-z0-9!#$ %& '*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&' * +/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g;
+//       const usernameRegex = /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/;
+//       if (
+//         (this.dataSignup.firstName !== null ||
+//           this.dataSignup.lastName !== null ||
+//           this.dataSignup.email !== null ||
+//           this.dataSignup.password !== null) &&
+
+//         usernameRegex.test(this.dataSignup.firstName) &&
+//         usernameRegex.test(this.dataSignup.lastName) &&
+//         regexEmail.test(this.dataSignup.email) &&
+//         regexPassword.test(this.dataSignup.password)
+//       ) {
+//         axios
+//           .post("http://localhost:3000/api/user/signup", this.dataSignup)
+//           .then((response) => {
+//             console.log(response);
+//             //Réinitialisation
+//             this.dataSignup.firstName = null;
+//             this.dataSignup.lastName = null;
+//             this.dataSignup.email = null;
+//             // this.dataSignup.password = null;
+//           })
+//           .catch((error) => console.log(error));
+//       } else {
+//         alert("oops ! Un problème est survenue avec vos saisies");
+//       }
+//     },
+//   },
+// };
+

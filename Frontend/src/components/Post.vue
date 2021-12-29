@@ -37,7 +37,7 @@
                   <a href=""
                     ><img
                       class="img-fluid rounded-circle"
-                      src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/4.jpg"
+                      src="https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png"
                       alt="User"
                   /></a>
                 </div>
@@ -59,7 +59,7 @@
             <div class="cardbox-item">
               <img
                 class="img-fluid"
-                src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/1.jpg"
+                src="https://cdn-s-www.leprogres.fr/images/82030199-3121-4C75-A2F2-79ACC0D888E1/NW_detail/les-rousses-sous-la-neige-photo-magali-letondor-1607174392.jpg"
                 alt="Image"
               />
             </div>
@@ -95,8 +95,8 @@
                 </li>
               </ul>
             </div>
-            <div class="cardbox-comments">
-              <span class="comment-avatar float-left">
+            <div class="container row align-items-center">
+              <span>
                 <a href=""
                   ><img
                     class="rounded-circle"
@@ -104,9 +104,15 @@
                     alt="..."
                 /></a>
               </span>
-              <div class="search">
-                <input placeholder="Ecrire un commentaire" type="text" />
-                <button><i class="fa fa-camera"></i></button>
+              <div class="col-8">
+                <input
+                  class="col-sm-9"
+                  placeholder="Ecrire un commentaire"
+                  type="text"
+                />
+                <button class="btn btn-primary ml-2">
+                  <i class="fa fa-camera"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -169,7 +175,7 @@ export default {
 }
 .cardbox .float-right a:hover {
   background: #f4f4f4 !important;
-}
+} 
 .cardbox .float-right a.dropdown-item {
   display: block;
   width: 100%;
@@ -359,19 +365,5 @@ export default {
   font-size: 20px;
   line-height: 30px;
   display: block;
-}
-
-/* ------------------------------- */
-/* Author
----------------------------------- */
-.author a {
-  font-family: "Rokkitt", serif;
-  font-size: 16px;
-  color: #00c4cf;
-}
-.author p {
-  font-family: "Rokkitt", serif;
-  font-size: 16px;
-  color: #8d8d8d;
 }
 </style>

@@ -6,12 +6,16 @@
         method="post"
       >
         <div class="input- mb-3">
-          <div class="row">
-            <img src="../assets/icon.png" alt="..." class="rounded-circle" />
+          <div class="row margin">
+            <img
+              src="https://www.icone-png.com/png/54/53787.png"
+              alt="..."
+              class="rounded-circle"
+            />
 
             <input
               type="text"
-              class="form-control col-10"
+              class="form-control col-10 margin"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               id="input_text"
@@ -19,7 +23,7 @@
             />
           </div>
         </div>
-
+        <form></form>
         <div class="boutton">
           <button class="btn btn-primary">Ajouter un fichier</button>
           <button
@@ -37,13 +41,6 @@
 </template>
 
 <script lang="ts">
-// import { Vue } from "vue-class-component";
-
-// @Options({
-//   props: {
-//     msg: String,
-//   },
-// })
 export default {
   props: {
     msg: String,
@@ -58,8 +55,8 @@ export default {
 
 <style scoped>
 img {
+  margin-top: 20px;
   width: 10%;
-  margin-left: 15px;
 }
 .input-text {
   width: 60%;
@@ -67,6 +64,9 @@ img {
   margin-right: auto;
   border-radius: 15px 15px 15px 15px;
   padding: 0px;
+}
+.margin {
+  margin-top: 30px;
 }
 .boutton {
   display: flex;

@@ -1,10 +1,10 @@
 
 
-import postModel2 from "../models/post.js";
+import model from "../models/post.js";
 
 async function allPostWall(req, res) {
   try {
-    const allPostWall = await postModel2.find();
+    const allPostWall = await model.find();
     res.status(200).json(allPostWall);
     return;
   } catch (error) {

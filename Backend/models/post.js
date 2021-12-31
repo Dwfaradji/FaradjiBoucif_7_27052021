@@ -1,31 +1,32 @@
-//Importer Mongoose
-import mongoose from "mongoose";
-
-//Crée le schéma de donnée
-
-const postShema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    maxLength: 20,
-    trim: true,
-  },
-
-  description: {
-    type: String,
-    required: true,
-    maxLength: 250,
-    trim: true,
-  },
-  imageUrl: { type: String, required: true },
-
-  likes: { type: Number, required: true },
-  dislikes: { type: Number, required: true },
-  usersLiked: { type: [String], required: false },
-  usersDisliked: { type: [String], required: false },
-  userId: { type: String, required: true },
-});
-
-const postModel2 = mongoose.model("post", postShema);
-
-export default postModel2;
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Post extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      models.Post.belongsTo(models.User,{
+        foreignkey:{
+          allowNull:false
+        }
+      })
+    }
+  };
+  Post.init({
+    idUser: DataTypes.INTEGER,
+    title: DataTypes.STRING,
+    content: DataTypes.STRING,
+    attachment: DataTypes.STRING,
+    likes: DataTypes.INTEGER
+  }, {
+    sequelize,
+    modelName: 'Post',
+  });
+  return Post;
+};

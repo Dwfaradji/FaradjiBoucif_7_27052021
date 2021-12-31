@@ -175,7 +175,7 @@ export default {
 }
 .cardbox .float-right a:hover {
   background: #f4f4f4 !important;
-} 
+}
 .cardbox .float-right a.dropdown-item {
   display: block;
   width: 100%;

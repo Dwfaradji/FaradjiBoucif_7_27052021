@@ -1,12 +1,9 @@
 // Crée un Programe qui va attendre notre requete http et y repondre
 
 //Importer le package http node qui nous donnera accès a cet objet qui va nous permettre de crée un serveur
-
-//const http = require('http');
 import http from "http";
 
 //Importer express
-//const app = require("./app");
 import { appli } from "./app.js";
 
 //La Fonction normalizePort renvoi un port valide, qu'il soit fourni sous la forme d'un numéro ou d'une chaine

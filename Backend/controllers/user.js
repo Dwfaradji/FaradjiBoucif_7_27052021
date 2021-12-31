@@ -1,43 +1,57 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-// import passwordValidator from "./password_validation.js";
-import { user } from "../models/user.js";
+import passwordValidator from "password-validator";
+import emailValidator from "email-validator";
+import user from "../models/user.js";
 
-async function signup(req, res) {
-  //   const passwordIsValid = passwordValidator.validate(req.body.password);
-  //   if (!passwordIsValid) {
-  //     return res.status(400).json({ message: "Mot de passe invalide" });
-  //   }
-  // firstName: null,
-  //         lastName: null,
-  //         email: null,
-  //         password: null,
-  //         confirmPassword: null,
+const schema = new passwordValidator();
+schema
+  .is()
+  .min(3)
+  .is()
+  .max(50)
+  .has()
+  .uppercase()
+  .has()
+  .lowercase()
+  .has()
+  .digits(1);
 
-  if (!req.body.email || !req.body.password) {
-    return res.status(400);
+async function signup(req, res, next) {
+  if (!emailValidator.validate(req.body.email)) {
+    return res
+      .status(401)
+      .json({ message: "Veuillez entrer une adresse email valide" });
+  }
+
+  if (!schema.validate(req.body.password)) {
+    return res.status(401).json({
+      message:
+        "Le mot de passe doit avoir une longueur de 3 à 50 caractères avec au moins un chiffre, une minuscule, une majuscule !!!",
+    });
   }
   try {
-    const passwordHash = await bcrypt.hash(req.body.password, 10);
-    const userSave = new user({
+    const criptPasseword = bcrypt.hash(req.body.password, 10);
+    const newUser =  user.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
-      password: passwordHash,
+      password: criptPasseword,
+      isAdmin: 0,
     });
-    await userSave.save();
-    res.status(201).json({ message: "Utilisateur crée" });
+    res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ error });
   }
 }
-
+//=====================================================================
+//====================================================================
 async function login(req, res) {
   if (!req.body.email || !req.body.password) {
     return res.status(400);
   }
   try {
-    const userEmail = await user.findOne({ email: req.body.email });
+    const userEmail = await models.findOne({ email: req.body.email });
     if (!userEmail) {
       return res
         .status(401)

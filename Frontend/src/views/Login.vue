@@ -23,13 +23,13 @@
     </div>
     <div class="form-row" v-if="mode == 'create'">
       <input
-        v-model="lastname"
+        v-model="firstName"
         class="form-row__input"
         type="text"
         placeholder="Prénom"
       />
       <input
-        v-model="filename"
+        v-model="lastName"
         class="form-row__input"
         type="text"
         placeholder="Nom"
@@ -77,8 +77,8 @@ export default {
     return {
       mode: "login",
       email: "",
-      filename: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
       password: "",
     };
   },
@@ -87,8 +87,8 @@ export default {
       if (this.mode == "create") {
         if (
           this.email != "" &&
-          this.filename != "" &&
-          this.lastname != "" &&
+          this.firstName != "" &&
+          this.lastName != "" &&
           this.password != ""
         ) {
           return true;
@@ -114,12 +114,12 @@ export default {
     },
     createAccount: function () {
       // const test = this;
-      console.log(this.email, this.filename, this.lastname, this.password);
+      console.log(this.email, this.firstName, this.lastName, this.password);
       this.$store
         .dispatch("createAccount", {
           email: this.email,
-          filename: this.filename,
-          lastname: this.lastname,
+          firstName: this.firstName,
+          lastName: this.lastName,
           password: this.password,
         })
         .then(function (response) {

@@ -26,8 +26,6 @@ appli.use((req, res, next) => {
   next();
 });
 async function testBd() {
-
-
   try {
     await sequelize.authenticate();
     console.log("Bienvenue sur le server groupomania.");
@@ -41,5 +39,5 @@ appli.use(bodyParser.urlencoded({ extended: true }));
 appli.use(bodyParser.json());
 appli.use("/images", express.static(path.join(__dirname, "images")));
 
-appli.use("/api/auth", userRoad);
+appli.use("/api/", userRoad);
 // appli.use("/api/post/", postRoad);

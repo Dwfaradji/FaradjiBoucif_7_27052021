@@ -6,11 +6,21 @@
 </template>
 
 <script>
+
 import CreatePost from "../components/CreatePost";
 import Post from "../components/Post";
 
+
 export default {
-  name: "Mur",
+  name: "Wall",
+  mounted: function () {
+    console.log(this.$store.state.user);
+    if (this.$store.state.user.user == -1) {
+      this.$router.push('/');
+      return ;
+    }
+    this.$store.dispatch('getUserInfos');
+  },
   components: {
     CreatePost,
     Post,

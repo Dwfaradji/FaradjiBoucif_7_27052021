@@ -28,12 +28,12 @@
           <router-link class="nav-link" to="/login">Log In</router-link>
         </li>
         <li class="nav-item" >
-          <router-link class="nav-link" to="/user">
+          <router-link class="nav-link" to="/profile">
             <i class="user-icon fas fa-user"></i>
           </router-link>
         </li>
         <li class="nav-item" >
-          <button type="button" class="btn btn-danger" @click="disconnect">Disconnect</button>
+          <button type="button" class="btn btn-danger" @click="logout">Disconnect</button>
         </li>
       </ul>
     </div>
@@ -46,9 +46,10 @@ export default {
     msg: String,
   },
 methods:{
-disconnect() {
+logout:function () {
   console.log("déconnecter");
-  
+  this.$store.commit("logout")
+  this.$router.push('/')
     },
 
 }

@@ -46,6 +46,9 @@
     <div class="form-row" v-if="mode == `login` && status == `error_login`">
       Adresse mail et/ou mot de passe incorrect
     </div>
+    <div class="form-row" v-if="mode == `create` && status == `error_create`">
+      Adresse mail deja utiliser
+    </div>
     <div class="form-row">
       <button
         @click="login()"
@@ -62,7 +65,8 @@
         :class="{ 'button--disabled': !validatedFields }"
         v-else
       >
-        S'inscrire
+        <span v-if="status == `loading`">Inscription en cours....</span>
+        <span v-else> S'inscrire</span>
       </button>
     </div>
   </div>
@@ -81,6 +85,12 @@ export default {
       lastName: "",
       password: "",
     };
+  },
+  mounted: function () {
+    if (this.$store.state.user.userId != -1) {
+      this.$router.push("/wall");
+      return;
+    }
   },
   computed: {
     validatedFields: function () {
@@ -112,38 +122,39 @@ export default {
     switchToLogin: function () {
       this.mode = "login";
     },
-    createAccount: function () {
-      // const test = this;
-      console.log(this.email, this.firstName, this.lastName, this.password);
-      this.$store
-        .dispatch("createAccount", {
-          email: this.email,
-          firstName: this.firstName,
-          lastName: this.lastName,
-          password: this.password,
-        })
-        .then(function (response) {
-          // test.$router.push("/wall/");
-          console.log(response);
-        }),
-        function (error) {
-          console.log(error);
-        };
-    },
     login: function () {
       const self = this;
-      console.log(this.email, this.password);
       this.$store
         .dispatch("login", {
           email: this.email,
           password: this.password,
         })
-        .then(function () {
-          self.$router.push("/wall/");
-        }),
-        function (error) {
-          console.log(error);
-        };
+        .then(
+          function () {
+            self.$router.push("/wall");
+          },
+          function (error) {
+            console.log(error);
+          }
+        );
+    },
+    createAccount: function () {
+      const self = this;
+      this.$store
+        .dispatch("signup", {
+          email: this.email,
+          lastName: this.lastName,
+          firstName: this.firstName,
+          password: this.password,
+        })
+        .then(
+          function () {
+            self.login();
+          },
+          function (error) {
+            console.log(error);
+          }
+        );
     },
   },
 };

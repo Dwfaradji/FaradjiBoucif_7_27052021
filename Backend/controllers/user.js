@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 import passwordValidator from "password-validator";
 import emailValidator from "email-validator";
-import user from "../models/user.js";
-
-const schema = new passwordValidator();
-schema
+import { User } from "../models/user.js";
+import verifInput from "../utils/verifInput.js";
+import jwt from "../utils/jwt.js";
+const schemaPassword = new passwordValidator();
+schemaPassword
   .is()
   .min(3)
   .is()
@@ -18,65 +19,114 @@ schema
   .digits(1);
 
 async function signup(req, res, next) {
-  if (!emailValidator.validate(req.body.email)) {
+  let firstName = req.body.firstName;
+  let lastName = req.body.lastName;
+  let email = req.body.email;
+  let password = req.body.password;
+  // Valider les paramètres de la requète
+  if (!emailValidator.validate(email)) {
     return res
       .status(401)
       .json({ message: "Veuillez entrer une adresse email valide" });
   }
 
-  if (!schema.validate(req.body.password)) {
+  if (!schemaPassword.validate(password)) {
     return res.status(401).json({
       message:
         "Le mot de passe doit avoir une longueur de 3 à 50 caractères avec au moins un chiffre, une minuscule, une majuscule !!!",
     });
   }
+
+  if (
+    email == null ||
+    firstName == null ||
+    lastName == null ||
+    password == null
+  ) {
+    res.status(400).json({ error: "il manque un paramètre" });
+  }
+  //TO DO => Vérification des saisies user
+  let emailOk = verifInput.validEmail(email);
+  console.log(emailOk);
+  let mdpOK = verifInput.validPassword(password);
+  console.log(mdpOK);
+  let firstNameOk = verifInput.validUsername(firstName);
+  console.log(firstNameOk);
+  let lastNameOk = verifInput.validUsername(lastName);
+  console.log(lastNameOk);
+
   try {
-    const criptPasseword = bcrypt.hash(req.body.password, 10);
-    const newUser =  user.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      password: criptPasseword,
-      isAdmin: 0,
-    });
-    res.status(201).json(newUser);
+    if (
+      emailOk == true &&
+      mdpOK == true &&
+      firstNameOk == true &&
+      lastNameOk == true
+    ) {
+      const verifUser = await User.findOne({
+        attributes: ["email"],
+        where: { email: email },
+      });
+      console.log(verifUser, "salut OK");
+      if (!verifUser) {
+        const criptPasseword = await bcrypt.hash(req.body.password, 10);
+        const newUser = await User.create({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          password: criptPasseword,
+          isAdmin: 0,
+        });
+        res.status(201).json({ id: newUser.id, message: "Utilisateur créer" });
+      } else {
+        res.status(409).json({ error: "Cette utilisateur existe déjà " });
+      }
+    }
   } catch (error) {
-    res.status(500).json({ error });
+    console.log(error);
+    res.status(500).json({ error, error: "probléme inscription est survenue" });
   }
 }
 //=====================================================================
 //====================================================================
 async function login(req, res) {
-  if (!req.body.email || !req.body.password) {
-    return res.status(400);
+  let username = req.body.email;
+  let password = req.body.password;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: "Il manque un paramètre" });
   }
   try {
-    const userEmail = await models.findOne({ email: req.body.email });
+    const userEmail = await User.findOne({ where: { email: username } });
     if (!userEmail) {
-      return res
-        .status(401)
-        .json({ error: "Utilisateur ou Mot de passe incorrect !" });
+      return res.status(401).json({ error: "Utilisateur  incorrect !" });
     }
-    const passwordValid = await bcrypt.compare(
-      req.body.password,
-      userEmail.password
-    );
+    const passwordValid = await bcrypt.compare(password, userEmail.password);
     if (!passwordValid) {
-      return res
-        .status(401)
-        .json({ error: "Utilisateur ou Mot de passe incorrect !" });
+      return res.status(401).json({ error: " Mot de passe incorrect !" });
     } else {
       res.status(200).json({
-        userId: userEmail._id,
-        token: jwt.sign({ userId: userEmail._id }, "TOKEN_SECRET", {
-          expiresIn: "24h",
-        }),
+        userId: userEmail.id,
+        token: jwt.generateToken(userEmail),
+        isAdmin: userEmail.isAdmin,
       });
       console.log("ok");
     }
   } catch (error) {
-    res.status(500).json({ error });
+    console.log(error);
+    res.status(500).json({ error, error: "erreur identification" });
   }
 }
 
-export { login, signup };
+async function userInfos(req, res) {
+  let id = jwt.getUserId(req.headers.authorization);
+  User.findOne({
+    attributes: ["id", "email", "firstName", "lastName"],
+    where: { id: id },
+  })
+    .then((user) => res.status(200).json(user))
+    .catch((error) =>
+      res.status(500).json({ error, erreur: "erreur infos user" })
+    );
+}
+
+export { login, signup, userInfos };

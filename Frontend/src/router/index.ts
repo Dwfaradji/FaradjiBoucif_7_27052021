@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 import Login from "../views/Login.vue";
- import Wall from "../views/Wall.vue";
+import Wall from "../views/Wall.vue";
+// import Profile from "../views/Profile.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -34,6 +35,16 @@ const routes: Array<RouteRecordRaw> = [
       title: "Mur",
     },
   },
+  // {
+  //   path: "/Profile",
+  //   name: "Profile",
+  //   components: {
+  //     default: Profile,
+  //   },
+  //   meta: {
+  //     title: "Profile",
+  //   },
+  // }
 ];
 
 const router = createRouter({

@@ -1,9 +1,9 @@
 import userRoad from "./routes/user.js";
-// import postRoad from "./routes/post.js";
+import postRoad from "./routes/post.js";
 
 import express from "express";
 import bodyParser from "body-parser";
-import sequelize from "./config/sequelize.js";
+import {database} from "./config/sequelize.js";
 import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -27,7 +27,7 @@ appli.use((req, res, next) => {
 });
 async function testBd() {
   try {
-    await sequelize.authenticate();
+    await database.authenticate();
     console.log("Bienvenue sur le server groupomania.");
   } catch (error) {
     console.error("Echec du lancement du server", error);
@@ -39,5 +39,5 @@ appli.use(bodyParser.urlencoded({ extended: true }));
 appli.use(bodyParser.json());
 appli.use("/images", express.static(path.join(__dirname, "images")));
 
-appli.use("/api/", userRoad);
-// appli.use("/api/post/", postRoad);
+appli.use("/api/auth/", userRoad);
+appli.use("/api/post/", postRoad);

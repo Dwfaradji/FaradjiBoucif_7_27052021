@@ -89,25 +89,25 @@ async function signup(req, res, next) {
 //=====================================================================
 //====================================================================
 async function login(req, res) {
-  let username = req.body.email;
+  let userEmail = req.body.email;
   let password = req.body.password;
 
-  if (!username || !password) {
+  if (!userEmail || !password) {
     return res.status(400).json({ error: "Il manque un paramètre" });
   }
   try {
-    const userEmail = await User.findOne({ where: { email: username } });
-    if (!userEmail) {
+    const userName = await User.findOne({ where: { email: userEmail } });
+    if (!userName) {
       return res.status(401).json({ error: "Utilisateur  incorrect !" });
     }
-    const passwordValid = await bcrypt.compare(password, userEmail.password);
+    const passwordValid = await bcrypt.compare(password, userName.password);
     if (!passwordValid) {
       return res.status(401).json({ error: " Mot de passe incorrect !" });
     } else {
       res.status(200).json({
-        userId: userEmail.id,
+        userId: userName.id,
         token: jwt.generateToken(userEmail),
-        isAdmin: userEmail.isAdmin,
+        isAdmin: userName.isAdmin,
       });
       console.log("ok");
     }
@@ -118,15 +118,30 @@ async function login(req, res) {
 }
 
 async function userInfos(req, res) {
-  let id = jwt.getUserId(req.headers.authorization);
-  User.findOne({
-    attributes: ["id", "email", "firstName", "lastName"],
-    where: { id: id },
-  })
-    .then((user) => res.status(200).json(user))
-    .catch((error) =>
-      res.status(500).json({ error, erreur: "erreur infos user" })
-    );
+  try {
+    let userId = jwt.getUserId(req.headers.authorization);
+    const user = await User.findOne({
+      attributes: ["id", "email", "firstName", "lastName", "isAdmin"],
+      where: { id: userId },
+    });
+    console.log(user, "c'est les infos user");
+    // if (user == true) {
+    res.status(200).json(user);
+    // }else{
+    //   res.status(401).json({error:"error user"})
+    // }
+  } catch (error) {
+    res.status(500).json({ error, erreur: "erreur infos user" });
+  }
 }
 
 export { login, signup, userInfos };
+
+// const user = await User.findOne({
+//   attributes: ["id", "email", "firstName", "lastName"],
+//   where: { id: id },
+// })
+//   .then((user) => res.status(200).json(user))
+//   .catch((error) =>
+//     res.status(500).json({ error, erreur: "erreur infos user" })
+//   );

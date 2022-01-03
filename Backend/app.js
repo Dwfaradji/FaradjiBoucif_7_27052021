@@ -1,5 +1,5 @@
 import userRoad from "./routes/user.js";
-import postRoad from "./routes/post.js";
+import postRoad from "./routes/comment.js";
 
 import express from "express";
 import bodyParser from "body-parser";
@@ -40,4 +40,4 @@ appli.use(bodyParser.json());
 appli.use("/images", express.static(path.join(__dirname, "images")));
 
 appli.use("/api/auth/", userRoad);
-appli.use("/api/post/", postRoad);
+appli.use("/api/posts/", postRoad);

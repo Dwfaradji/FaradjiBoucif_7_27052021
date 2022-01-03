@@ -2,7 +2,8 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 import Login from "../views/Login.vue";
 import Wall from "../views/Wall.vue";
-// import Profile from "../views/Profile.vue";
+import Profile from "../views/Profile.vue";
+import Create from "../components/CreatePost.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -35,16 +36,26 @@ const routes: Array<RouteRecordRaw> = [
       title: "Mur",
     },
   },
-  // {
-  //   path: "/Profile",
-  //   name: "Profile",
-  //   components: {
-  //     default: Profile,
-  //   },
-  //   meta: {
-  //     title: "Profile",
-  //   },
-  // }
+  {
+    path: "/profile",
+    name: "Profile",
+    components: {
+      default: Profile,
+    },
+    meta: {
+      title: "Profile",
+    },
+  },
+  {
+    path: "/create",
+    name: "Create",
+    components: {
+      default: Create,
+    },
+    meta: {
+      title: "Profile",
+    },
+  },
 ];
 
 const router = createRouter({

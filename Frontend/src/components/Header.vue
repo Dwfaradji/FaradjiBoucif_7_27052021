@@ -1,6 +1,5 @@
 <template>
   <nav class="row navbar navbar-expand-lg navbar-light bg-light fixed-top px-4">
-    
     <button
       class="navbar-toggler"
       type="button"
@@ -12,28 +11,34 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <router-link class="navbar-brand " to="/">
-      <img class="w-50 col-6 row" src="../assets/icon-left-font-monochrome-black.svg" alt="Logo Groupomania" />
+    <router-link class="navbar-brand" to="/">
+      <img
+        class="w-50 col-6 row"
+        src="../assets/icon-left-font-monochrome-black.svg"
+        alt="Logo Groupomania"
+      />
     </router-link>
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarToggle">
       <ul class="navbar-nav mt-2 mt-lg-0">
-        <li class="nav-item" >
-          <router-link class="nav-link" to="/">Home</router-link>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/wall">Home</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/signup">Sign Up</router-link>
+          <router-link class="nav-link" to="/">Sign Up</router-link>
         </li>
-        <li class="nav-item" >
+        <li class="nav-item">
           <router-link class="nav-link" to="/login">Log In</router-link>
         </li>
-        <li class="nav-item" >
+        <li class="nav-item">
           <router-link class="nav-link" to="/profile">
             <i class="user-icon fas fa-user"></i>
           </router-link>
         </li>
-        <li class="nav-item" >
-          <button type="button" class="btn btn-danger" @click="logout">Disconnect</button>
+        <li class="nav-item">
+          <button type="button" class="btn btn-danger" @click="logout">
+            Déconnecter
+          </button>
         </li>
       </ul>
     </div>
@@ -45,21 +50,19 @@ export default {
   props: {
     msg: String,
   },
-methods:{
-logout:function () {
-  console.log("déconnecter");
-  this.$store.commit("logout")
-  this.$router.push('/')
+  methods: {
+    logout: function () {
+      console.log("déconnecter");
+      this.$store.commit("logout");
+      this.$router.push("/");
     },
-
-}
-  
+  },
 };
 </script>
-<style lang='scss'>
+
+<style lang="scss">
 nav {
   position: fixed;
   top: 0;
 }
 </style>
-

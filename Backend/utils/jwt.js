@@ -1,7 +1,5 @@
 import jwt from "jsonwebtoken";
 
-const Sign = "DEVELOPMENT_TOKEN_SECRET";
-
 function generateToken(user, tokenSign) {
   return jwt.sign(
     {
@@ -14,7 +12,7 @@ function generateToken(user, tokenSign) {
     }
   );
 }
-function getUserId(data, tokenSign) {
+function getUserId(data, tokenSign,userId) {
   if (data.length > 1) {
     let token = data.split(" ")[1];
     try {
@@ -25,7 +23,7 @@ function getUserId(data, tokenSign) {
       userId = decodedToken.userId;
       return userId;
     } catch (err) {
-      return err;
+      return console.log(err, "KO");
     }
   }
 }

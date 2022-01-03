@@ -12,9 +12,18 @@
               alt="..."
               class="rounded-circle"
             />
-
             <input
               type="text"
+              v-model="titre"
+              class="form-control col-10 margin"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              id="input_text"
+              placeholder="Quoi de neuf ,(prénon) ?"
+            />
+            <input
+              type="text"
+              v-model="contenu"
               class="form-control col-10 margin"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
@@ -26,11 +35,7 @@
         <form></form>
         <div class="boutton">
           <button class="btn btn-primary">Ajouter un fichier</button>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            @click.prevent="createPost"
-          >
+          <button type="submit" class="btn btn-primary" @click="createPost()">
             Publier
           </button>
         </div>
@@ -40,14 +45,24 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 export default {
+  name:"Create",
   props: {
     msg: String,
   },
+  data() {
+    return {
+      titre: "",
+      contenu: "",
+    };
+  },
   methods: {
-    createPost() {
-      console.log("envoyer");
+    createPost: function () {
+      this.$store.dispatch("commentPost", {
+        title: this.titre,
+        content: this.contenu,
+      });
     },
   },
 };

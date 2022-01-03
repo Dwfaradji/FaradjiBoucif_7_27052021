@@ -1,9 +1,9 @@
 import express from "express";
 
 import { auth } from "../middleware/auth.js";
-import { allPostWall, createPost } from "../controllers/post.js";
+import { createPost } from "../controllers/comment.js";
 
 const postRoad = express.Router();
-postRoad.post("/create", auth, createPost);
+postRoad.post("/create", auth,createPost);
 
 export default postRoad;

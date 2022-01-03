@@ -1,24 +1,25 @@
-import {Comment} from "../models/Comment.js";
+import { Comment } from "../models/Comment.js";
 
 async function allPostWall(req, res) {
   try {
     const allPostWall = await Comment.findOne();
-    res.status(200).json(allPostWall);
-    return;
+    return res.status(200).json(allPostWall);
   } catch (error) {
-    res.status(500).json({ error,error:"post introuvable" });
+    res.status(500).json({ error, error: "post introuvable" });
   }
 }
 
-
-async function createPost  (req, res) {
-	Comment.create({
-    title: req.body.title,
-    content: req.body.content,
-    user_id: req.body.idUser
-})
-.then(() => res.status(201).json({message: 'Post créé !'}))
-.catch( error => res.status(400).json({error}));
-    
+async function createPost(req, res) {
+  try {
+    const post = await Comment.create({
+      title: req.body.title,
+      content: req.body.content,
+      post_id: req.body.post_id,
+    });
+	console.log(post);
+    return res.status(201).json({ post, message: "Post créé !" });
+  } catch (error) {
+    res.status(400).json({ error, error: "echec post" });
+  }
 }
 export { allPostWall, createPost };

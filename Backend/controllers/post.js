@@ -1,25 +1,16 @@
-import { Post } from "../models/post.js";
+// import { Post } from "../models/post.js";
 
-async function allPostWall(req, res) {
-  try {
-    const allPostWall = await Post.findAll();
-    res.status(200).json(allPostWall);
-    return;
-  } catch (error) {
-    res.status(500).json({ error:"erreur recherche all post" });
-  }
-}
+// async function allPostWall(req, res) {
+//   try {
+//     const allPostWall = await Post.findAll();
+//     res.status(200).json(allPostWall);
+//     return;
+//   } catch (error) {
+//     res.status(500).json({ error:"erreur recherche all post" });
+//   }
+// }
 
-async function createPost(req, res) {
-  Post.create({
-    title: req.body.title,
-    content: req.body.content,
-    user_id: req.body.idUser,
-  })
-    .then(() => res.status(201).json({ message: "Post créé !" }))
-    .catch((error) => res.status(400).json({ error:"erreur creation de post" }));
-}
-export { allPostWall, createPost };
+// export { allPostWall };
 
 // exports.listMsg = (req, res) => {
 //     models.Post.findAll({

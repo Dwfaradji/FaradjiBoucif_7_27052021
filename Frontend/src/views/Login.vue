@@ -4,7 +4,6 @@
     <h1 class="card__title" v-else>Inscription</h1>
     <p class="card__subtitle" v-if="mode == 'login'">
       Tu n'as pas encore de compte ?
-
       <span class="card__action" @click="switchToCreateAccount()"
         >Créer un compte</span
       >
@@ -86,12 +85,14 @@ export default {
       password: "",
     };
   },
+
   mounted: function () {
     if (this.$store.state.user.userId != -1) {
       this.$router.push("/wall");
       return;
     }
   },
+
   computed: {
     validatedFields: function () {
       if (this.mode == "create") {
@@ -115,6 +116,7 @@ export default {
     },
     ...mapState(["status"]),
   },
+
   methods: {
     switchToCreateAccount: function () {
       this.mode = "create";
@@ -122,6 +124,7 @@ export default {
     switchToLogin: function () {
       this.mode = "login";
     },
+
     login: function () {
       const self = this;
       this.$store
@@ -138,10 +141,11 @@ export default {
           }
         );
     },
+
     createAccount: function () {
       const self = this;
       this.$store
-        .dispatch("signup", {
+        .dispatch("createAccount", {
           email: this.email,
           lastName: this.lastName,
           firstName: this.firstName,

@@ -1,43 +1,42 @@
-
-  <!-- <div class="card">
+<template>
+  <div class="card">
     <h1 class="card__title">Espace Perso</h1>
     <p class="card__subtitle">Voilà donc qui je suis...</p>
-    <p>{{user.firstName}} {{user.lastName}} {{user.email}}</p>
-    <img :src="user.photo"/>
+    <p>{{ user.firstName }} {{ user.lastName }} {{ user.email }}</p>
+    <!-- <img :src="user.photo" /> -->
     <div class="form-row">
-      <button @click="logout()" class="button">
-        Déconnexion
-      </button>
+      <button @click="logout()" class="button">Déconnexion</button>
     </div>
-  </div> -->
+  </div>
+</template>
 
-
-<!-- <script>
-import { mapState } from 'vuex'
+<script>
+import { mapState } from "vuex";
 export default {
-  name: 'Profile',
+  name: "Profile",
   mounted: function () {
-    console.log(this.$store.state.user);
+    console.log(this.$store.state.user.token);
     if (this.$store.state.user.userId == -1) {
-      this.$router.push('/');
-      return ;
+      this.$router.push("/");
+      return;
+    } else {
+      this.$store.dispatch("getUserInfos");
     }
-    this.$store.dispatch('getUserInfos');
   },
   computed: {
     ...mapState({
-      user: 'userInfos',
-    })
+      user: "userInfos",
+    }),
   },
+
   methods: {
     logout: function () {
-      this.$store.commit('logout');
-      this.$router.push('/');
-    }
-  }
-}
+      this.$store.commit("logout");
+      this.$router.push("/");
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style> -->
+<style scoped></style>
+>

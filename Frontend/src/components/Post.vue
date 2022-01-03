@@ -127,11 +127,7 @@ export default {
   props: {
     msg: String,
   },
-  methods: {
-    createPost() {
-      console.log("envoyer");
-    },
-  },
+  methods: {},
 };
 </script>
 

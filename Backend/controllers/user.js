@@ -106,10 +106,10 @@ async function login(req, res) {
     } else {
       res.status(200).json({
         userId: userName.id,
-        token: jwt.generateToken(userEmail),
+        token: jwt.generateToken(userName),
         isAdmin: userName.isAdmin,
       });
-      console.log("ok");
+      console.log(jwt,"ok");
     }
   } catch (error) {
     console.log(error);
@@ -125,23 +125,14 @@ async function userInfos(req, res) {
       where: { id: userId },
     });
     console.log(user, "c'est les infos user");
-    // if (user == true) {
-    res.status(200).json(user);
-    // }else{
-    //   res.status(401).json({error:"error user"})
-    // }
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(401).json({ error: "error user" });
+    }
   } catch (error) {
-    res.status(500).json({ error, erreur: "erreur infos user" });
+    res.status(500).json({ error, erreur: "erreur serveur infos user" });
   }
 }
 
 export { login, signup, userInfos };
-
-// const user = await User.findOne({
-//   attributes: ["id", "email", "firstName", "lastName"],
-//   where: { id: id },
-// })
-//   .then((user) => res.status(200).json(user))
-//   .catch((error) =>
-//     res.status(500).json({ error, erreur: "erreur infos user" })
-//   );

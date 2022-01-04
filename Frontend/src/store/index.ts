@@ -49,7 +49,6 @@ export default createStore({
     },
 
     userInfos: function (state, userInfos) {
-      localStorage.setItem("userInfos", JSON.stringify(userInfos));
       state.userInfos = userInfos;
     },
 
@@ -103,7 +102,7 @@ export default createStore({
         .get("/auth/profile")
         .then(function (response) {
           console.log("response API", response.data.userId);
-          commit("userInfos", response.data.id);
+          commit("userInfos", response.data.userId);
         })
         .catch((error) => {
           console.log(error); //affiche pas le message 'normalement' envoyé par le back
@@ -115,10 +114,12 @@ export default createStore({
         instance
           .post("/posts/create", commentPost)
           .then(function (response) {
+            console.log(response);
             commit("commentPost");
             resolve(response);
           })
           .catch(function (error) {
+            console.log(error);
             commit("commentPost");
             reject(error);
           });

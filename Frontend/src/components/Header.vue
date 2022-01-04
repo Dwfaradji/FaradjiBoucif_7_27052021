@@ -25,12 +25,6 @@
           <router-link class="nav-link" to="/wall">Home</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/">Sign Up</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link" to="/login">Log In</router-link>
-        </li>
-        <li class="nav-item">
           <router-link class="nav-link" to="/profile">
             <i class="user-icon fas fa-user"></i>
           </router-link>

@@ -14,16 +14,7 @@
             />
             <input
               type="text"
-              v-model="titre"
-              class="form-control col-10 margin"
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-              id="input_text"
-              placeholder="Quoi de neuf ,(prénon) ?"
-            />
-            <input
-              type="text"
-              v-model="contenu"
+              v-model="content"
               class="form-control col-10 margin"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
@@ -34,8 +25,10 @@
         </div>
         <form></form>
         <div class="boutton">
-          <button class="btn btn-primary">Ajouter un fichier</button>
-          <button type="submit" class="btn btn-primary" @click="createPost()">
+          <router-link to="/posts/create"
+            ><button class="btn btn-primary">Ajouter un fichier</button>
+          </router-link>
+          <button type="submit" class="btn btn-primary" @click="createPost">
             Publier
           </button>
         </div>
@@ -46,23 +39,29 @@
 </template>
 
 <script>
+let userStore = localStorage.getItem("user");
+const user = JSON.parse(userStore);
+
 export default {
-  name:"Create",
+  name: "Create",
   props: {
     msg: String,
   },
   data() {
     return {
-      titre: "",
-      contenu: "",
+      content: "",
+      date: "",
+      user_id: "",
+      post_id: "",
     };
   },
   methods: {
     createPost: function () {
       this.$store.dispatch("commentPost", {
-        title: this.titre,
-        content: this.contenu,
+        content: this.content,
+        user_id: user.userId,
       });
+      // this.$router.push("/posts/wall");
     },
   },
 };

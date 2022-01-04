@@ -1,10 +1,10 @@
-// import express from "express";
+import express from "express";
 
-// import { auth } from "../middleware/auth.js";
-// import { allPostWall } from "../controllers/post.js";
+import { auth } from "../middleware/auth.js";
+import { allPostWall } from "../controllers/post.js";
 
-// const postRoad = express.Router();
+const postRoad = express.Router();
 
-// postRoad.get("/wall", auth, allPostWall);
+postRoad.get("/wall", auth, allPostWall);
 
-// export default postRoad;
+export default postRoad;

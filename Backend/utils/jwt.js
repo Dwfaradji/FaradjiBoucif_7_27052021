@@ -6,20 +6,17 @@ function generateToken(user, tokenSign) {
       userId: user.id,
       isAdmin: user.isAdmin,
     },
-    (tokenSign = "DEVELOPMENT_TOKEN_SECRET"),
+    "DEVELOPMENT_TOKEN_SECRET",
     {
       expiresIn: "24h",
     }
   );
 }
-function getUserId(data, tokenSign,userId) {
+function getUserId(data, userId) {
   if (data.length > 1) {
     let token = data.split(" ")[1];
     try {
-      let decodedToken = jwt.verify(
-        token,
-        (tokenSign = "DEVELOPMENT_TOKEN_SECRET")
-      );
+      let decodedToken = jwt.verify(token, "DEVELOPMENT_TOKEN_SECRET");
       userId = decodedToken.userId;
       return userId;
     } catch (err) {

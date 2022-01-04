@@ -53,7 +53,7 @@ const routes: Array<RouteRecordRaw> = [
       default: Create,
     },
     meta: {
-      title: "Profile",
+      title: "Create",
     },
   },
 ];

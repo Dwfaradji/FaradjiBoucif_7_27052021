@@ -1,16 +1,19 @@
-// import { Post } from "../models/post.js";
+import { Post } from "../models/post.js";
 
-// async function allPostWall(req, res) {
-//   try {
-//     const allPostWall = await Post.findAll();
-//     res.status(200).json(allPostWall);
-//     return;
-//   } catch (error) {
-//     res.status(500).json({ error:"erreur recherche all post" });
-//   }
-// }
+async function allPostWall(req, res) {
+  try {
+    const allPostWall = await Post.findAll({include: [{
+		model : User
+	}],
+	order: [["id", "DESC"]]});
+    res.status(200).json(allPostWall);
+    return;
+  } catch (error) {
+    res.status(500).json({ error:"erreur recherche all post" });
+  }
+}
 
-// export { allPostWall };
+export { allPostWall };
 
 // exports.listMsg = (req, res) => {
 //     models.Post.findAll({

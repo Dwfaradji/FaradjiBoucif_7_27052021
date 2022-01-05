@@ -1,141 +1,116 @@
 <template>
-  <section class="hero">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 offset-lg-3">
-          <div class="cardbox shadow-lg bg-white">
-            <div class="cardbox-heading">
-              <!-- START dropdown-->
-              <div class="dropdown float-right">
-                <button
-                  class="btn btn-flat btn-flat-icon"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <em class="fa fa-ellipsis-h"></em>
-                </button>
-                <div
-                  class="dropdown-menu dropdown-scale dropdown-menu-right"
-                  role="menu"
-                  style="
-                    position: absolute;
-                    transform: translate3d(-136px, 28px, 0px);
-                    top: 0px;
-                    left: 0px;
-                    will-change: transform;
-                  "
-                >
-                  <a class="dropdown-item" href="#">Hide post</a>
-                  <a class="dropdown-item" href="#">Stop following</a>
-                  <a class="dropdown-item" href="#">Report</a>
-                </div>
-              </div>
-              <!--/ dropdown -->
-              <div class="media m-0">
-                <div class="d-flex mr-3">
-                  <a href=""
-                    ><img
-                      class="img-fluid rounded-circle"
-                      src="https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png"
-                      alt="User"
-                  /></a>
-                </div>
-                <div class="media-body">
-                  <p class="m-0">Nom d'utilisateur du post</p>
-                  <small
-                    ><span
-                      ><i class="icon ion-md-pin"></i> Nairobi, Kenya</span
-                    ></small
-                  >
-                  <small
-                    ><span
-                      ><i class="icon ion-md-time"></i> 10 hours ago</span
-                    ></small
-                  >
-                </div>
+  <div class="container m-3">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+        <div class="cardbox shadow-lg bg-white">
+          <div class="cardbox-heading">
+            <!-- START dropdown-->
+            <div class="dropdown float-right">
+              <button
+                class="btn btn-flat btn-flat-icon"
+                type="button"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <em class="fa fa-ellipsis-h"></em>
+              </button>
+              <div
+                class="dropdown-menu dropdown-scale dropdown-menu-right"
+                role="menu"
+                style="
+                  position: absolute;
+                  transform: translate3d(-136px, 28px, 0px);
+                  top: 0px;
+                  left: 0px;
+                  will-change: transform;
+                "
+              >
+                <a class="dropdown-item" href="#">Modifier le post</a>
+                <a class="dropdown-item" href="#">Supprimer le post</a>
               </div>
             </div>
-            <div class="cardbox-item">
-              <img
-                class="img-fluid"
-                src="https://cdn-s-www.leprogres.fr/images/82030199-3121-4C75-A2F2-79ACC0D888E1/NW_detail/les-rousses-sous-la-neige-photo-magali-letondor-1607174392.jpg"
-                alt="Image"
-              />
-            </div>
-            <div class="cardbox-base">
-              <ul class="float-right">
-                <li>
-                  <a><i class="fa fa-comments"></i></a>
-                </li>
-                <li>
-                  <a><em class="mr-5">Commentaire</em></a>
-                </li>
-                <li>
-                  <a><i class="fa fa-share-alt"></i></a>
-                </li>
-                <li>
-                  <a><em class="mr-3">03</em></a>
-                </li>
-              </ul>
-              <ul>
-                <li>
-                  <a><i class="fa fa-thumbs-up"></i></a>
-                </li>
-                <li>
-                  <a href="#"
-                    ><img
-                      src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/3.jpeg"
-                      class="img-fluid rounded-circle"
-                      alt="User like"
-                  /></a>
-                </li>
-                <li>
-                  <a><span>Nombre de Likes</span></a>
-                </li>
-              </ul>
-            </div>
-            <div class="container row align-items-center">
-              <span>
-                <a href=""
-                  ><img
-                    class="rounded-circle"
-                    src="http://www.themashabrand.com/templates/bootsnipp/post/assets/img/users/6.jpg"
-                    alt="..."
-                /></a>
-              </span>
-              <div class="col-8">
-                <input
-                  class="col-sm-9"
-                  placeholder="Ecrire un commentaire"
-                  type="text"
+            <!--/ dropdown -->
+            <div class="media m-0">
+              <div class="d-flex mr-3">
+                <img
+                  class="img-fluid rounded-circle"
+                  src="https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png"
+                  alt="User"
                 />
-                <button class="btn btn-primary ml-2">
-                  <i class="fa fa-camera"></i>
-                </button>
               </div>
+              <div class="media-body">
+                <p class="m-0">{{ user.firstName }}</p>
+                <small
+                  ><span
+                    ><i class="icon ion-md-time"></i> Heure du post
+                  </span></small
+                >
+              </div>
+            </div>
+          </div>
+          <div class="cardbox-item">
+            <img
+              class="img-fluid"
+              src="https://cdn-s-www.leprogres.fr/images/82030199-3121-4C75-A2F2-79ACC0D888E1/NW_detail/les-rousses-sous-la-neige-photo-magali-letondor-1607174392.jpg"
+              alt="Image"
+            />
+          </div>
+          <div class="cardbox-base">
+            <ul class="float-right">
+              <li>
+                <a><i class="fa fa-comments"></i></a>
+              </li>
+              <li>
+                <a href=""><em class="mr-5">Commentaire</em></a>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a href=""><i class="fa fa-thumbs-up"></i></a>
+              </li>
+              <li>
+                <a><span>0 Nombre de Likes</span></a>
+              </li>
+            </ul>
+          </div>
+          <div class="container row align-items-center">
+            <div class="col-9">
+              <input
+                class="col-sm-10 m-2"
+                placeholder="Ecrire un commentaire"
+                type="text"
+              />
+              <button class="btn btn-primary ml-2">
+                <i class="fa fa-camera"></i>
+              </button>
+              <button class="btn btn-primary ml-2">
+                <i class="fas fa-paper-plane"></i>
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
-<script lang="ts">
+<script>
+import { mapState } from "vuex";
 export default {
-  props: {
-    msg: String,
+  name: "Wall",
+  // mounted: function () {
+
+  //     this.$store.dispatch("getUserInfos");
+  // },
+  computed: {
+    ...mapState({
+      user: "userInfos",
+    }),
   },
-  methods: {},
 };
 </script>
 
 <style scoped>
-.hero {
-  padding: 6.25rem 0px !important;
-  margin: 0px !important;
-}
 .cardbox {
   border-radius: 3px;
   margin-bottom: 20px;

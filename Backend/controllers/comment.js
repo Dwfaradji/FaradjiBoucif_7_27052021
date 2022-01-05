@@ -1,25 +1,34 @@
 import { Comment } from "../models/Comment.js";
-
-async function allPostWall(req, res) {
+import { User } from "../models/user.js";
+async function getAllComments(req, res) {
   try {
-    const allPostWall = await Comment.findOne();
-    return res.status(200).json(allPostWall);
+    const allComment = await Comment.findAll({
+      where: {
+      post_id : req.params.post_id
+  },
+      include: [{
+      model : User,
+  }],
+      order: [["date", "ASC"]]})
+    return res.status(200).json(allComment);
   } catch (error) {
-    res.status(500).json({ error, error: "post introuvable" });
+    console.log(error);
+    res.status(400).json({ error, error: "post introuvable" });
   }
 }
 
 async function createPost(req, res) {
   try {
     const post = await Comment.create({
-      title: req.body.title,
       content: req.body.content,
+      user_id: req.body.user_id,
       post_id: req.body.post_id,
     });
 	console.log(post);
     return res.status(201).json({ post, message: "Post créé !" });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ error, error: "echec post" });
   }
 }
-export { allPostWall, createPost };
+export { getAllComments, createPost };

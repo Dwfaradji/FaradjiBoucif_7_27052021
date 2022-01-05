@@ -14,7 +14,8 @@ function generateToken(user, tokenSign) {
 }
 function getUserId(data, userId) {
   if (data.length > 1) {
-    let token = data.split(" ")[1];
+    let token = data.split(" ")[0];
+    console.log(token, "TOKEN USER ID");
     try {
       let decodedToken = jwt.verify(token, "DEVELOPMENT_TOKEN_SECRET");
       userId = decodedToken.userId;

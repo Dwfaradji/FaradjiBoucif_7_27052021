@@ -2,10 +2,17 @@
   <div class="card">
     <h1 class="card__title">Espace Perso</h1>
     <p class="card__subtitle">Voilà donc qui je suis...</p>
-    <p>{{ user.firstName }} {{ user.lastName }} {{ user.email }}</p>
+    <p>
+      <strong>Infos utilisateur: </strong>{{ user.firstName }}
+      {{ user.lastName }}
+    </p>
+    <p>
+      <strong> E-mail:</strong>
+      {{ user.email }}
+    </p>
     <!-- <img :src="user.photo" /> -->
     <div class="form-row">
-      <button @click="logout()" class="button">Déconnexion</button>
+      <button @click="logout()" class="button">Supprimer le compte</button>
     </div>
   </div>
 </template>
@@ -15,7 +22,7 @@ import { mapState } from "vuex";
 export default {
   name: "Profile",
   mounted: function () {
-    console.log(this.$store.state.user.token);
+    console.log(this.$store.state.userInfos);
     if (this.$store.state.user.userId == -1) {
       this.$router.push("/");
       return;
@@ -31,8 +38,7 @@ export default {
 
   methods: {
     logout: function () {
-      this.$store.commit("logout");
-      this.$router.push("/");
+      console.log("Compte supprimer");
     },
   },
 };

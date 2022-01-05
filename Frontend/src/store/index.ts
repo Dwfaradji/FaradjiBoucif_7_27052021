@@ -12,8 +12,11 @@ if (!userStore) {
 } else {
   try {
     user = JSON.parse(userStore);
-    instance.defaults.headers.common["Authorization"] = user.token;
+    const testtoken = (instance.defaults.headers.common["Authorization"] =
+      user.token);
+    console.log(testtoken, "TEST TOKEN");
   } catch (ex) {
+    console.log(ex);
     user = authUser;
   }
 }
@@ -43,7 +46,9 @@ export default createStore({
     },
 
     logUser: function (state, user) {
-      instance.defaults.headers.common["Authorization"] = user.token;
+      const test = (instance.defaults.headers.common["Authorization"] =
+        user.token);
+      console.log(test, "LOG USER TOKEN");
       localStorage.setItem("user", JSON.stringify(user));
       state.user = user;
     },
@@ -101,8 +106,8 @@ export default createStore({
       instance
         .get("/auth/profile")
         .then(function (response) {
-          console.log("response API", response.data.userId);
-          commit("userInfos", response.data.userId);
+          console.log("response API", response.data);
+          commit("userInfos", response.data);
         })
         .catch((error) => {
           console.log(error); //affiche pas le message 'normalement' envoyé par le back

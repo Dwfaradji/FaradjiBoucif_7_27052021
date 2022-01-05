@@ -5,7 +5,7 @@ import  {database}  from '../config/sequelize.js'
 
 export const Comment = database.define('Comment', {
     content: DataTypes.INTEGER,
-    date: DataTypes.STRING,
+    date: DataTypes.DATE,
     user_id: DataTypes.STRING,
     post_id: DataTypes.INTEGER
 })

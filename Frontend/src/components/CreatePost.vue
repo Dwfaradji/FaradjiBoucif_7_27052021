@@ -19,16 +19,29 @@
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               id="input_text"
-              placeholder="Quoi de neuf ,(prénon) ?"
+              placeholder=" Quoi de neuf ?"
             />
+          
+            <!-- <input
+              type="text"
+              v-model="title"
+              class="form-control col-10 margin"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              id="input_text"
+              placeholder="titre ?"
+            /> -->
           </div>
         </div>
         <form></form>
         <div class="boutton">
-          <router-link to="/posts/create"
-            ><button class="btn btn-primary">Ajouter un fichier</button>
-          </router-link>
-          <button type="submit" class="btn btn-primary" @click="createPost">
+          <button class="btn btn-primary">Ajouter un fichier</button>
+
+          <button
+            type="submit"
+            class="btn btn-primary"
+            @click.prevent="createPost"
+          >
             Publier
           </button>
         </div>
@@ -41,27 +54,37 @@
 <script>
 let userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
+console.log(user);
+
+import { mapState } from "vuex";
 
 export default {
   name: "Create",
+  mounted: function () {
+    this.$store.dispatch("getUserInfos");
+  },
+  computed: {
+    ...mapState({
+      user: "userInfos",
+    }),
+  },
   props: {
     msg: String,
   },
   data() {
     return {
+      title: "",
       content: "",
-      date: "",
-      user_id: "",
-      post_id: "",
     };
   },
   methods: {
     createPost: function () {
       this.$store.dispatch("commentPost", {
+        title: this.title,
         content: this.content,
         user_id: user.userId,
       });
-      // this.$router.push("/posts/wall");
+      this.$router.push("/wall");
     },
   },
 };

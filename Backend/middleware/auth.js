@@ -1,26 +1,20 @@
 import jwt from "jsonwebtoken";
-
 const auth = (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-    // Si l'utilisateur possède une autorisation,
-    // on déclare le token et on le vérifie, s'il n'y a pas
-    // d'erreur, on le next, sinon on renvoie un statut 403
-    if (authHeader) {
-        const token = authHeader.split(' ')[1];
-
-        jwt.verify(token, 'DEVELOPMENT_TOKEN_SECRET', (err, user) => {
-            if (err) {
-                return res.status(403);
-            }
-            next();
-        });
+    const token = req.headers.authorization.split(" ")[0]; //Récupère seulement le token du header authorization de la requête
+    const decodedToken = jwt.verify(token, "DEVELOPMENT_TOKEN_SECRET"); //Decode le token en vérifiant le token avec celui présent dans la fonction login
+    const userId = decodedToken.id; //Récupère le userId
+    if (req.body.id && req.body.id !== userId) {
+      //Vérifie s'il y a un userId dans la requête et que celui ci est différent de l'user Id alors
+      throw new Error("403:unauthorized request"); //Renvoie l'erreur
+    } else {
+      next();
     }
-  } catch (err) {
-    res.status(401).json({ error: "Accès non authorisé" });
-    console.log(err, "erreur c'est pas toi");
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ error: error | "Requête non authentifiée" });
   }
 };
 
 export { auth };
-
+// "DEVELOPMENT_TOKEN_SECRET"

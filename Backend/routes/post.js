@@ -5,7 +5,7 @@ import { createPost, getAllPosts } from "../controllers/post.js";
 
 const postRoad = express.Router();
 
-postRoad.post("/wall", auth, createPost);
+postRoad.post("/post", auth, createPost);
 postRoad.get("/wall", auth, getAllPosts);
 
 export default postRoad;

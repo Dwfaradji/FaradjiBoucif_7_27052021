@@ -29,6 +29,7 @@ async function testBd() {
   try {
     await database.sync();
     console.log("Bienvenue sur le server groupomania.");
+    console.log("Syncronisation des tables BD");
   } catch (error) {
     console.error("Echec du lancement du server", error);
   }

@@ -12,9 +12,7 @@ if (!userStore) {
 } else {
   try {
     user = JSON.parse(userStore);
-    const testtoken = (instance.defaults.headers.common["Authorization"] =
-      user.token);
-    console.log(testtoken, "TEST TOKEN");
+    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
   } catch (ex) {
     console.log(ex);
     user = authUser;
@@ -31,13 +29,23 @@ export default createStore({
       email: "",
       firstName: "",
       lastName: "",
+      token: user.token,
     },
 
     commentPost: {
+      id: "",
       content: "",
       date: "",
       user_id: "",
       post_id: "",
+    },
+    createPost: {
+      title: "",
+      content: "",
+      date: "",
+      attachment: "",
+      idUser: "",
+      likes: "",
     },
   },
   mutations: {
@@ -47,8 +55,8 @@ export default createStore({
 
     logUser: function (state, user) {
       const test = (instance.defaults.headers.common["Authorization"] =
-        user.token);
-      console.log(test, "LOG USER TOKEN");
+        "Bearer " + user.token);
+      console.log(test, "LOG TOKEN");
       localStorage.setItem("user", JSON.stringify(user));
       state.user = user;
     },
@@ -63,7 +71,12 @@ export default createStore({
     },
 
     commentPost: function (state, commentPost) {
+      instance.defaults.headers.common["Authorization"] =
+        "Bearer " + user.token;
       state.commentPost = commentPost;
+    },
+    createPost: function (state, createPost) {
+      state.createPost = createPost;
     },
   },
   actions: {
@@ -120,12 +133,30 @@ export default createStore({
           .post("/posts/create", commentPost)
           .then(function (response) {
             console.log(response);
-            commit("commentPost");
+            commit("commentPost",response.data);
+            console.log("comment post", response.data);
+            
             resolve(response);
           })
           .catch(function (error) {
             console.log(error);
             commit("commentPost");
+            reject(error);
+          });
+      });
+    },
+    createPost: ({ commit }, createPost) => {
+      return new Promise((resolve, reject) => {
+        instance
+          .post("/posts/post", createPost)
+          .then(function (response) {
+            console.log(response);
+            commit("createPost");
+            resolve(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+            commit("createPost");
             reject(error);
           });
       });

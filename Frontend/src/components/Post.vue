@@ -1,7 +1,7 @@
 <template>
   <div class="container m-3">
     <div class="row">
-      <div class="col-lg-6 offset-lg-3">
+      <div class="col-lg-6 offset-lg-3 mr-4">
         <div class="cardbox shadow-lg bg-white">
           <div class="cardbox-heading">
             <!-- START dropdown-->
@@ -32,14 +32,14 @@
             <!--/ dropdown -->
             <div class="media m-0">
               <div class="d-flex mr-3">
-                <img
+                <!-- <img
                   class="img-fluid rounded-circle"
                   src="https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png"
                   alt="User"
-                />
+                /> -->
               </div>
               <div class="media-body">
-                <p class="m-0">{{ user.firstName }}</p>
+                <p class="m-0">Posté par {{ user.firstName }}</p>
                 <small
                   ><span
                     ><i class="icon ion-md-time"></i> Heure du post
@@ -48,13 +48,13 @@
               </div>
             </div>
           </div>
-          <div class="cardbox-item">
+          <!-- <div class="cardbox-item">
             <img
               class="img-fluid"
-              src="https://cdn-s-www.leprogres.fr/images/82030199-3121-4C75-A2F2-79ACC0D888E1/NW_detail/les-rousses-sous-la-neige-photo-magali-letondor-1607174392.jpg"
+              src=""
               alt="Image"
             />
-          </div>
+          </div> -->
           <div class="cardbox-base">
             <ul class="float-right">
               <li>
@@ -64,26 +64,28 @@
                 <a href=""><em class="mr-5">Commentaire</em></a>
               </li>
             </ul>
-            <ul>
+            <!-- <ul>
               <li>
-                <a href=""><i class="fa fa-thumbs-up"></i></a>
+                <a href=""><i class="fa fa-thumbs-up"> 0</i></a>
               </li>
               <li>
-                <a><span>0 Nombre de Likes</span></a>
+                <a href=""><i class="fa fa-thumbs-down"> 0</i></a>
               </li>
-            </ul>
+            </ul> -->
           </div>
           <div class="container row align-items-center">
-            <div class="col-9">
+            <div class="col-10">
               <input
                 class="col-sm-10 m-2"
-                placeholder="Ecrire un commentaire"
+                placeholder="Ecrivez un commentaire"
                 type="text"
               />
-              <button class="btn btn-primary ml-2">
-                <i class="fa fa-camera"></i>
-              </button>
-              <button class="btn btn-primary ml-2">
+            
+              <button
+                class="btn btn-primary ml-2"
+                type="submit"
+                @click.prevent="createPost"
+              >
                 <i class="fas fa-paper-plane"></i>
               </button>
             </div>
@@ -95,17 +97,46 @@
 </template>
 
 <script>
+let userStore = localStorage.getItem("user");
+const user = JSON.parse(userStore);
+// console.log(user);
+
 import { mapState } from "vuex";
 export default {
-  name: "Wall",
-  // mounted: function () {
-
-  //     this.$store.dispatch("getUserInfos");
-  // },
+  name: "Post",
+  mounted: function () {
+    this.$store.dispatch("getUserInfos");
+  },
   computed: {
     ...mapState({
       user: "userInfos",
     }),
+  },
+  props: {
+    msg: String,
+  },
+  data() {
+    return {
+      title: "",
+      content: "",
+      date: "",
+      attachment: "",
+      idUser: "",
+      likes: "",
+    };
+  },
+  methods: {
+    createPost: function () {
+      this.$store.dispatch("createPost", {
+        title: this.title,
+        content: this.content,
+        date: this.date,
+        attachment: this.attachment,
+        idUser: user.userId,
+        likes: this.likes,
+      });
+      this.$router.push("/wall");
+    },
   },
 };
 </script>

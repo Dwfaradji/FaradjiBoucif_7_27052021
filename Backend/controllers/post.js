@@ -6,7 +6,8 @@ async function createPost(req, res) {
     const post = await Post.create({
       title: req.body.title,
       content: req.body.content,
-      user_id: req.body.user_id,
+      idUser: req.body.idUser,
+      likes: req.body.likes,
     });
     console.log(post);
     return res.status(201).json({ post, message: "Post créé !" });

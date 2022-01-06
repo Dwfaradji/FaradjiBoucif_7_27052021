@@ -8,6 +8,7 @@ export const User = database.define("User", {
   lastName: DataTypes.STRING,
   email: DataTypes.STRING,
   password: DataTypes.STRING,
+  // image: DataTypes.STRING,
   isAdmin: DataTypes.BOOLEAN,
 });
 

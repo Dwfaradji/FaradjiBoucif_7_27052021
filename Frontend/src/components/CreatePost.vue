@@ -5,42 +5,42 @@
         class="col-lg-6 offset-lg-3 cardbox shadow-lg bg-white"
         method="post"
       >
-        <div class="input- mb-3">
-          <div class="row margin">
-            <img
-              src="https://www.icone-png.com/png/54/53787.png"
-              alt="..."
-              class="rounded-circle"
-            />
+        <div class="row">
+          <img
+            src="https://www.icone-png.com/png/54/53787.png"
+            alt="..."
+            class="rounded-circle"
+          />
+          <div class="col-10 flex-column mt-3">
             <input
               type="text"
               v-model="content"
-              class="form-control col-10 margin"
+              class="form-control col-12 flex-column"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               id="input_text"
-              placeholder=" Quoi de neuf ?"
+              placeholder=" Titre ?"
             />
-          
-            <!-- <input
+
+            <input
               type="text"
               v-model="title"
-              class="form-control col-10 margin"
+              class="form-control col-12 mt-2"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               id="input_text"
-              placeholder="titre ?"
-            /> -->
+              placeholder="Quoi de neuf ?"
+            />
           </div>
         </div>
         <form></form>
-        <div class="boutton">
-          <button class="btn btn-primary">Ajouter un fichier</button>
+        <div class="boutton mt-2" >
+          <button class="btn btn-primary ">Ajouter un fichier</button>
 
           <button
             type="submit"
             class="btn btn-primary"
-            @click.prevent="createPost"
+            @click.prevent="createComment"
           >
             Publier
           </button>
@@ -54,7 +54,7 @@
 <script>
 let userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
-console.log(user);
+// console.log(user);
 
 import { mapState } from "vuex";
 
@@ -73,18 +73,20 @@ export default {
   },
   data() {
     return {
-      title: "",
+      // title: "",
       content: "",
+      user_id: "",
+      date: "",
     };
   },
   methods: {
-    createPost: function () {
+    createComment: function () {
       this.$store.dispatch("commentPost", {
-        title: this.title,
+        date: this.date,
         content: this.content,
         user_id: user.userId,
       });
-      this.$router.push("/wall");
+      // this.$router.push("/wall");
     },
   },
 };

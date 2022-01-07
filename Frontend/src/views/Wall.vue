@@ -1,7 +1,8 @@
 <template>
   <div id="wall" class="wall">
+      <Post />
     <CreatePost />
-    <Post />
+  
   </div>
 </template>
 

@@ -18,7 +18,9 @@ schemaPassword
   .has()
   .digits(1);
 
+// POST pour un nouvel utilisateur
 async function signup(req, res, next) {
+  // Récupération des valeur utilisateur
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
   let email = req.body.email;
@@ -45,7 +47,7 @@ async function signup(req, res, next) {
   ) {
     res.status(400).json({ error: "il manque un paramètre" });
   }
-  //TO DO => Vérification des saisies user
+  //Vérification des saisies user
   let emailOk = verifInput.validEmail(email);
   console.log(emailOk);
   let mdpOK = verifInput.validPassword(password);
@@ -62,13 +64,17 @@ async function signup(req, res, next) {
       firstNameOk == true &&
       lastNameOk == true
     ) {
+      // Vérification de l 'existance de cet email dans la base de donnée utilisateurs
       const verifUser = await User.findOne({
         attributes: ["email"],
         where: { email: email },
       });
       console.log(verifUser, "salut OK");
+
+      // hash du password avec bcript :
       if (!verifUser) {
         const criptPasseword = await bcrypt.hash(req.body.password, 10);
+        // Lancement de la création de l'utilisateur
         const newUser = await User.create({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
@@ -86,9 +92,12 @@ async function signup(req, res, next) {
     res.status(500).json({ error, error: "probléme inscription est survenue" });
   }
 }
-//=====================================================================
-//====================================================================
+// // ----------------------------------------------------------------------/
+// //       script pour le login
+// // ----------------------------------------------------------------------/
+
 async function login(req, res) {
+  // Récupération des valeur utilisateur
   let userEmail = req.body.email;
   let password = req.body.password;
 
@@ -96,20 +105,23 @@ async function login(req, res) {
     return res.status(400).json({ error: "Il manque un paramètre" });
   }
   try {
+    // Recherche d'une entrée dans la base en fonction de l'email
     const userName = await User.findOne({ where: { email: userEmail } });
     if (!userName) {
       return res.status(401).json({ error: "Utilisateur  incorrect !" });
     }
+    // Lancement de la vérification du mot de passe
     const passwordValid = await bcrypt.compare(password, userName.password);
     if (!passwordValid) {
       return res.status(401).json({ error: " Mot de passe incorrect !" });
     } else {
+      // Génere les informations tell que userId et le token 
       res.status(200).json({
         userId: userName.id,
         token: jwt.generateToken(userName),
         isAdmin: userName.isAdmin,
       });
-      console.log(jwt,"ok");
+      console.log(jwt, "ok");
     }
   } catch (error) {
     console.log(error);
@@ -119,6 +131,7 @@ async function login(req, res) {
 
 async function userInfos(req, res) {
   try {
+    // Va recupérer les informations de l'utilisateur  aprés identification
     let userId = jwt.getUserId(req.headers.authorization);
     const user = await User.findOne({
       attributes: ["id", "email", "firstName", "lastName", "isAdmin"],

@@ -1,5 +1,7 @@
 import { Comment } from "../models/Comment.js";
 import { User } from "../models/user.js";
+
+// Recupére tout les commentaires enregistré dans la base de donnée 
 async function getAllComments(req, res) {
   try {
     const allComment = await Comment.findAll({
@@ -19,7 +21,7 @@ async function getAllComments(req, res) {
     res.status(400).json({ error, error: "post introuvable" });
   }
 }
-
+// Enregistre les informations de la creation de commentaire 
 async function createPost(req, res) {
   try {
     const post = await Comment.create({

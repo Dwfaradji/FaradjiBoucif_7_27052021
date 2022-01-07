@@ -133,9 +133,8 @@ export default createStore({
           .post("/posts/create", commentPost)
           .then(function (response) {
             console.log(response);
-            commit("commentPost",response.data);
+            commit("commentPost", response.data);
             console.log("comment post", response.data);
-            
             resolve(response);
           })
           .catch(function (error) {
@@ -145,6 +144,7 @@ export default createStore({
           });
       });
     },
+
     createPost: ({ commit }, createPost) => {
       return new Promise((resolve, reject) => {
         instance
@@ -162,5 +162,4 @@ export default createStore({
       });
     },
   },
-  modules: {},
 });

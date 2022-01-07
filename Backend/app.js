@@ -25,7 +25,9 @@ appli.use((req, res, next) => {
   );
   next();
 });
-async function testBd() {
+
+// Lancement de la base de donnée et syncronisation des tables avec ({force:true}).
+async function runDatabase() {
   try {
     await database.sync();
     console.log("Bienvenue sur le server groupomania.");
@@ -34,7 +36,7 @@ async function testBd() {
     console.error("Echec du lancement du server", error);
   }
 }
-testBd();
+runDatabase();
 
 appli.use(bodyParser.urlencoded({ extended: true }));
 appli.use(bodyParser.json());

@@ -11,8 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const appli = express();
 
-//permet acceder à notre API depuis n'importe quelle origine
-
+//Permet acceder à notre API depuis n'importe quelle origine
 appli.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -29,7 +28,7 @@ appli.use((req, res, next) => {
 // Lancement de la base de donnée et syncronisation des tables avec ({force:true}).
 async function runDatabase() {
   try {
-    await database.sync();
+    await database.sync({ alter: true });
     console.log("Bienvenue sur le server groupomania.");
     console.log("Syncronisation des tables BD");
   } catch (error) {

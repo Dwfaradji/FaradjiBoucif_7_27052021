@@ -1,50 +1,41 @@
 <template>
   <div>
-    <div class="container">
-      <form class="cardbox shadow-lg bg-white" method="post">  <div class="d-flex justify-content-between">
-          <p class="m-0">Posté par {{ user.firstName }} a ../../.. ..:..</p>
-
-          <div class="dropdown float-right">
-            <button
-              class="btn btn-flat btn-flat-icon"
-              type="button"
-              data-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <em class="fa fa-ellipsis-h"></em>
-            </button>
-            <div
-              class="dropdown-menu dropdown-scale dropdown-menu-right"
-              role="menu"
-            >
-              <a class="dropdown-item" href="#">Modifier le post</a>
-              <a class="dropdown-item" href="#">Supprimer le post</a>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-between  align-items-center">
+    <div class="container mb-3">
+      <form class="cardbox shadow-lg bg-white" method="post">
+        <div class="d-flex justify-content-between align-items-center">
           <img
             src="https://www.icone-png.com/png/54/53787.png"
             alt="..."
             class="rounded-circle m-2"
           />
-
-          <input
-            type="text"
-            v-model="content"
-            class="form-control "
-            aria-label="Default"
-            aria-describedby="inputGroup-sizing-default"
-            id="input_text"
-            placeholder="Ecrire un commentaire"
-          />
-          <div class="d-flex align-items-center mr-2">
+          <div class="d-flex flex-column col-6">
+            <input
+              type="text"
+              v-model="content"
+              class="form-control m-2"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              id="input_text"
+              placeholder="Titre"
+            />
+            <input
+              type="text"
+              v-model="title"
+              class="form-control m-2"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              id="input_text"
+              placeholder="Quoi de neuf ?"
+            />
+          </div>
+          <div class="d-flex align-items-end mr-2">
+            <button type="submit" class="btn btn-primary ml-5">image</button>
             <button
               type="submit"
               class="btn btn-primary ml-5"
-              @click.prevent="createComment"
+              @click.prevent="createPost"
             >
-              Commenter
+              Publier
             </button>
           </div>
         </div>
@@ -54,12 +45,11 @@
 </template>
 
 <script>
-// Recupereration des informations dans le local storage
 let userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
-// Importation module
-import { mapState } from "vuex";
+// console.log(user);
 
+import { mapState } from "vuex";
 export default {
   name: "Create",
   mounted: function () {
@@ -68,6 +58,7 @@ export default {
   computed: {
     ...mapState({
       user: "userInfos",
+      post: "createPost",
     }),
   },
   props: {
@@ -75,19 +66,25 @@ export default {
   },
   data() {
     return {
+      title: "",
       content: "",
-      user_id: "",
       date: "",
+      attachment: "",
+      idUser: "",
+      likes: "",
     };
   },
   methods: {
-    createComment: function () {
-      this.$store.dispatch("commentPost", {
-        date: this.date,
+    createPost: function () {
+      this.$store.dispatch("createPost", {
+        title: this.title,
         content: this.content,
-        user_id: user.userId,
+        date: this.date,
+        attachment: this.attachment,
+        idUser: user.userId,
+        likes: this.likes,
       });
-      // this.$router.push("/wall");
+      this.$router.push("/wall");
     },
   },
 };
@@ -104,9 +101,6 @@ img {
   margin-right: auto;
   border-radius: 15px 15px 15px 15px;
   padding: 0px;
-}
-.margin {
-  margin-top: 30px;
 }
 .boutton {
   display: flex;

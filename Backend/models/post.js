@@ -8,5 +8,5 @@ export const Post = database.define("Post", {
   date: DataTypes.DATE,
   attachment: DataTypes.STRING,
   user_id: DataTypes.STRING,
-//   likes: DataTypes.STRING,
+  //   likes: DataTypes.STRING,
 });

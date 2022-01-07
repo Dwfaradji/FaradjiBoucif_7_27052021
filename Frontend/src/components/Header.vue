@@ -18,7 +18,6 @@
         alt="Logo Groupomania"
       />
     </router-link>
-
     <div class="collapse navbar-collapse justify-content-end" id="navbarToggle">
       <ul class="navbar-nav mt-2 mt-lg-0">
         <li class="nav-item">

@@ -22,12 +22,13 @@ import { mapState } from "vuex";
 export default {
   name: "Profile",
   mounted: function () {
-    console.log(this.$store.state.userInfos);
+
     if (this.$store.state.user.userId == -1) {
       this.$router.push("/");
       return;
     } else {
-      this.$store.dispatch("getUserInfos");
+       this.$store.dispatch("getUserInfos");
+           console.log("test api user Info",this.$store.state.userInfos);
     }
   },
   computed: {

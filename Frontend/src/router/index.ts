@@ -5,7 +5,6 @@ import Wall from "../views/Wall.vue";
 import Profile from "../views/Profile.vue";
 import Create from "../components/CreatePost.vue";
 
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",

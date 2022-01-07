@@ -1,8 +1,9 @@
 <template>
   <div id="wall" class="wall">
-      <Post />
     <CreatePost />
-  
+    <Post v-for="post in allPosts" v-bind:key="post.id" :post="post" />
+    <!-- boucle v-for sur le tableau posts 
+    passer une attribut au composant -->
   </div>
 </template>
 
@@ -12,16 +13,32 @@ import Post from "../components/Post";
 
 export default {
   name: "Wall",
+  components: {
+    CreatePost,
+    Post,
+  },
+  data() {
+    return {
+      post: {
+        id: "",
+        content: "",
+      },
+      allPosts: [],
+    };
+  },
+  methods: {},
+  // },
   mounted: function () {
-    // console.log(this.$store.state.user);
+    console.log("All Post", this.$store.state.getAllPost);
+    const getAllPost = this.$store.state.getAllPost;
+    this.allPosts = getAllPost;
+    //faire un fetch vers route post all et stocker le résultat dans un tableau data
+    
     if (this.$store.state.user.userId == -1) {
       this.$router.push("/");
       return;
     }
-  },
-  components: {
-    CreatePost,
-    Post,
+    this.$store.dispatch("getAllPost");
   },
 };
 </script>

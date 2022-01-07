@@ -31,6 +31,14 @@ export default createStore({
       lastName: "",
       token: user.token,
     },
+    getAllPost: {
+      title: "",
+      content: "",
+      date: "",
+      attachment: "",
+      user_id: "",
+      likes: "",
+    },
 
     commentPost: {
       id: "",
@@ -44,8 +52,7 @@ export default createStore({
       content: "",
       date: "",
       attachment: "",
-      idUser: "",
-      likes: "",
+      user_id: "",
     },
   },
   mutations: {
@@ -54,9 +61,8 @@ export default createStore({
     },
 
     logUser: function (state, user) {
-      const test = (instance.defaults.headers.common["Authorization"] =
-        "Bearer " + user.token);
-      console.log(test, "LOG TOKEN");
+      instance.defaults.headers.common["Authorization"] =
+        "Bearer " + user.token;
       localStorage.setItem("user", JSON.stringify(user));
       state.user = user;
     },
@@ -78,6 +84,9 @@ export default createStore({
     createPost: function (state, createPost) {
       state.createPost = createPost;
     },
+    getAllPost: function (state, getAllPost) {
+      state.getAllPost = getAllPost;
+    },
   },
   actions: {
     login: ({ commit }, userInfos) => {
@@ -86,12 +95,12 @@ export default createStore({
         instance
           .post("auth/login", userInfos)
           .then(function (response) {
-            console.log("response API", response);
             commit("setStatus", "");
             commit("logUser", response.data);
             resolve(response);
           })
           .catch(function (error) {
+            console.log(error);            
             commit("setStatus", "error_login");
             reject(error);
           });
@@ -109,6 +118,7 @@ export default createStore({
             resolve(response);
           })
           .catch(function (error) {
+            console.log(error);
             commit("setStatus", "error_create");
             reject(error);
           });
@@ -119,7 +129,6 @@ export default createStore({
       instance
         .get("/auth/profile")
         .then(function (response) {
-          console.log("response API", response.data);
           commit("userInfos", response.data);
         })
         .catch((error) => {
@@ -132,9 +141,7 @@ export default createStore({
         instance
           .post("/posts/create", commentPost)
           .then(function (response) {
-            console.log(response);
             commit("commentPost", response.data);
-            console.log("comment post", response.data);
             resolve(response);
           })
           .catch(function (error) {
@@ -150,7 +157,6 @@ export default createStore({
         instance
           .post("/posts/post", createPost)
           .then(function (response) {
-            console.log(response);
             commit("createPost");
             resolve(response);
           })
@@ -160,6 +166,17 @@ export default createStore({
             reject(error);
           });
       });
+    },
+    getAllPost: ({ commit }) => {
+      instance
+        .get("/posts/allpost")
+        .then(function (response) {
+          commit("getAllPost", response.data);
+          console.log("response API", response.data);
+        })
+        .catch((error) => {
+          console.log(error); //affiche pas le message 'normalement' envoyé par le back
+        });
     },
   },
 });

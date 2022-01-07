@@ -6,6 +6,6 @@ import { createPost, getAllPosts } from "../controllers/post.js";
 const postRoad = express.Router();
 
 postRoad.post("/post", auth, createPost);
-postRoad.get("/wall", auth, getAllPosts);
+postRoad.get("/allpost", auth, getAllPosts);
 
 export default postRoad;

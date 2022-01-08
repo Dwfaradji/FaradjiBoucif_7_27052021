@@ -1,12 +1,21 @@
 "use strict";
 import { DataTypes } from "sequelize";
 import { database } from "../config/sequelize.js";
+import { Comment } from "../models/Comment.js";
 
 export const Post = database.define("Post", {
   title: DataTypes.STRING,
   content: DataTypes.STRING,
   date: DataTypes.DATE,
   attachment: DataTypes.STRING,
-  user_id: DataTypes.STRING,
+  user_id: DataTypes.SMALLINT,
   //   likes: DataTypes.STRING,
 });
+
+Post.hasMany(Comment, {
+  foreignKey: "post_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Comment.belongsTo(Post, { foreignKey: "post_id" });
+

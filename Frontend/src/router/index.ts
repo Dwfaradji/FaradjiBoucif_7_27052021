@@ -4,6 +4,7 @@ import Login from "../views/Login.vue";
 import Wall from "../views/Wall.vue";
 import Profile from "../views/Profile.vue";
 import Create from "../components/CreatePost.vue";
+import Post from "../components/Post.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -54,6 +55,16 @@ const routes: Array<RouteRecordRaw> = [
     },
     meta: {
       title: "Create",
+    },
+  },
+  {
+    path: "/post/:id",
+    name: "Post",
+    components: {
+      default: Post,
+    },
+    meta: {
+      title: "Post",
     },
   },
 ];

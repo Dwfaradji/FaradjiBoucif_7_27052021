@@ -47,7 +47,7 @@
 <script>
 let userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
-// console.log(user);
+console.log(user);
 
 import { mapState } from "vuex";
 export default {
@@ -58,7 +58,6 @@ export default {
   computed: {
     ...mapState({
       user: "userInfos",
-      post: "createPost",
     }),
   },
   props: {
@@ -70,21 +69,25 @@ export default {
       content: "",
       date: "",
       attachment: "",
-      idUser: "",
-      likes: "",
+      // user_id: "",
+      // likes: "",
     };
   },
   methods: {
     createPost: function () {
+      const Id = user.userId;
+      console.log(Id, "USER ID");
       this.$store.dispatch("createPost", {
         title: this.title,
         content: this.content,
         date: this.date,
         attachment: this.attachment,
-        idUser: user.userId,
-        likes: this.likes,
+        user_id: Id,
+        // likes: this.likes,
       });
-      this.$router.push("/wall");
+      // Met a jour les nouveau post 
+      // @ TODO A VOIR AVEC FLORIAN
+      this.$router.go();
     },
   },
 };

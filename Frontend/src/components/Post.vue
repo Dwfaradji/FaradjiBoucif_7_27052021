@@ -17,15 +17,22 @@
               class="dropdown-menu dropdown-scale dropdown-menu-right"
               role="menu"
             >
-              <a class="dropdown-item" @click.prevent="deletePost"
+              <a class="dropdown-item" @click.prevent="deletePost()"
                 >Modifier le post</a
               >
-              <a class="dropdown-item" href="#">Supprimer le post</a>
+              <a class="dropdown-item" @click.prevent="deletePost()">
+                Supprimer le post</a
+              >
             </div>
           </div>
         </div>
         <div>
           <p>Contenue</p>
+          <p>{{ post.title }}</p>
+          <p>{{ post.content }}</p>
+        </div>
+        <div>
+          <p>{{ comments.content }}</p>
         </div>
         <div class="d-flex justify-content-between align-items-center">
           <img
@@ -59,35 +66,43 @@
 
 <script>
 // Recupereration des informations dans le local storage
+
+import axios from "axios";
+const instance = axios.create({
+  baseURL: "http://localhost:3000/api/",
+});
 let userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
+const idUser = user.userId;
 
 // Importation module
 import { mapState } from "vuex";
-
 export default {
   name: "Post",
-  mounted: function () {
-    this.$store.dispatch("getAllPost");
-    this.$router.push("/wall");
-  },
   computed: {
     ...mapState({
       user: "userInfos",
     }),
   },
+
   props: {
     post: {
       // @ TODO problème recupération post
       type: Object,
-      // required: true,
     },
   },
   data() {
     return {
+      id_param: this.$route.params.post_id,
       content: "",
       user_id: "",
       date: "",
+      post_id: "",
+      //   id_param: this.$route.params.id,
+      comments: [],
+      // isDisplay: false,
+      // displaycomment: false,
+      commentaire: "",
     };
   },
   methods: {
@@ -95,21 +110,37 @@ export default {
       this.$store.dispatch("commentPost", {
         date: this.date,
         content: this.content,
-        user_id: user.userId,
+        user_id: idUser,
+        post_id: idUser,
       });
     },
-    // deletePost() {
-    //   if (confirm("Voulez-vous vraiment supprimer le post") == true) {
-    //     fetch(`http://localhost:3000/api/posts/${this.id_param}`, {
-    //       method: "DELETE",
-    //     })
-    //       .then((response) => response.json())
-    //       .then(() => {
-    //         alert("La suppression du post est bien prise en compte");
-    //         this.$router.push("/allposts");
-    //       });
-    //   }
-    // },
+
+    deletePost() {
+      if (confirm("Voulez-vous vraiment supprimer le post") == true) {
+        instance
+          .delete("/posts/delete")
+          .then((response) => response.data)
+          .then(() => {
+            alert("La suppression du post est bien prise en compte");
+            this.$router.push("/wall");
+          });
+      }
+    },
+    mounted() {
+      this.$store.dispatch("userInfos");
+      instance.defaults.headers.common["Authorization"] =
+        "Bearer " + user.token;
+      instance
+        .post("/comments/allcomments")
+        .then((response) => {
+          this.comments = response.data.Comments;
+          console.log("response API commentaire", response.data);
+        })
+        .catch((error) => {
+          console.log(error); //affiche pas le message 'normalement' envoyé par le back
+        });
+      this.$store.dispatch("getUserInfos");
+    },
   },
 };
 </script>

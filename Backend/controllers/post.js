@@ -1,15 +1,14 @@
 import { Post } from "../models/post.js";
 import { User } from "../models/user.js";
+import { Comment } from "../models/Comment.js";
 
-
-
-// Creation d'un post 
+// Creation d'un post
 async function createPost(req, res) {
   try {
     const post = await Post.create({
       title: req.body.title,
       content: req.body.content,
-      idUser: req.body.idUser,
+      user_id: req.body.user_id,
       likes: req.body.likes,
     });
     console.log(post);
@@ -27,6 +26,9 @@ async function getAllPosts(req, res) {
         {
           model: User,
         },
+        {
+          model: Comment,
+        },
       ],
       order: [["id", "DESC"]],
     });
@@ -37,5 +39,34 @@ async function getAllPosts(req, res) {
     console.log(error);
   }
 }
+async function deletePost(req, res, next) {
+  try {
+    await Post.destroy({ where: { user_id: 1 } });
+    res.status(200).json({ message: "Post supprimé !" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error, error: "erreur suppression post" });
+  }
+}
 
-export { createPost, getAllPosts };
+// async function listMsg(req, res, next) {
+//   try {
+//   const allComments=  await Post.findAll({
+//       include: [{
+//           model: models.User,
+//           attributes: ['username']
+//       }],
+//       order: [['createdAt', 'DESC']]
+//   })
+//   if (allComments.length > null) {
+//     res.status(200).json(posts)
+// } else {
+//     res.status(404).json({ error: 'Pas de post à afficher' })
+// }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json(error)
+//   }
+// }
+
+export { createPost, getAllPosts, deletePost };

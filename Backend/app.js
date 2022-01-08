@@ -28,7 +28,7 @@ appli.use((req, res, next) => {
 // Lancement de la base de donnée et syncronisation des tables avec ({force:true}).
 async function runDatabase() {
   try {
-    await database.sync({ alter: true });
+    await database.sync();
     console.log("Bienvenue sur le server groupomania.");
     console.log("Syncronisation des tables BD");
   } catch (error) {
@@ -42,5 +42,5 @@ appli.use(bodyParser.json());
 appli.use("/images", express.static(path.join(__dirname, "images")));
 
 appli.use("/api/auth/", userRoad);
-appli.use("/api/posts/", commentRoad);
+appli.use("/api/comments/", commentRoad);
 appli.use("/api/posts/", postRoad);

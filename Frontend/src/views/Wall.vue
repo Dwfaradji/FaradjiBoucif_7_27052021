@@ -10,7 +10,12 @@
 <script>
 import CreatePost from "../components/CreatePost";
 import Post from "../components/Post";
-
+import axios from "axios";
+const instance = axios.create({
+  baseURL: "http://localhost:3000/api/",
+});
+let userStore = localStorage.getItem("user");
+const user = JSON.parse(userStore);
 export default {
   name: "Wall",
   components: {
@@ -29,16 +34,24 @@ export default {
   methods: {},
   // },
   mounted: function () {
-    console.log("All Post", this.$store.state.getAllPost);
-    const getAllPost = this.$store.state.getAllPost;
-    this.allPosts = getAllPost;
+      instance.defaults.headers.common["Authorization"] =
+        "Bearer " + user.token;
+    instance
+      .get("/posts/allpost")
+      .then((response) => {
+        this.allPosts = response.data;
+        console.log("response API Post", response.data);
+      })
+      .catch((error) => {
+        console.log(error); //affiche pas le message 'normalement' envoyé par le back
+      });
+    this.$store.dispatch("getUserInfos");
     //faire un fetch vers route post all et stocker le résultat dans un tableau data
-    
+
     if (this.$store.state.user.userId == -1) {
       this.$router.push("/");
       return;
     }
-    this.$store.dispatch("getAllPost");
   },
 };
 </script>

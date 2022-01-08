@@ -7,5 +7,5 @@ export const Comment = database.define("Comment", {
   content: DataTypes.STRING,
   date: DataTypes.DATE,
   user_id: DataTypes.SMALLINT,
-  post_id: DataTypes.SMALLINT,
+  post_id: DataTypes.STRING,
 });

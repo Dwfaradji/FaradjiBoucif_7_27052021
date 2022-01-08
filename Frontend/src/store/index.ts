@@ -29,17 +29,8 @@ export default createStore({
       email: "",
       firstName: "",
       lastName: "",
-      token: user.token,
+      // token: user.token,
     },
-    getAllPost: {
-      title: "",
-      content: "",
-      date: "",
-      attachment: "",
-      user_id: "",
-      likes: "",
-    },
-
     commentPost: {
       id: "",
       content: "",
@@ -52,7 +43,7 @@ export default createStore({
       content: "",
       date: "",
       attachment: "",
-      user_id: "",
+      id: "",
     },
   },
   mutations: {
@@ -68,7 +59,7 @@ export default createStore({
     },
 
     userInfos: function (state, userInfos) {
-      state.userInfos = userInfos;
+      state.userInfos = userInfos;    
     },
 
     logout: function (state) {
@@ -77,15 +68,14 @@ export default createStore({
     },
 
     commentPost: function (state, commentPost) {
-      instance.defaults.headers.common["Authorization"] =
-        "Bearer " + user.token;
+      // instance.defaults.headers.common["Authorization"] =
+      //   "Bearer " + user.token;
       state.commentPost = commentPost;
     },
     createPost: function (state, createPost) {
+      state.user= user
       state.createPost = createPost;
-    },
-    getAllPost: function (state, getAllPost) {
-      state.getAllPost = getAllPost;
+      
     },
   },
   actions: {
@@ -100,7 +90,7 @@ export default createStore({
             resolve(response);
           })
           .catch(function (error) {
-            console.log(error);            
+            console.log(error);
             commit("setStatus", "error_login");
             reject(error);
           });
@@ -129,6 +119,8 @@ export default createStore({
       instance
         .get("/auth/profile")
         .then(function (response) {
+          console.log(response);
+          
           commit("userInfos", response.data);
         })
         .catch((error) => {
@@ -139,7 +131,7 @@ export default createStore({
     commentPost: ({ commit }, commentPost) => {
       return new Promise((resolve, reject) => {
         instance
-          .post("/posts/create", commentPost)
+          .post("/comments/", commentPost)
           .then(function (response) {
             commit("commentPost", response.data);
             resolve(response);
@@ -166,17 +158,6 @@ export default createStore({
             reject(error);
           });
       });
-    },
-    getAllPost: ({ commit }) => {
-      instance
-        .get("/posts/allpost")
-        .then(function (response) {
-          commit("getAllPost", response.data);
-          console.log("response API", response.data);
-        })
-        .catch((error) => {
-          console.log(error); //affiche pas le message 'normalement' envoyé par le back
-        });
     },
   },
 });

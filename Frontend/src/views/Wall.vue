@@ -34,8 +34,7 @@ export default {
   methods: {},
   // },
   mounted: function () {
-      instance.defaults.headers.common["Authorization"] =
-        "Bearer " + user.token;
+    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
     instance
       .get("/posts/allpost")
       .then((response) => {

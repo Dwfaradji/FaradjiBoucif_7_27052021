@@ -28,7 +28,7 @@ export default {
       return;
     } else {
        this.$store.dispatch("getUserInfos");
-           console.log("test api user Info",this.$store.state.userInfos);
+          //  console.log("test api user Info",this.$store.state.userInfos);
     }
   },
   computed: {

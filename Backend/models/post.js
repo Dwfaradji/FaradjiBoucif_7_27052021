@@ -1,7 +1,8 @@
 "use strict";
 import { DataTypes } from "sequelize";
 import { database } from "../config/sequelize.js";
-import { Comment } from "../models/Comment.js";
+import { Comment } from "../models/comment.js";
+// import { User } from "../models/user.js";
 
 export const Post = database.define("Post", {
   title: DataTypes.STRING,
@@ -9,6 +10,7 @@ export const Post = database.define("Post", {
   date: DataTypes.DATE,
   attachment: DataTypes.STRING,
   user_id: DataTypes.SMALLINT,
+
   //   likes: DataTypes.STRING,
 });
 
@@ -19,3 +21,5 @@ Post.hasMany(Comment, {
 });
 Comment.belongsTo(Post, { foreignKey: "post_id" });
 
+// Post.belongsTo(Comment);
+// Comment.hasMany(Post);

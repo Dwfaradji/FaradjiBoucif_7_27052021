@@ -1,8 +1,9 @@
 import { Comment } from "../models/Comment.js";
 import { User } from "../models/user.js";
+// import { Post } from "../models/post.js";
 
 // Enregistre les informations de la creation de commentaire
-async function createPost(req, res) {
+async function createComment(req, res) {
   try {
     const post = await Comment.create({
       user_id: req.body.user_id,
@@ -10,17 +11,18 @@ async function createPost(req, res) {
       post_id: req.body.post_id,
     });
     console.log(post);
-    return res.status(201).json({ post, message: "Commentaire créé !" });
+    return res.status(201).json({ id: post.id, message: "Commentaire créé !" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error, error: "echec envoi commentaire" });
   }
-} // Recupére tout les commentaires enregistré dans la base de donnée
+}
+// Recupére tout les commentaires enregistré dans la base de donnée
 async function getAllComments(req, res) {
   try {
     const allComment = await Comment.findAll({
       where: {
-        post_id: req.body.post_id,
+        post_id: req.body.post_id, // @_TODO problème pour recuperer id du commentaire
       },
       include: [
         {
@@ -35,4 +37,18 @@ async function getAllComments(req, res) {
     res.status(400).json({ error, error: "Commentaire introuvable" });
   }
 }
-export { getAllComments, createPost };
+async function getOneComment(req, res) {
+  try {
+    const comment = await Comment.findOne({
+      where: {
+        id: req.params.id, // @_TODO problème pour recuperer le commentaire
+      },
+    });
+    return res.status(200).json(comment);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error, error: "Commentaire introuvable" });
+  }
+}
+
+export { getAllComments, createComment, getOneComment };

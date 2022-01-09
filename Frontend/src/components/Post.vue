@@ -32,6 +32,7 @@
           <p>{{ post.content }}</p>
         </div>
         <div>
+          <p>Commentaire</p>
           <p>{{ comments.content }}</p>
         </div>
         <div class="d-flex justify-content-between align-items-center">
@@ -71,9 +72,9 @@ import axios from "axios";
 const instance = axios.create({
   baseURL: "http://localhost:3000/api/",
 });
-let userStore = localStorage.getItem("user");
+const userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
-const idUser = user.userId;
+// const idUser = user.userId;
 
 // Importation module
 import { mapState } from "vuex";
@@ -95,23 +96,32 @@ export default {
     return {
       id_param: this.$route.params.post_id,
       content: "",
-      user_id: "",
       date: "",
-      post_id: "",
-      //   id_param: this.$route.params.id,
-      comments: [],
-      // isDisplay: false,
-      // displaycomment: false,
-      commentaire: "",
+      comments: {},
+      // post_id:""
     };
+  },
+  mounted: function () {
+    // this.$store.dispatch("userInfos");
+    // instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
+    // instance
+    //   .get("/comments/allcomments")
+    //   .then((response) => {
+    //     this.comments = response.data;
+    //     console.log("response API commentaire", response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error); //affiche pas le message 'normalement' envoyé par le back
+    //   });
+    this.$store.dispatch("getUserInfos");
   },
   methods: {
     createComment: function () {
       this.$store.dispatch("commentPost", {
         date: this.date,
         content: this.content,
-        user_id: idUser,
-        post_id: idUser,
+        user_id: user.userId,
+        post_id: this.id_param,
       });
     },
 
@@ -125,21 +135,6 @@ export default {
             this.$router.push("/wall");
           });
       }
-    },
-    mounted() {
-      this.$store.dispatch("userInfos");
-      instance.defaults.headers.common["Authorization"] =
-        "Bearer " + user.token;
-      instance
-        .post("/comments/allcomments")
-        .then((response) => {
-          this.comments = response.data.Comments;
-          console.log("response API commentaire", response.data);
-        })
-        .catch((error) => {
-          console.log(error); //affiche pas le message 'normalement' envoyé par le back
-        });
-      this.$store.dispatch("getUserInfos");
     },
   },
 };

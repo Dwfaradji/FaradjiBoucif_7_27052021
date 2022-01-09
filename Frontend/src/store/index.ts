@@ -59,7 +59,7 @@ export default createStore({
     },
 
     userInfos: function (state, userInfos) {
-      state.userInfos = userInfos;    
+      state.userInfos = userInfos;
     },
 
     logout: function (state) {
@@ -68,14 +68,14 @@ export default createStore({
     },
 
     commentPost: function (state, commentPost) {
-      // instance.defaults.headers.common["Authorization"] =
-      //   "Bearer " + user.token;
+      instance.defaults.headers.common["Authorization"] =
+        "Bearer " + user.token;
       state.commentPost = commentPost;
+      console.log(commentPost);
     },
     createPost: function (state, createPost) {
-      state.user= user
+      state.user = user;
       state.createPost = createPost;
-      
     },
   },
   actions: {
@@ -119,8 +119,7 @@ export default createStore({
       instance
         .get("/auth/profile")
         .then(function (response) {
-          console.log(response);
-          
+          // console.log(response);
           commit("userInfos", response.data);
         })
         .catch((error) => {

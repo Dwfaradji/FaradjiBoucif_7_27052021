@@ -9,6 +9,8 @@ async function createPost(req, res) {
       title: req.body.title,
       content: req.body.content,
       user_id: req.body.user_id,
+      CommentId: req.body.CommentId,
+      UserId: req.body.UserId,
       likes: req.body.likes,
     });
     console.log(post);
@@ -25,14 +27,24 @@ async function getAllPosts(req, res) {
       include: [
         {
           model: User,
+          attributes: ["firstName", "lastName", "email"],
         },
+
         {
           model: Comment,
+          attributes: ["post_id", "content", "user_id"],
         },
       ],
       order: [["id", "DESC"]],
+
+      // include: [
+      //   {
+      //     model: User,Comment
+      //   },
+      // ],
+      // order: [["id", "DESC"]],
     });
-    console.log(allPostWall);
+    console.log(allPostWall, "contenu du post");
     res.status(200).json(allPostWall);
   } catch (error) {
     res.status(400).json({ error, error: "erreur de récupération des posts" });

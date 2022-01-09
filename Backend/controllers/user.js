@@ -82,7 +82,7 @@ async function signup(req, res, next) {
           password: criptPasseword,
           isAdmin: 0,
         });
-        res.status(201).json({ id: newUser.id, message: "Utilisateur créer" });
+        res.status(201).json({ id: newUser.post_id, message: "Utilisateur créer" });
       } else {
         res.status(409).json({ error: "Cette utilisateur existe déjà " });
       }

@@ -82,7 +82,9 @@ async function signup(req, res, next) {
           password: criptPasseword,
           isAdmin: 0,
         });
-        res.status(201).json({ id: newUser.post_id, message: "Utilisateur créer" });
+        res
+          .status(201)
+          .json({ id: newUser.post_id, message: "Utilisateur créer" });
       } else {
         res.status(409).json({ error: "Cette utilisateur existe déjà " });
       }
@@ -115,7 +117,7 @@ async function login(req, res) {
     if (!passwordValid) {
       return res.status(401).json({ error: " Mot de passe incorrect !" });
     } else {
-      // Génere les informations tell que userId et le token 
+      // Génere les informations tell que userId et le token
       res.status(200).json({
         userId: userName.id,
         token: jwt.generateToken(userName),
@@ -147,5 +149,15 @@ async function userInfos(req, res) {
     res.status(500).json({ error, erreur: "erreur serveur infos user" });
   }
 }
+// async function deleteUser(req, res, next) {
+//   try {
+//     await User.destroy({ where: { id: req.params.id } });
+//     res.status(200).json({ message: "Utilisateur supprimé !" });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(400).json({ error, error: "erreur suppression Utilisateur" });
+//   }
+// }
 
-export { login, signup, userInfos };
+
+export { login, signup, userInfos, };

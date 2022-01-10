@@ -9,8 +9,6 @@ async function createPost(req, res) {
       title: req.body.title,
       content: req.body.content,
       user_id: req.body.user_id,
-      CommentId: req.body.CommentId,
-      UserId: req.body.UserId,
       likes: req.body.likes,
     });
     console.log(post);
@@ -35,16 +33,10 @@ async function getAllPosts(req, res) {
           attributes: ["post_id", "content", "user_id"],
         },
       ],
-      order: [["id", "DESC"]],
 
-      // include: [
-      //   {
-      //     model: User,Comment
-      //   },
-      // ],
-      // order: [["id", "DESC"]],
+      order: [["id", "DESC"]],
     });
-    console.log(allPostWall, "contenu du post");
+    console.log(req.body.title, "contenu du post");
     res.status(200).json(allPostWall);
   } catch (error) {
     res.status(400).json({ error, error: "erreur de récupération des posts" });
@@ -53,7 +45,7 @@ async function getAllPosts(req, res) {
 }
 async function deletePost(req, res, next) {
   try {
-    await Post.destroy({ where: { user_id: 1 } });
+    await Post.destroy({ where: { id: req.params.id } });
     res.status(200).json({ message: "Post supprimé !" });
   } catch (error) {
     console.log(error);
@@ -61,24 +53,6 @@ async function deletePost(req, res, next) {
   }
 }
 
-// async function listMsg(req, res, next) {
-//   try {
-//   const allComments=  await Post.findAll({
-//       include: [{
-//           model: models.User,
-//           attributes: ['username']
-//       }],
-//       order: [['createdAt', 'DESC']]
-//   })
-//   if (allComments.length > null) {
-//     res.status(200).json(posts)
-// } else {
-//     res.status(404).json({ error: 'Pas de post à afficher' })
-// }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json(error)
-//   }
-// }
+
 
 export { createPost, getAllPosts, deletePost };

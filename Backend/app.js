@@ -41,6 +41,6 @@ appli.use(bodyParser.urlencoded({ extended: true }));
 appli.use(bodyParser.json());
 appli.use("/images", express.static(path.join(__dirname, "images")));
 
-appli.use("/api/auth/", userRoad);
-appli.use("/api/comments/", commentRoad);
-appli.use("/api/posts/", postRoad);
+appli.use("/api/auth", userRoad);
+appli.use("/api/comments", commentRoad);
+appli.use("/api/posts", postRoad);

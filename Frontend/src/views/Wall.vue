@@ -27,6 +27,7 @@ export default {
       post: {
         id: "",
         content: "",
+        post_id: "",
       },
       allPosts: [],
     };
@@ -34,6 +35,7 @@ export default {
   methods: {},
   // },
   mounted: function () {
+    console.log(this.post);
     instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
     instance
       .get("/posts/allpost")

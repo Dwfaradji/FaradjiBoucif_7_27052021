@@ -1,13 +1,13 @@
 import express from "express";
 
 import { auth } from "../middleware/auth.js";
-import { createPost, getAllPosts, deletePost } from "../controllers/post.js";
+import { createPost, getAllPosts, deletePost} from "../controllers/post.js";
 
 const postRoad = express.Router();
 
 postRoad.post("/post", auth, createPost);
 postRoad.get("/allpost", auth, getAllPosts);
-postRoad.delete("/delete", deletePost);
+postRoad.delete("/:id", deletePost);
 
 
 export default postRoad;

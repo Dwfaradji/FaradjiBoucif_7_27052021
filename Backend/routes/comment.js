@@ -5,7 +5,7 @@ import { createComment,getAllComments,getOneComment } from "../controllers/comme
 
 const commentRoad = express.Router();
 commentRoad.post("/", auth, createComment);
-commentRoad.get('/:post_id',auth, getAllComments)
+commentRoad.get('/allcomments', getAllComments)
 commentRoad.get('/:id', getOneComment)
 
 export default commentRoad;

@@ -31,7 +31,7 @@ export default createStore({
       lastName: "",
       // token: user.token,
     },
-    commentPost: {
+    createComment: {
       id: "",
       content: "",
       date: "",
@@ -67,11 +67,11 @@ export default createStore({
       localStorage.removeItem("user");
     },
 
-    commentPost: function (state, commentPost) {
+    createComment: function (state, createComment) {
       instance.defaults.headers.common["Authorization"] =
         "Bearer " + user.token;
-      state.commentPost = commentPost;
-      console.log(commentPost);
+      state.createComment = createComment;
+      console.log(createComment);
     },
     createPost: function (state, createPost) {
       state.user = user;
@@ -127,17 +127,17 @@ export default createStore({
         });
     },
 
-    commentPost: ({ commit }, commentPost) => {
+    createComment: ({ commit }, createComment) => {
       return new Promise((resolve, reject) => {
         instance
-          .post("/comments/", commentPost)
+          .post("/comments/", createComment)
           .then(function (response) {
-            commit("commentPost", response.data);
+            commit("createComment", response.data);
             resolve(response);
           })
           .catch(function (error) {
             console.log(error);
-            commit("commentPost");
+            commit("createComment");
             reject(error);
           });
       });

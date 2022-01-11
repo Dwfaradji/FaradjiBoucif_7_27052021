@@ -149,15 +149,15 @@ async function userInfos(req, res) {
     res.status(500).json({ error, erreur: "erreur serveur infos user" });
   }
 }
-// async function deleteUser(req, res, next) {
-//   try {
-//     await User.destroy({ where: { id: req.params.id } });
-//     res.status(200).json({ message: "Utilisateur supprimé !" });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).json({ error, error: "erreur suppression Utilisateur" });
-//   }
-// }
+async function deleteUser(req, res, next) {
+  try {
+    await User.destroy({ where: { id: req.params.id } });
+    res.status(200).json({ message: "Utilisateur supprimé !" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error, error: "erreur suppression Utilisateur" });
+  }
+}
 
 
-export { login, signup, userInfos, };
+export { login, signup, userInfos,deleteUser };

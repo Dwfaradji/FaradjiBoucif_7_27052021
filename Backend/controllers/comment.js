@@ -10,7 +10,7 @@ async function createComment(req, res) {
       content: req.body.content,
       post_id: req.body.post_id,
     });
-    console.log(post.post_id," TEST ");
+    console.log(post.post_id, " TEST ");
     return res.status(201).json({ id: post, message: "Commentaire créé !" });
   } catch (error) {
     console.log(error);
@@ -24,7 +24,7 @@ async function getAllComments(req, res) {
       include: [
         {
           model: User,
-          // attributes: ["firstName", "lastName", "email"],
+          attributes: ["firstName"],
         },
       ],
       order: [["date", "ASC"]],

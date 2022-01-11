@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="container mb-3">
-      <form class="cardbox shadow-lg bg-white" method="post">
-        <div class="d-flex justify-content-between align-items-center">
+    <div class="container-fluid mb-3 ">
+      <form class="container cardbox shadow-lg bg-white post" method="post">
+        <div class="row justify-content-around align-items-center ">
           <img
             src="https://www.icone-png.com/png/54/53787.png"
             alt="..."
-            class="rounded-circle m-2"
+            class="rounded-circle m-2 col-1,4"
           />
           <div class="d-flex flex-column col-6">
             <input
               type="text"
-              v-model="content"
+              v-model="title"
               class="form-control m-2"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
@@ -20,7 +20,7 @@
             />
             <input
               type="text"
-              v-model="title"
+              v-model="content"
               class="form-control m-2"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
@@ -28,11 +28,10 @@
               placeholder="Quoi de neuf ?"
             />
           </div>
-          <div class="d-flex align-items-end mr-2">
-            <button type="submit" class="btn btn-primary ml-5">image</button>
+          <div>
             <button
               type="submit"
-              class="btn btn-primary ml-5"
+              class="btn btn-primary"
               @click.prevent="createPost"
             >
               Publier
@@ -83,9 +82,10 @@ export default {
         date: this.date,
         attachment: this.attachment,
         user_id: Id,
+        id: this.id,
         // likes: this.likes,
       });
-      // Met a jour les nouveau post 
+      // Met a jour les nouveau post
       // @ TODO A VOIR AVEC FLORIAN
       this.$router.go();
     },
@@ -94,6 +94,11 @@ export default {
 </script>
 
 <style scoped>
+.post {
+  border-radius: 10px 10px 10px;
+  box-shadow: 30px;
+  border: 1px solid rgb(255, 223, 223);
+}
 img {
   margin-top: 20px;
   width: 10%;
@@ -108,7 +113,7 @@ img {
 .boutton {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-left: 10em;
 }
 </style>

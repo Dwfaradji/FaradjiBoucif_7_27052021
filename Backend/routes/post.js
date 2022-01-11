@@ -7,7 +7,7 @@ const postRoad = express.Router();
 
 postRoad.post("/post", auth, createPost);
 postRoad.get("/allpost", auth, getAllPosts);
-postRoad.delete("/:id", deletePost);
+postRoad.delete("/delete", deletePost);
 
 
 export default postRoad;

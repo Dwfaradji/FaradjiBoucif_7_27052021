@@ -44,7 +44,7 @@
         <div>
           <p>Commentaire</p>
           <div>
-            <p v-for="comment in comments" :key="comment.content" :conmment="comment">
+            <p v-for="comment in post.Comments" :key="comment.content">
               {{ comment.content }}
             </p>
           </div>
@@ -111,15 +111,18 @@ export default {
       type: Object,
       required: true,
     },
+    comment: {
+      type: Object,
+    },
   },
   data() {
     return {
-      // id_param: this.$route.params.id,
+      id_param: this.$route.params.id,
       commentaire: "",
       date: "",
       comments: {
-        // post_id: "",
-        // content: "",
+        post_id: "",
+        content: "",
       },
       // comment: {
       //   id: "",
@@ -128,18 +131,18 @@ export default {
     };
   },
   mounted: function () {
-    console.log(this.comments);
-    this.$store.dispatch("getUserInfos");
-    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-    instance
-      .get("/comments/allcomments")
-      .then((response) => {
-        const test = (this.comments = response.data);
-        console.log("response API Commentaire", test);
-      })
-      .catch((error) => {
-        console.log(error); //affiche pas le message 'normalement' envoyé par le back
-      });
+    // console.log(this.comments);
+    // this.$store.dispatch("getUserInfos");
+    // instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
+    // instance
+    //   .get("/comments/allcomments")
+    //   .then((response) => {
+    //     const test = (this.comments = response.data);
+    //     console.log("response API Commentaire", test);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error); //affiche pas le message 'normalement' envoyé par le back
+    //   });
   },
   methods: {
     sendComment: function () {
@@ -154,14 +157,36 @@ export default {
     deletePost() {
       if (confirm("Voulez-vous vraiment supprimer le post") == true) {
         instance
-          .delete(`/posts/${this.id_param}`)
-          .then((response) => response.data)
+          .delete(`/posts/delete`, {
+            data: {
+              post_id: this.post.id,
+              user_id: this.user.userId,
+            },
+          })
           .then(() => {
+            window.location.reload();
             alert("La suppression du post est bien prise en compte");
             this.$router.push("/wall");
-          });
+          })
+          .catch((error) => console.log(error));
       }
     },
+    // deletePost() {
+    //   axios
+    //     .delete("http://localhost:3000/api/post/delete", {
+    //       headers: {
+    //         Authorization: "Bearer " + localStorage.getItem("token"),
+    //       },
+    //       data: {
+    //         postId: this.post.id,
+    //         userIdOrder: this.user.userId,
+    //       },
+    //     })
+    //     .then(() => {
+    //       window.location.reload();
+    //     })
+    //     .catch((error) => console.log(error));
+    // },
   },
 };
 </script>

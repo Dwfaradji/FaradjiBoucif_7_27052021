@@ -3,7 +3,7 @@
 import { DataTypes } from "sequelize";
 import { database } from "../config/sequelize.js";
 import { Post } from "../models/post.js";
-import { Comment } from "../models/Comment.js";
+import { Comment } from "../models/comment.js";
 
 export const User = database.define("User", {
   firstName: DataTypes.STRING,

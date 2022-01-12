@@ -1,6 +1,6 @@
 import { Post } from "../models/post.js";
 import { User } from "../models/user.js";
-import { Comment } from "../models/Comment.js";
+import { Comment } from "../models/comment.js";
 import jwt from "../utils/jwt.js";
 
 // Creation d'un post

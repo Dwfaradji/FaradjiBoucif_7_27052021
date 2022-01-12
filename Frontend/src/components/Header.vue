@@ -1,5 +1,7 @@
 <template>
-  <nav class="row navbar navbar-expand-lg navbar-light bg-light fixed-top px-4">
+  <nav
+    class="container-fluid navbar navbar-expand-lg navbar-light bg-light fixed-top px-4"
+  >
     <button
       class="navbar-toggler"
       type="button"

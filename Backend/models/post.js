@@ -5,12 +5,11 @@ import { Comment } from "../models/comment.js";
 // import { User } from "../models/user.js";
 
 export const Post = database.define("Post", {
-  //  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: DataTypes.STRING,
   content: DataTypes.STRING,
   date: DataTypes.DATE,
   attachment: DataTypes.STRING,
-  user_id: DataTypes.SMALLINT,
 
   //   likes: DataTypes.STRING,
 });

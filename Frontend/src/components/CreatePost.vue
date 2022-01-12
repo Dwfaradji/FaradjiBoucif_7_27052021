@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="container-fluid mb-3 ">
+    <div class="container-fluid mb-3">
       <form class="container cardbox shadow-lg bg-white post" method="post">
-        <div class="row justify-content-around align-items-center ">
+        <div class="row justify-content-around align-items-center">
           <img
             src="https://www.icone-png.com/png/54/53787.png"
             alt="..."
@@ -44,10 +44,6 @@
 </template>
 
 <script>
-let userStore = localStorage.getItem("user");
-const user = JSON.parse(userStore);
-console.log(user);
-
 import { mapState } from "vuex";
 export default {
   name: "Create",
@@ -74,6 +70,9 @@ export default {
   },
   methods: {
     createPost: function () {
+      let userStore = localStorage.getItem("user");
+      var user = JSON.parse(userStore);
+      console.log(user);
       const Id = user.userId;
       console.log(Id, "USER ID");
       this.$store.dispatch("createPost", {

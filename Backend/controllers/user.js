@@ -80,9 +80,9 @@ async function signup(req, res, next) {
           lastName: req.body.lastName,
           email: req.body.email,
           password: criptPasseword,
-          image: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`,
+          // image: `${req.protocol}://${req.get("host")}/images/${
+          //   req.file.filename
+          // }`,
           isAdmin: 0,
         });
         res
@@ -163,17 +163,17 @@ async function deleteUser(req, res, next) {
 }
 
 async function updateInfoUser(req, res) {
-  try {
-    if (req.file.filename) {
-      console.log(req.file);
-      res.status(201).json({ message: "Image téléchargé avec succés " });
-    } else {
-      res.status(500).json({ message: "Image non téléchargé" });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ error });
-  }
+  // try {
+  //   if (req.file) {
+  //     console.log(req.file);
+  //     res.status(201).json({ message: "Image téléchargé avec succés " });
+  //   } else {
+  //     res.status(500).json({ message: "Image non téléchargé" });
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(400).json({ error });
+  // }
 }
 
 export { login, signup, userInfos, deleteUser, updateInfoUser };

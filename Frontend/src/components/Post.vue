@@ -134,7 +134,7 @@ export default {
     };
   },
   mounted: function () {
-    console.log(this.post,"ID POST");
+    console.log(this.post, "ID POST");
     this.$store.dispatch("getUserInfos");
     instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
     instance
@@ -165,6 +165,7 @@ export default {
         instance
           .delete(`/posts/${this.id_param}`)
           .then(() => {
+            console.log("instance");
             window.location.reload();
             alert("La suppression du post est bien prise en compte");
             this.$router.push("/wall");

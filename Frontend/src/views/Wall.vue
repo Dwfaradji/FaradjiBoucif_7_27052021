@@ -27,7 +27,7 @@ export default {
       post: {
         id: "",
         content: "",
-        post_id: "",
+        // post_id: "",
       },
       allPosts: [],
     };

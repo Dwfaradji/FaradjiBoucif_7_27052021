@@ -29,7 +29,7 @@ export default createStore({
       email: "",
       firstName: "",
       lastName: "",
-      photo: '',
+      image: "",
       // token: user.token,
     },
     createComment: {

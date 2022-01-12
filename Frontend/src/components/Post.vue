@@ -93,7 +93,6 @@
 
 <script>
 // Recupereration des informations dans le local storage
-
 import axios from "axios";
 const instance = axios.create({
   baseURL: "http://localhost:3000/api/",
@@ -125,6 +124,7 @@ export default {
     return {
       commentaire: "",
       date: "",
+      id_param: this.post.user_id,
       id: this.post.id,
       comments: {
         post_id: "",
@@ -134,6 +134,7 @@ export default {
     };
   },
   mounted: function () {
+    console.log(this.post,"ID POST");
     this.$store.dispatch("getUserInfos");
     instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
     instance
@@ -143,7 +144,7 @@ export default {
         console.log("response API Commentaire", test);
       })
       .catch((error) => {
-        console.log(error); //affiche pas le message 'normalement' envoyé par le back
+        console.log(error);
       });
   },
   methods: {
@@ -159,13 +160,10 @@ export default {
 
     deletePost() {
       if (confirm("Voulez-vous vraiment supprimer le post") == true) {
+        instance.defaults.headers.common["Authorization"] =
+          "Bearer " + user.token;
         instance
-          .delete(`/posts/delete`, {
-            data: {
-              // post_id: this.post.id,
-              id: this.id,
-            },
-          })
+          .delete(`/posts/${this.id_param}`)
           .then(() => {
             window.location.reload();
             alert("La suppression du post est bien prise en compte");

@@ -4,26 +4,32 @@
     <p class="card__subtitle">Voilà donc qui je suis...</p>
     <div class="row justify-content-center">
       <div class="">
-        <div class="col-sm ">
+        <div class="col-sm">
           <div class="parent-div">
             <div class="media profile">
               <img
-                :src="uploadedImage"
+                :src="previewImage"
                 style="width: 45%"
                 class="rounded-circle align-self-center mr-3"
               />
             </div>
-
-            <button class="button" @click="onUploadImage">
+            <button
+              class="button"
+              name="image"
+              @click.prevent="onUploadImage()"
+            >
               Choisir une image
             </button>
             <input
+              id="picture"
               type="file"
               class="file_input"
-              name="photo"
-              @change="onFileChange"
+              name="image"
+              @change="uploadImage"
             />
           </div>
+          <!-- <img :src="previewImage" class="uploading-image" />
+          <input type="file" accept="image/jpeg" @change="uploadImage" /> -->
         </div>
         <div class="col-sm">
           <p>
@@ -45,13 +51,20 @@
 </template>
 
 <script>
+import axios from "axios";
+const instance = axios.create({
+  baseURL: "http://localhost:3000/api/",
+});
+const userStore = localStorage.getItem("user");
+const user = JSON.parse(userStore);
+
 import { mapState } from "vuex";
 export default {
   name: "Profile",
-
   data() {
     return {
-      uploadedImage: "",
+      selectedFile: null,
+      previewImage: null,
     };
   },
   mounted: function () {
@@ -60,7 +73,6 @@ export default {
       return;
     } else {
       this.$store.dispatch("getUserInfos");
-      //  console.log("test api user Info",this.$store.state.userInfos);
     }
   },
   computed: {
@@ -70,18 +82,37 @@ export default {
   },
 
   methods: {
-    onFileChange(e) {
-      let files = e.target.files || e.dataTransfer.files;
-      console.log(files);
-      this.createImage(files[0]);
-    },
-    createImage(file) {
-      let reader = new FileReader();
+    uploadImage(e) {
+      // Récupération de l'image
+      const image = e.target.files[0];
+      console.log(image, "image");
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
       reader.onload = (e) => {
-        this.uploadedImage = e.target.result;
+        this.previewImage = e.target.result;
+        // console.log(this.previewImage);
       };
-      reader.readAsDataURL(file);
+      // Récupération de l'image
+      let img = document.getElementById("picture").files[0];
+      console.log(img, " IMAGE ");
+      // Création d'un formData obligatoire pour envoi de l'image
+      var formData = new FormData();
+      console.log(formData, "formdata");
+      formData.append("img", img.name);
+      // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image
+      instance.defaults.headers.common["Authorization"] =
+        "Bearer " + user.token;
+      instance
+        .post("/auth/photo", formData)
+        .then((resp) => {
+          console.log(resp, "c'est la response");
+        })
+        .catch((err) => {
+          console.log(err.response, "c'est l'erreur");
+        });
     },
+    onUploadImage() {},
+
     // deleteUser() {
     // const Id = this.$store.state.user.userId;
     // console.log(Id, "local store");
@@ -108,12 +139,11 @@ export default {
 </script>
 
 <style scoped>
-.profile{
+.profile {
   display: flex;
   justify-content: center;
 }
 img {
-  /* margin-left: 25px; */
   margin-bottom: 10px;
 }
 .parent-div {
@@ -134,7 +164,6 @@ img {
   background-color: rgb(241, 133, 133);
   border: 3px solid #000;
   color: #000;
-  /* padding: 10px 25px; */
   border-radius: 10px;
   font-size: 15px;
   font-weight: bold;

@@ -80,6 +80,9 @@ async function signup(req, res, next) {
           lastName: req.body.lastName,
           email: req.body.email,
           password: criptPasseword,
+          image: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
           isAdmin: 0,
         });
         res
@@ -136,7 +139,7 @@ async function userInfos(req, res) {
     // Va recupérer les informations de l'utilisateur  aprés identification
     let userId = jwt.getUserId(req.headers.authorization);
     const user = await User.findOne({
-      attributes: ["id", "email", "firstName", "lastName", "isAdmin"],
+      attributes: ["id", "email", "firstName", "lastName", "image", "isAdmin"],
       where: { id: userId },
     });
     console.log(user, "c'est les infos user");
@@ -159,5 +162,18 @@ async function deleteUser(req, res, next) {
   }
 }
 
+async function updateInfoUser(req, res) {
+  try {
+    if (req.file.filename) {
+      console.log(req.file);
+      res.status(201).json({ message: "Image téléchargé avec succés " });
+    } else {
+      res.status(500).json({ message: "Image non téléchargé" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error });
+  }
+}
 
-export { login, signup, userInfos,deleteUser };
+export { login, signup, userInfos, deleteUser, updateInfoUser };

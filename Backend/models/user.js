@@ -10,7 +10,10 @@ export const User = database.define("User", {
   lastName: DataTypes.STRING,
   email: DataTypes.STRING,
   password: DataTypes.STRING,
-  // image: DataTypes.STRING,
+  image: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   isAdmin: DataTypes.BOOLEAN,
 });
 
@@ -28,4 +31,3 @@ User.hasMany(Comment, {
 });
 
 Comment.belongsTo(User, { foreignKey: "user_id" });
-

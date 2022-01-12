@@ -1,6 +1,7 @@
 import { Post } from "../models/post.js";
 import { User } from "../models/user.js";
 import { Comment } from "../models/Comment.js";
+import jwt from "../utils/jwt.js";
 
 // Creation d'un post
 async function createPost(req, res) {
@@ -29,7 +30,7 @@ async function getAllPosts(req, res) {
         },
         {
           model: Comment,
-          attributes: ["content","user_id"],
+          attributes: ["content", "user_id"],
           separate: true,
           order: [["id", "ASC"]],
         },
@@ -42,12 +43,25 @@ async function getAllPosts(req, res) {
     console.log(error);
   }
 }
+
 async function deletePost(req, res, next) {
+  let idUser = jwt.getUserId(req.headers.authorization);
+  const userIdPost = req.params.id
+  console.log(idUser, "id auth local storage");
+  console.log(userIdPost, "requete user_id");
   try {
-    await Post.destroy({
-      where: { id: req.body.id },
-    });
-    res.status(200).json({ message: "Post supprimé !" });
+    if (idUser == userIdPost) {
+      console.log("je supprime");
+     await Post.destroy({
+        where: { id: userIdPost },
+      });
+       res.status(200).json({ message: "Post supprimé !" });
+    } else {
+      console.log("je ne supprime pas");
+      res
+        .status(400)
+        .send({ message: "Vous n'êtes pas autorisé a supprimez ce post!" });
+    }
   } catch (error) {
     console.log(error);
     res.status(400).json({ error, error: "erreur suppression post" });

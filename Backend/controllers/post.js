@@ -22,6 +22,7 @@ async function createPost(req, res) {
 // Recupération de tout les posts enregistrer dans la base de données
 async function getAllPosts(req, res) {
   try {
+    
     const allPostWall = await Post.findAll({
       include: [
         {
@@ -45,28 +46,30 @@ async function getAllPosts(req, res) {
 }
 
 async function deletePost(req, res, next) {
-  let idUser = jwt.getUserId(req.headers.authorization);
-  const userIdPost = req.params.id
-  console.log(idUser, "id auth local storage");
-  console.log(userIdPost, "requete user_id");
+  let idUserStore = jwt.getUserId(req.headers.authorization);
+  const userIdPost = req.params.id;
+  console.log(idUserStore, "id auth local storage");
+  // console.log(userIdPost, "requete user_id");
   try {
-    if (idUser == userIdPost) {
-      console.log("je supprime");
-     await Post.destroy({
-        where: { id: userIdPost },
-      });
-       res.status(200).json({ message: "Post supprimé !" });
-    } else {
-      console.log("je ne supprime pas");
+    const postFind = await Post.findOne({ where: { id: req.params.id } });
+    const userFindPost = postFind.user_id;
+    console.log(userFindPost, "JE SUIS USER ID DU POST");
+    if (idUserStore !== userFindPost) {
       res
         .status(400)
         .send({ message: "Vous n'êtes pas autorisé a supprimez ce post!" });
+    } else {
+      console.log("je supprime");
+      await Post.destroy({
+        where: { id: userIdPost },
+      });
+      res.status(200).json({ message: "Post supprimé !" });
+      console.log("je ne supprime pas");
     }
   } catch (error) {
     console.log(error);
     res.status(400).json({ error, error: "erreur suppression post" });
   }
 }
-
 
 export { createPost, getAllPosts, deletePost };

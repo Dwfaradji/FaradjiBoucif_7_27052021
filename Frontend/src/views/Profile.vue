@@ -113,27 +113,23 @@ export default {
     },
     onUploadImage() {},
 
-    // deleteUser() {
-    // const Id = this.$store.state.user.userId;
-    // console.log(Id, "local store");
-    // if (confirm("Voulez-vous vraiment supprimer le compte") == true) {
-    //   fetch(`http://localhost:3000/api/auth/${Id}`, {
-    //     method: "DELETE",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(this.user),
-    //   })
-    //     .then((response) => response.json())
-    //     .then(() => {
-    //       localStorage.removeItem("user")
-    //       this.$router.push("/")
-    //       alert("La suppression du compte est bien prise en compte");
-    //     })
-    //     // .then(this.$router.push("/"));
-    // }
-    // },
+    deleteUser() {
+      const Id = this.$store.state.user.userId;
+      if (confirm("Voulez-vous vraiment supprimer cet utilisateur") == true) {
+        instance.defaults.headers.common["Authorization"] =
+          "Bearer " + user.token;
+        instance
+          .delete(`/auth/${Id}`)
+          .then(() => {
+            console.log("instance");
+            localStorage.removeItem("user");
+            window.location.reload();
+            alert("La suppression de l'utilisateur a bien été pris en compte");
+            this.$router.push("/");
+          })
+          .catch((error) => console.log(error));
+      }
+    },
   },
 };
 </script>

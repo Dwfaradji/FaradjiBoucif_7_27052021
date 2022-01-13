@@ -7,7 +7,7 @@ const userRoad = express.Router();
 userRoad.post("/signup", signup);
 userRoad.post("/login", login);
 userRoad.get("/profile", auth, multer,userInfos);
-userRoad.delete("/:id", deleteUser);
+userRoad.delete("/:id", auth,deleteUser);
 userRoad.post("/photo", auth, multer, updateInfoUser);
 
 export default userRoad;

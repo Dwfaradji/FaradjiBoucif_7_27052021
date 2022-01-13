@@ -48,10 +48,9 @@
             <p class="mt-2"><strong>Commentaire</strong></p>
             <p
               v-for="comment in post.Comments"
-              :key="comment.content"
-              :infoPost="infoPost"
+              :key="comment.content" 
             >
-              {{ infoPost.User }} {{ comment.content }}
+             {{ comment.content }}
             </p>
           </div>
         </div>
@@ -108,7 +107,9 @@ export default {
   computed: {
     ...mapState({
       user: "userInfos",
+      
     }),
+
   },
   props: {
     post: {
@@ -124,13 +125,13 @@ export default {
     return {
       commentaire: "",
       date: "",
-      id_param: this.post.user_id,
+      id_param: this.post.id,
       id: this.post.id,
       comments: {
         post_id: "",
         content: "",
       },
-      infoPost: [],
+        infoPost:this.infoPost
     };
   },
   mounted: function () {

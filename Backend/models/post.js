@@ -5,7 +5,7 @@ import { Comment } from "../models/comment.js";
 // import { User } from "../models/user.js";
 
 export const Post = database.define("Post", {
-   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: DataTypes.STRING,
   content: DataTypes.STRING,
   date: DataTypes.DATE,
@@ -20,5 +20,3 @@ Post.hasMany(Comment, {
   onUpdate: "CASCADE",
 });
 Comment.belongsTo(Post, { foreignKey: "post_id" });
-
-

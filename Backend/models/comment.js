@@ -1,12 +1,12 @@
 "use strict";
-
+// Imports
 import { DataTypes } from "sequelize";
 import { database } from "../config/sequelize.js";
 
+//Modèle
 export const Comment = database.define("Comment", {
-  // id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   content: DataTypes.STRING,
   date: DataTypes.DATE,
-  // user_id: DataTypes.SMALLINT,
-  //  post_id: DataTypes.SMALLINT,
+  // firstName:DataTypes.STRING,
 });

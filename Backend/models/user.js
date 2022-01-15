@@ -1,10 +1,11 @@
 "use strict";
-
+// Import
 import { DataTypes } from "sequelize";
 import { database } from "../config/sequelize.js";
 import { Post } from "../models/post.js";
 import { Comment } from "../models/comment.js";
 
+// Modèle
 export const User = database.define("User", {
   firstName: DataTypes.STRING,
   lastName: DataTypes.STRING,
@@ -17,6 +18,7 @@ export const User = database.define("User", {
   isAdmin: DataTypes.BOOLEAN,
 });
 
+// Association
 User.hasMany(Post, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
@@ -29,5 +31,4 @@ User.hasMany(Comment, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-
 Comment.belongsTo(User, { foreignKey: "user_id" });

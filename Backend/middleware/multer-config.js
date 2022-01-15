@@ -1,6 +1,6 @@
- // Importation des packages
+// Imports
 import multerFile from "multer";
- // Déclaration des formats autorisés
+// Déclaration des formats autorisés
 const mineTypes = {
   "image/jpg": "jpg",
   "image/jpeg": "jpg",
@@ -10,7 +10,9 @@ const mineTypes = {
 // Déclaration de storage qui permet de sauvegarder les images
 // // en leur indiquant la destination, et en changeant le nom
 // // de l'image ainsi que l'extension
+
 const storage = multerFile.diskStorage({
+  // Paramètre
   destination: (req, file, callback) => {
     callback(null, "images");
   },

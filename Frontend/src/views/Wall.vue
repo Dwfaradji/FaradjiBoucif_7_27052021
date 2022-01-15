@@ -1,9 +1,11 @@
 <template>
   <div id="wall" class="wall">
-    <CreatePost />
+    <CreatePost @post-created="loadPosts" />
+    <!-- <pre>{{ allPosts }} </pre> -->
+    <article v-if="allPosts.length == 0" class="row justify-content-center">
+      <p><b>Désolé il n'y a aucune publication pour le moment...</b></p>
+    </article>
     <Post v-for="post in allPosts" v-bind:key="post.id" :post="post" />
-    <!-- boucle v-for sur le tableau posts 
-    passer une attribut au composant -->
   </div>
 </template>
 
@@ -14,8 +16,7 @@ import axios from "axios";
 const instance = axios.create({
   baseURL: "http://localhost:3000/api/",
 });
-let userStore = localStorage.getItem("user");
-const user = JSON.parse(userStore);
+
 export default {
   name: "Wall",
   components: {
@@ -27,39 +28,42 @@ export default {
       post: {
         id: "",
         content: "",
-        // post_id: "",
       },
       allPosts: [],
     };
   },
-  methods: {},
-  // },
-  mounted: function () {
-    console.log(this.post);
-    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-    instance
-      .get("/posts/allpost")
-      .then((response) => {
-        this.allPosts = response.data;
-        console.log("response API Post", response.data);
-      })
-      .catch((error) => {
-        console.log(error); //affiche pas le message 'normalement' envoyé par le back
-      });
-    this.$store.dispatch("getUserInfos");
-    //faire un fetch vers route post all et stocker le résultat dans un tableau data
+  methods: {
+    loadPosts: async function () {
+      let userStore = localStorage.getItem("user");
+      const user = JSON.parse(userStore);
+      try {
+        instance.defaults.headers.common["Authorization"] =
+          "Bearer " + user.token;
+        const getAllPosts = await instance.get("/posts/allpost");
+        this.allPosts = getAllPosts.data;
+        console.log("response API Post", getAllPosts.data);
+      } catch (error) {
+        console.log(error);
+      }
+  
+    },
+      //  this.$router.push("/wall");
+  },
 
+  mounted: function () {
     if (this.$store.state.user.userId == -1) {
       this.$router.push("/");
       return;
     }
+    this.$store.dispatch("getUserInfos");
+    // Chargement du post dans le dom
+    this.loadPosts();
   },
 };
 </script>
 
 <style lang="scss">
 .wall {
-  
   min-height: 100%;
   padding: 5rem 0 2rem 0;
 }

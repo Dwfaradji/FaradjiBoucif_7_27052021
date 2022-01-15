@@ -2,6 +2,9 @@
   <div>
     <div class="container-fluid mb-3">
       <form class="container cardbox shadow-lg bg-white post" method="post">
+        <div class="row justify-content-center">
+          <h1>Bonjour {{ user.firstName }}</h1>
+        </div>
         <div class="row justify-content-around align-items-center">
           <img
             src="https://www.icone-png.com/png/54/53787.png"
@@ -47,8 +50,13 @@
 import { mapState } from "vuex";
 export default {
   name: "Create",
-  mounted: function () {
-    this.$store.dispatch("getUserInfos");
+  data() {
+    return {
+      title: "",
+      content: "",
+      date: "",
+      attachment: "",
+    };
   },
   computed: {
     ...mapState({
@@ -58,23 +66,11 @@ export default {
   props: {
     msg: String,
   },
-  data() {
-    return {
-      title: "",
-      content: "",
-      date: "",
-      attachment: "",
-      // user_id: "",
-      // likes: "",
-    };
-  },
   methods: {
     createPost: function () {
       let userStore = localStorage.getItem("user");
       var user = JSON.parse(userStore);
-      console.log(user);
       const Id = user.userId;
-      console.log(Id, "USER ID");
       this.$store.dispatch("createPost", {
         title: this.title,
         content: this.content,
@@ -82,12 +78,13 @@ export default {
         attachment: this.attachment,
         user_id: Id,
         id: this.id,
-        // likes: this.likes,
       });
       // Met a jour les nouveau post
-      // @ TODO A VOIR AVEC FLORIAN
-      this.$router.go();
+      this.$emit("post-created");
     },
+  },
+  mounted: function () {
+    this.$store.dispatch("getUserInfos");
   },
 };
 </script>

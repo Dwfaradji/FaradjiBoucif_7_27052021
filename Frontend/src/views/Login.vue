@@ -46,7 +46,7 @@
       Adresse mail et/ou mot de passe incorrect
     </div>
     <div class="form-row" v-if="mode == `create` && status == `error_create`">
-      Adresse mail deja utiliser
+      Adresse deja utiliser / 
     </div>
     <div class="form-row">
       <button

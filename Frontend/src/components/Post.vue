@@ -7,6 +7,7 @@
             Posté par <strong>{{ post.User.firstName }}</strong>
           </p>
           <button
+            v-if="post.user_id == userStore"
             class="btn btn-flat btn-flat-icon"
             type="button"
             data-toggle="dropdown"
@@ -18,9 +19,9 @@
             class="dropdown-menu dropdown-scale dropdown-menu-right"
             role="menu"
           >
-            <a class="dropdown-item" @click.prevent="deletePost()"
+            <!-- <a class="dropdown-item" @click.prevent="deletePost()"
               >Modifier le post</a
-            >
+            > -->
             <a class="dropdown-item" @click.prevent="deletePost()">
               Supprimer le post</a
             >
@@ -32,34 +33,51 @@
             <p>{{ post.title }}</p>
             <p>{{ post.content }}</p>
           </div>
-          <!-- <button
-            v-if="comments.length != 0"
-            v-on:click="show"
-            class="comment-button"
-          >
-            Voir {{ comments.length }} commentaire<span
-              v-if="comments.length >= 2"
-              >s</span
-            >
-          </button> -->
         </div>
         <div class="row justify-content-center">
           <div class="col-7">
-            <p class="mt-2"><strong>Commentaire</strong></p>
-            <p
-              v-for="comment in post.Comments"
-              :key="comment.content" 
+            <!--  affiche les deux premier commentaire =>  /!\ ERROR -->
+            <p>{{ post.Comments.content }}</p>
+            <button
+              v-if="post.Comments.length != 0"
+              @click.prevent="show"
+              class="btn btn-primary comment-button"
             >
-             {{ comment.content }}
-            </p>
+              Voir {{ post.Comments.length }} commentaire<span
+                v-if="post.Comments.length >= 2"
+                >s</span
+              >
+            </button>
+            <article v-if="isDisplay">
+              <div
+                v-bind:key="index"
+                v-for="(comment, index) in post.Comments"
+                class="comment p-1"
+              >
+                <p class="d-flex justify-content-between align-items-center">
+                  <!--  affiche le nom de l'utilisateur du commentaire  =>  /!\ ERROR -->
+                  <span
+                    >écrit par <b>{{ comment.User.firstName }} </b></span
+                  >
+                  <button
+                    v-if="comment.user_id == userStore"
+                    @click.prevent="deleteComment(index)"
+                    class="btn btn-primary button-comment"
+                  >
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                </p>
+                <p>
+                  {{ comment.content }}
+                </p>
+              </div>
+              <button v-on:click="hide" class="btn btn-primary comment-button">
+                Cacher le<span v-if="post.Comments.length >= 2">s</span>
+                commentaire<span v-if="post.Comments.length >= 2">s</span>
+              </button>
+            </article>
           </div>
         </div>
-        <!-- <button v-on:click="hide" class="comment-button">
-          Cacher le<span v-if="comments.length >= 2">s</span> commentaire<span
-            v-if="comments.length >= 2"
-            >s</span
-          >
-        </button> -->
         <div class="row justify-content-between align-items-center">
           <img
             src="https://www.icone-png.com/png/54/53787.png"
@@ -98,7 +116,7 @@ const instance = axios.create({
 });
 const userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
-// const idUser = user.userId;
+// this.userStore = user.userId
 
 // Importation module
 import { mapState } from "vuex";
@@ -107,48 +125,54 @@ export default {
   computed: {
     ...mapState({
       user: "userInfos",
-      
     }),
-
   },
   props: {
     post: {
-      // @ TODO problème recupération post
       type: Object,
       required: true,
     },
-    comment: {
-      type: Object,
-    },
+    // comment: {
+    //   type: Object,
+    // },
   },
   data() {
     return {
+      userStore: "",
+      id_param: this.post.id,
+      idComment: [],
       commentaire: "",
       date: "",
-      id_param: this.post.id,
-      id: this.post.id,
-      comments: {
-        post_id: "",
-        content: "",
-      },
-        infoPost:this.infoPost
+      isDisplay: false,
+      displaycomment: false,
     };
   },
   mounted: function () {
-    console.log(this.post, "ID POST");
-    this.$store.dispatch("getUserInfos");
-    instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-    instance
-      .get("/comments/allcomments")
-      .then((response) => {
-        const test = (this.infoPost = response.data);
-        console.log("response API Commentaire", test);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.userStore = user.userId;
+
+    //
+
+    this.idComment = this.post.Comments.id;
+
+    // console.log(this.comment);
+    // this.$store.state.createComment.user_id
+    // instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
+    // instance
+    //   .get("/comments/allcomments")
+    //   .then((response) => {
+    //     this.idComment = response.data;
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   },
   methods: {
+    show: function () {
+      return (this.isDisplay = true);
+    },
+    hide: function () {
+      return (this.isDisplay = false);
+    },
     sendComment: function () {
       this.$store.dispatch("createComment", {
         date: this.date,
@@ -156,7 +180,8 @@ export default {
         user_id: user.userId,
         post_id: this.post.id,
       });
-      this.$router.go();
+      // Envois le nouveau commentaire
+      // this.$emit("comment-created");
     },
 
     deletePost() {
@@ -167,11 +192,24 @@ export default {
           .delete(`/posts/${this.id_param}`)
           .then(() => {
             console.log("instance");
-            window.location.reload();
             alert("La suppression du post est bien prise en compte");
-            this.$router.push("/wall");
+            this.$router.go("/wall");
           })
-          .catch((error) => console.log(error));
+          .catch(() => alert("Vous ne pouvez pas supprimez ce post"));
+      }
+    },
+
+    deleteComment(index) {
+      instance.defaults.headers.common["Authorization"] =
+        "Bearer " + user.token;
+      if (confirm("Voulez-vous vraiment supprimer ce commentaire") == true) {
+        instance
+          .delete(`/comments/delete/${this.post.Comments[index].id}`)
+          .then(() => {
+            alert("La suppression du commentaire est bien prise en compte");
+            this.$router.go("/wall");
+          })
+          .catch(() => alert("Vous ne pouvez pas supprimez ce commentaire"));
       }
     },
   },
@@ -212,9 +250,9 @@ img {
 .button-comment {
   margin: 10px 0 10px 10px;
   padding: 5px 5px;
-  border: 2px solid #fd2d01;
+  /* border: 2px solid #fd2d01; */
   border-radius: 10px;
-  background: #ffd7d7;
+  /* background: #ffd7d7; */
   font-size: 1rem;
   cursor: pointer;
 }
@@ -222,9 +260,9 @@ img {
 .comment-button {
   margin: 10px 0 30px 0;
   padding: 5px 30px;
-  border: 2px solid #fd2d01;
+  /* border: 2px solid #fd2d01; */
   border-radius: 10px;
-  background: #ffd7d7;
+  /* background: #ffd7d7; */
   font-size: 1rem;
   cursor: pointer;
 }
@@ -236,5 +274,8 @@ img {
   border: 2px solid #000000;
   border-radius: 20px;
   margin-bottom: 20px;
+}
+.comment-info {
+  padding: 0 30px 0 30px;
 }
 </style>

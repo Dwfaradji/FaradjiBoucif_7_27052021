@@ -1,11 +1,21 @@
+// Import
 import express from "express";
-
 import { auth } from "../middleware/auth.js";
-import { createComment,getAllComments,getOneComment } from "../controllers/comment.js";
+import {
+  createComment,
+  getAllComments,
+  getOneComment,
+  deleteComment,
+} from "../controllers/comment.js";
 
+// Variables
 const commentRoad = express.Router();
-commentRoad.post("/", auth, createComment);
-commentRoad.get('/allcomments', getAllComments)
-commentRoad.get('/:id', getOneComment)
 
+// Route
+commentRoad.post("/", auth, createComment);
+commentRoad.get("/allcomments", getAllComments);
+commentRoad.get("/:id", getOneComment);
+commentRoad.delete("/delete/:id",auth, deleteComment);
+
+// Export
 export default commentRoad;

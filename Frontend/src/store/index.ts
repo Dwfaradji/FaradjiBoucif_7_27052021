@@ -30,7 +30,6 @@ export default createStore({
       firstName: "",
       lastName: "",
       image: "",
-      // token: user.token,
     },
     createComment: {
       id: "",
@@ -38,13 +37,14 @@ export default createStore({
       date: "",
       user_id: "",
       post_id: "",
+      firstName: "",
     },
     createPost: {
+      id: "",
       title: "",
       content: "",
       date: "",
       attachment: "",
-      id: "",
     },
   },
   mutations: {
@@ -74,6 +74,7 @@ export default createStore({
       state.createComment = createComment;
       console.log(createComment);
     },
+
     createPost: function (state, createPost) {
       state.user = user;
       state.createPost = createPost;
@@ -120,7 +121,6 @@ export default createStore({
       instance
         .get("/auth/profile")
         .then(function (response) {
-          // console.log(response);
           commit("userInfos", response.data);
         })
         .catch((error) => {

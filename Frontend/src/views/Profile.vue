@@ -6,6 +6,7 @@
       <div class="">
         <div class="col-sm">
           <div class="parent-div">
+             <!--  affiche la photo de l'utilisateur  =>  /!\ ERROR -->
             <div class="media profile">
               <img
                 :src="previewImage"
@@ -28,8 +29,6 @@
               @change="uploadImage"
             />
           </div>
-          <!-- <img :src="previewImage" class="uploading-image" />
-          <input type="file" accept="image/jpeg" @change="uploadImage" /> -->
         </div>
         <div class="col-sm">
           <p>
@@ -43,7 +42,6 @@
         </div>
       </div>
     </div>
-
     <div class="form-row">
       <button @click="deleteUser()" class="button">Supprimer le compte</button>
     </div>
@@ -111,7 +109,6 @@ export default {
           console.log(err.response, "c'est l'erreur");
         });
     },
-    onUploadImage() {},
 
     deleteUser() {
       const Id = this.$store.state.user.userId;
@@ -127,7 +124,9 @@ export default {
             alert("La suppression de l'utilisateur a bien été pris en compte");
             this.$router.push("/");
           })
-          .catch((error) => console.log(error));
+          .catch(() =>
+            alert("La suppression de l'utilisateur a bien été pris en compte")
+          );
       }
     },
   },

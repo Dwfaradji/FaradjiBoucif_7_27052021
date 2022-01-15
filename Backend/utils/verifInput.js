@@ -1,4 +1,5 @@
-//fichier comprenant les fonctions de vérification des inputs des users
+//Fichier comprenant les fonctions de vérification des inputs des users
+
 function validEmail(value) {
   const regexEmail =
     /^[a-z0-9!#$ %& '*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&' * +/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g;

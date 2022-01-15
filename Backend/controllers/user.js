@@ -1,10 +1,12 @@
+// Imports
 import bcrypt from "bcrypt";
-// import jwt from "jsonwebtoken";
 import passwordValidator from "password-validator";
 import emailValidator from "email-validator";
 import { User } from "../models/user.js";
 import verifInput from "../utils/verifInput.js";
 import jwt from "../utils/jwt.js";
+
+// Variables
 const schemaPassword = new passwordValidator();
 schemaPassword
   .is()
@@ -18,9 +20,9 @@ schemaPassword
   .has()
   .digits(1);
 
-// POST pour un nouvel utilisateur
+// Routes
 async function signup(req, res, next) {
-  // Récupération des valeur utilisateur
+  // Enregistre les informations de l'utilisateur dans la base de données
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
   let email = req.body.email;
@@ -31,14 +33,12 @@ async function signup(req, res, next) {
       .status(401)
       .json({ message: "Veuillez entrer une adresse email valide" });
   }
-
   if (!schemaPassword.validate(password)) {
     return res.status(401).json({
       message:
         "Le mot de passe doit avoir une longueur de 3 à 50 caractères avec au moins un chiffre, une minuscule, une majuscule !!!",
     });
   }
-
   if (
     email == null ||
     firstName == null ||
@@ -49,15 +49,12 @@ async function signup(req, res, next) {
   }
   //Vérification des saisies user
   let emailOk = verifInput.validEmail(email);
-  console.log(emailOk);
   let mdpOK = verifInput.validPassword(password);
-  console.log(mdpOK);
   let firstNameOk = verifInput.validUsername(firstName);
-  console.log(firstNameOk);
   let lastNameOk = verifInput.validUsername(lastName);
-  console.log(lastNameOk);
 
   try {
+    //Paramètre
     if (
       emailOk == true &&
       mdpOK == true &&
@@ -69,8 +66,6 @@ async function signup(req, res, next) {
         attributes: ["email"],
         where: { email: email },
       });
-      console.log(verifUser, "salut OK");
-
       // hash du password avec bcript :
       if (!verifUser) {
         const criptPasseword = await bcrypt.hash(req.body.password, 10);
@@ -102,16 +97,16 @@ async function signup(req, res, next) {
 // // ----------------------------------------------------------------------/
 
 async function login(req, res) {
-  // Récupération des valeur utilisateur
+  // Récupération les informations de l'utilisateur enregistré dans la base de données
   let userEmail = req.body.email;
   let password = req.body.password;
-
   if (!userEmail || !password) {
     return res.status(400).json({ error: "Il manque un paramètre" });
   }
   try {
-    // Recherche d'une entrée dans la base en fonction de l'email
+    // Paramètre
     const userName = await User.findOne({ where: { email: userEmail } });
+    // Recherche d'une entrée dans la base en fonction de l'email
     if (!userName) {
       return res.status(401).json({ error: "Utilisateur  incorrect !" });
     }
@@ -126,7 +121,6 @@ async function login(req, res) {
         token: jwt.generateToken(userName),
         isAdmin: userName.isAdmin,
       });
-      console.log(jwt, "ok");
     }
   } catch (error) {
     console.log(error);
@@ -135,14 +129,14 @@ async function login(req, res) {
 }
 
 async function userInfos(req, res) {
+  // Récupère les informations de l'utilisateur  aprés identification
   try {
-    // Va recupérer les informations de l'utilisateur  aprés identification
     let userId = jwt.getUserId(req.headers.authorization);
+    // Paramètre
     const user = await User.findOne({
       attributes: ["id", "email", "firstName", "lastName", "image", "isAdmin"],
       where: { id: userId },
     });
-    console.log(user, "c'est les infos user");
     if (user) {
       res.status(200).json(user);
     } else {
@@ -153,7 +147,9 @@ async function userInfos(req, res) {
   }
 }
 async function deleteUser(req, res, next) {
+  // Supprime l'utilisateur enregistrer dans la base de données
   try {
+    //Paramètre
     await User.destroy({ where: { id: req.params.id } });
     res.status(200).json({ message: "Utilisateur supprimé !" });
   } catch (error) {
@@ -162,18 +158,20 @@ async function deleteUser(req, res, next) {
   }
 }
 
-async function updateInfoUser(req, res) {
-  // try {
-  //   if (req.file) {
-  //     console.log(req.file);
-  //     res.status(201).json({ message: "Image téléchargé avec succés " });
-  //   } else {
-  //     res.status(500).json({ message: "Image non téléchargé" });
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(400).json({ error });
-  // }
+async function updatePicture(req, res) {
+  // Enregistre l'image choisi par l'utilisateur dans la base de données
+  try {
+    // Paramètre
+    if (req.file) {
+      console.log(req.file);
+      res.status(201).json({ message: "Image téléchargé avec succés " });
+    } else {
+      res.status(500).json({ message: "Image non téléchargé" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error });
+  }
 }
-
-export { login, signup, userInfos, deleteUser, updateInfoUser };
+// Exportation
+export { login, signup, userInfos, deleteUser, updatePicture };

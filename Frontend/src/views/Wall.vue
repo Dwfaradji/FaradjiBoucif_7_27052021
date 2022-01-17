@@ -5,11 +5,16 @@
     <article v-if="allPosts.length == 0" class="row justify-content-center">
       <p><b>Désolé il n'y a aucune publication pour le moment...</b></p>
     </article>
-    <Post v-for="post in allPosts" v-bind:key="post.id" :post="post" />
+    <Post
+      v-for="post in allPosts"
+      v-bind:key="post.id"
+      :post="post"
+      @comment-created="loadPosts"
+    />
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import CreatePost from "../components/CreatePost.vue";
 import Post from "../components/Post.vue";
 import axios from "axios";
@@ -45,9 +50,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
-  
     },
-      //  this.$router.push("/wall");
   },
 
   mounted: function () {

@@ -46,7 +46,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script >
 import { mapState } from "vuex";
 export default {
   name: "Create",
@@ -67,11 +67,11 @@ export default {
     msg: String,
   },
   methods: {
-    createPost: function () {
+    createPost: async function () {
       let userStore = localStorage.getItem("user");
       var user = JSON.parse(userStore);
       const Id = user.userId;
-      this.$store.dispatch("createPost", {
+       await this.$store.dispatch("createPost", {
         title: this.title,
         content: this.content,
         date: this.date,

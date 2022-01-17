@@ -22,7 +22,6 @@
               Choisir une image
             </button>
             <input
-        
               name="inputFile"
               id="inputFile"
               type="file"
@@ -49,7 +48,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script >//@_TODO erreur lang="ts"
 import axios from "axios";
 const instance = axios.create({
   baseURL: "http://localhost:3000/api/",
@@ -74,6 +73,7 @@ export default {
     } else {
       this.$store.dispatch("getUserInfos");
     }
+    console.log(this.image, "image this");
   },
   computed: {
     ...mapState({
@@ -92,23 +92,23 @@ export default {
         // console.log(this.previewImage);
       };
       // Récupération de l'image
-  
+      const imageFiles = e.target.files[0];
+
       const fd = new FormData();
-      fd.append("inputFile", image.name);
+      fd.append("inputFile", imageFiles.name);
       console.log("test récup", fd.get("inputFile"));
-      const photo = fd.get("inputFile")
-      console.log(photo,"ok ou ko");
-      
+      fd.get("inputFile");
+
       // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image
       instance.defaults.headers.common["Authorization"] =
         "Bearer " + user.token;
       instance
-        .post("/auth/photo", photo)
+        .post("/auth/photo", fd)
         .then((resp) => {
-          console.log(resp, "c'est la response Image");
+          return console.log(resp, "c'est la response Image");
         })
         .catch((err) => {
-          console.log(err.response, "c'est l'erreur");
+          console.log(err, "c'est l'erreur");
         });
     },
 

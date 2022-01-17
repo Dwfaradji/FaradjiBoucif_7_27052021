@@ -154,23 +154,9 @@ export default {
   mounted: function () {
     this.userStore = user.userId;
     this.isAdmin = user.isAdmin;
-    console.log(this.isAdmin, "ADMIN OU PAS ");
-    console.log(this.post.createdAt, "OK");
-    //
 
     this.idComment = this.post.Comments.id;
-
-    // console.log(this.comment);
-    // this.$store.state.createComment.user_id
-    // instance.defaults.headers.common["Authorization"] = "Bearer " + user.token;
-    // instance
-    //   .get("/comments/allcomments")
-    //   .then((response) => {
-    //     this.idComment = response.data;
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    this.deletePost;
   },
   methods: {
     show: function () {
@@ -179,15 +165,15 @@ export default {
     hide: function () {
       return (this.isDisplay = false);
     },
-    sendComment: function () {
-      this.$store.dispatch("createComment", {
+    sendComment: async function () {
+      await this.$store.dispatch("createComment", {
         date: this.date,
         content: this.commentaire,
         user_id: user.userId,
         post_id: this.post.id,
       });
       // Envois le nouveau commentaire
-      // this.$emit("comment-created");
+      this.$emit("comment-created");
     },
     dateFormat(createdDate) {
       const date = new Date(createdDate);
@@ -213,11 +199,13 @@ export default {
           .then(() => {
             console.log("instance");
             alert("La suppression du post est bien prise en compte");
-            this.$router.go("/wall");
+            // EMIT DELETE POST
+            this.$emit("post-delete", { post: this.post.id });
           })
           .catch(() => alert("Vous ne pouvez pas supprimez ce post"));
       }
     },
+
 
     deleteComment(index) {
       instance.defaults.headers.common["Authorization"] =
@@ -227,7 +215,7 @@ export default {
           .delete(`/comments/delete/${this.post.Comments[index].id}`)
           .then(() => {
             alert("La suppression du commentaire est bien prise en compte");
-            this.$router.go("/wall");
+            this.$router.push("/wall");
           })
           .catch(() => alert("Vous ne pouvez pas supprimez ce commentaire"));
       }

@@ -46,7 +46,7 @@
       Adresse mail et/ou mot de passe incorrect
     </div>
     <div class="form-row" v-if="mode == `create` && status == `error_create`">
-      Adresse deja utiliser / 
+      Adresse deja utiliser /
     </div>
     <div class="form-row">
       <button
@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script >
 import { mapState } from "vuex";
 
 export default {
@@ -139,9 +139,9 @@ export default {
         );
     },
 
-    createAccount: function () {
+    createAccount: async function () {
       const self = this;
-      this.$store
+      await this.$store
         .dispatch("createAccount", {
           email: this.email,
           lastName: this.lastName,

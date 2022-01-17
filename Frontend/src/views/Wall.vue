@@ -9,9 +9,9 @@
   </div>
 </template>
 
-<script>
-import CreatePost from "../components/CreatePost";
-import Post from "../components/Post";
+<script lang="ts">
+import CreatePost from "../components/CreatePost.vue";
+import Post from "../components/Post.vue";
 import axios from "axios";
 const instance = axios.create({
   baseURL: "http://localhost:3000/api/",

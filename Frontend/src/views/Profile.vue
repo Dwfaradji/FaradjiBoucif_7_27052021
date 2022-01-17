@@ -6,7 +6,7 @@
       <div class="">
         <div class="col-sm">
           <div class="parent-div">
-             <!--  affiche la photo de l'utilisateur  =>  /!\ ERROR -->
+            <!--  affiche la photo de l'utilisateur  =>  /!\ ERROR -->
             <div class="media profile">
               <img
                 :src="previewImage"
@@ -22,10 +22,11 @@
               Choisir une image
             </button>
             <input
-              id="picture"
+        
+              name="inputFile"
+              id="inputFile"
               type="file"
               class="file_input"
-              name="image"
               @change="uploadImage"
             />
           </div>
@@ -48,7 +49,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import axios from "axios";
 const instance = axios.create({
   baseURL: "http://localhost:3000/api/",
@@ -63,6 +64,7 @@ export default {
     return {
       selectedFile: null,
       previewImage: null,
+      image: null,
     };
   },
   mounted: function () {
@@ -83,7 +85,6 @@ export default {
     uploadImage(e) {
       // Récupération de l'image
       const image = e.target.files[0];
-      console.log(image, "image");
       const reader = new FileReader();
       reader.readAsDataURL(image);
       reader.onload = (e) => {
@@ -91,19 +92,20 @@ export default {
         // console.log(this.previewImage);
       };
       // Récupération de l'image
-      let img = document.getElementById("picture").files[0];
-      console.log(img, " IMAGE ");
-      // Création d'un formData obligatoire pour envoi de l'image
-      var formData = new FormData();
-      console.log(formData, "formdata");
-      formData.append("img", img.name);
+  
+      const fd = new FormData();
+      fd.append("inputFile", image.name);
+      console.log("test récup", fd.get("inputFile"));
+      const photo = fd.get("inputFile")
+      console.log(photo,"ok ou ko");
+      
       // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image
       instance.defaults.headers.common["Authorization"] =
         "Bearer " + user.token;
       instance
-        .post("/auth/photo", formData)
+        .post("/auth/photo", photo)
         .then((resp) => {
-          console.log(resp, "c'est la response");
+          console.log(resp, "c'est la response Image");
         })
         .catch((err) => {
           console.log(err.response, "c'est l'erreur");

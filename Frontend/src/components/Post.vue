@@ -5,9 +5,10 @@
         <div class="row justify-content-between">
           <p class="ml-3">
             Posté par <strong>{{ post.User.firstName }}</strong>
+            {{ dateFormat(post.createdAt) }} à {{ hourFormat(post.createdAt) }}
           </p>
           <button
-            v-if="post.user_id == userStore"
+            v-if="post.user_id == userStore || isAdmin"
             class="btn btn-flat btn-flat-icon"
             type="button"
             data-toggle="dropdown"
@@ -59,8 +60,10 @@
                   <span
                     >écrit par <b>{{ comment.User.firstName }} </b></span
                   >
+                  {{ dateFormat(comment.createdAt) }} à
+                  {{ hourFormat(comment.createdAt) }}
                   <button
-                    v-if="comment.user_id == userStore"
+                    v-if="comment.user_id == userStore || isAdmin"
                     @click.prevent="deleteComment(index)"
                     class="btn btn-primary button-comment"
                   >
@@ -138,6 +141,7 @@ export default {
   },
   data() {
     return {
+      isAdmin: true,
       userStore: "",
       id_param: this.post.id,
       idComment: [],
@@ -149,7 +153,9 @@ export default {
   },
   mounted: function () {
     this.userStore = user.userId;
-
+    this.isAdmin = user.isAdmin;
+    console.log(this.isAdmin, "ADMIN OU PAS ");
+    console.log(this.post.createdAt, "OK");
     //
 
     this.idComment = this.post.Comments.id;
@@ -182,6 +188,20 @@ export default {
       });
       // Envois le nouveau commentaire
       // this.$emit("comment-created");
+    },
+    dateFormat(createdDate) {
+      const date = new Date(createdDate);
+      const options = {
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      };
+      return date.toLocaleDateString("fr-FR", options);
+    },
+    hourFormat(createdHour) {
+      const hour = new Date(createdHour);
+      const options = { hour: "numeric", minute: "numeric", second: "numeric" };
+      return hour.toLocaleTimeString("fr-FR", options);
     },
 
     deletePost() {

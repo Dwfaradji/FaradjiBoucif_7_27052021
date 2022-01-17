@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script >
+<script>
 import { mapState } from "vuex";
 
 export default {
@@ -122,9 +122,9 @@ export default {
     switchToLogin: function () {
       this.mode = "login";
     },
-    login: function () {
+    login: async function () {
       const self = this;
-      this.$store
+      await this.$store
         .dispatch("login", {
           email: this.email,
           password: this.password,
@@ -132,6 +132,7 @@ export default {
         .then(
           function () {
             self.$router.push("/wall");
+            window.location.reload();
           },
           function (error) {
             console.log(error);

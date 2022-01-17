@@ -5,8 +5,8 @@
     <div class="row justify-content-center">
       <div class="">
         <div class="col-sm">
-          <div class="parent-div">
-            <!--  affiche la photo de l'utilisateur  =>  /!\ ERROR -->
+          <div class="">
+            <!--  affiche la photo de l'utilisateur  =>  /!\ ERROR  parent-div =boutton imput-->
             <div class="media profile">
               <img
                 :src="previewImage"
@@ -15,18 +15,28 @@
               />
             </div>
             <button
-              class="button"
+              class="button m-2"
               name="image"
-              @click.prevent="onUploadImage()"
+              @click="$refs.fileInput.click()"
             >
               Choisir une image
             </button>
+            <button
+              class="button m-2"
+              name="image"
+              @click.prevent="onUploadImage()"
+            >
+              Télécharger
+            </button>
+
             <input
+              style="display: none"
+              ref="fileInput"
               name="inputFile"
               id="inputFile"
               type="file"
-              class="file_input"
-              @change="uploadImage"
+              class="button"
+              @change="onFileSelected"
             />
           </div>
         </div>
@@ -48,7 +58,8 @@
   </div>
 </template>
 
-<script >//@_TODO erreur lang="ts"
+<script>
+//@_TODO erreur lang="ts"
 import axios from "axios";
 const instance = axios.create({
   baseURL: "http://localhost:3000/api/",
@@ -82,6 +93,24 @@ export default {
   },
 
   methods: {
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(this.selectedFile);
+      reader.onload = (e) => {
+        this.previewImage = e.target.result;
+      };
+    },
+    onUploadImage() {
+      const fd = new FormData();
+      fd.append("image", this.selectedFile, this.selectedFile.name);
+      instance.defaults.headers.common["Authorization"] =
+        "Bearer " + user.token;
+      instance.post("/auth/photo", fd).then((res) => {
+        console.log(res);
+      });
+    },
+
     uploadImage(e) {
       // Récupération de l'image
       const image = e.target.files[0];
@@ -89,29 +118,29 @@ export default {
       reader.readAsDataURL(image);
       reader.onload = (e) => {
         this.previewImage = e.target.result;
-        // console.log(this.previewImage);
+        console.log(this.previewImage);
       };
-      // Récupération de l'image
-      const imageFiles = e.target.files[0];
-
-      const fd = new FormData();
-      fd.append("inputFile", imageFiles.name);
-      console.log("test récup", fd.get("inputFile"));
-      fd.get("inputFile");
-
-      // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image
-      instance.defaults.headers.common["Authorization"] =
-        "Bearer " + user.token;
-      instance
-        .post("/auth/photo", fd)
-        .then((resp) => {
-          return console.log(resp, "c'est la response Image");
-        })
-        .catch((err) => {
-          console.log(err, "c'est l'erreur");
-        });
     },
+    //   // Récupération de l'image
+    //   const imageFiles = e.target.files[0];
 
+    //   const fd = new FormData();
+    //   fd.append("inputFile", imageFiles.name);
+    //   console.log("test récup", fd.get("inputFile"));
+    //   fd.get("inputFile");
+
+    //   // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image
+    //   instance.defaults.headers.common["Authorization"] =
+    //     "Bearer " + user.token;
+    //   instance
+    //     .post("/auth/photo", fd)
+    //     .then((resp) => {
+    //       return console.log(resp, "c'est la response Image");
+    //     })
+    //     .catch((err) => {
+    //       console.log(err, "c'est l'erreur");
+    //     });
+    // },
     deleteUser() {
       const Id = this.$store.state.user.userId;
       if (confirm("Voulez-vous vraiment supprimer cet utilisateur") == true) {

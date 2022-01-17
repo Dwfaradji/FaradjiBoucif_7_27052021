@@ -199,13 +199,13 @@ export default {
           .then(() => {
             console.log("instance");
             alert("La suppression du post est bien prise en compte");
+            window.location.reload();
             // EMIT DELETE POST
             this.$emit("post-delete", { post: this.post.id });
           })
           .catch(() => alert("Vous ne pouvez pas supprimez ce post"));
       }
     },
-
 
     deleteComment(index) {
       instance.defaults.headers.common["Authorization"] =
@@ -215,6 +215,7 @@ export default {
           .delete(`/comments/delete/${this.post.Comments[index].id}`)
           .then(() => {
             alert("La suppression du commentaire est bien prise en compte");
+            window.location.reload();
             this.$router.push("/wall");
           })
           .catch(() => alert("Vous ne pouvez pas supprimez ce commentaire"));

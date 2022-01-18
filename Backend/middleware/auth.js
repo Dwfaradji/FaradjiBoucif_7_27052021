@@ -7,7 +7,7 @@ const auth = (req, res, next) => {
     //Récupère seulement le token du header authorization de la requête
     const token = req.headers.authorization.split(" ")[1];
     //Decode le token en vérifiant le token avec celui présent dans la fonction login
-    const decodedToken = jwt.verify(token, "DEVELOPMENT_TOKEN_SECRET");
+    const decodedToken = jwt.verify(token, process.env.DB_TOKEN);
     //Récupère le userId
     const userId = decodedToken.id;
     //Vérifie s'il y a un userId dans la requête et que celui ci est différent de l'user Id alors

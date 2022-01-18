@@ -5,7 +5,7 @@ const mineTypes = {
   "image/jpg": "jpg",
   "image/jpeg": "jpg",
   "image/png": "png",
-  "image/gif": "gif",
+  "image/webp": "webp",
 };
 // Déclaration de storage qui permet de sauvegarder les images
 // // en leur indiquant la destination, et en changeant le nom
@@ -21,9 +21,9 @@ const storage = multerFile.diskStorage({
     const extension = mineTypes[file.mimetype];
     callback(null, name + Date.now() + "." + extension);
     //===== contrôle extension images
-    // if (!extension) {
-    //   return res.status(400).json({error:"error"});
-    // }
+    if (!extension) {
+      return res.status(400).json({error:"error"});
+    }
   },
 });
 

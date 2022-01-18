@@ -11,7 +11,6 @@ import { fileURLToPath } from "url";
 
 // Export
 export const appli = express();
-
 // Constant
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -32,7 +31,7 @@ appli.use((req, res, next) => {
 // Lancement de la base de donnée
 async function runDatabase() {
   try {
-    await database.sync();
+    await database.sync({alter:true});
     console.log("Bienvenue sur le server groupomania.");
     console.log("Syncronisation des tables BD");
   } catch (error) {

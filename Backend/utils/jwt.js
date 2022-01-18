@@ -10,7 +10,7 @@ function generateToken(user, tokenSign) {
       isAdmin: user.isAdmin,
     },
     // Token secret
-    "DEVELOPMENT_TOKEN_SECRET",
+    process.env.DB_TOKEN,
     {
       expiresIn: "24h",
     }
@@ -22,7 +22,7 @@ function getUserId(data, userId) {
   if (data.length > 1) {
     let token = data.split(" ")[1];
     try {
-      let decodedToken = jwt.verify(token, "DEVELOPMENT_TOKEN_SECRET");
+      let decodedToken = jwt.verify(token, process.env.DB_TOKEN);
       userId = decodedToken.userId;
       return userId;
     } catch (err) {

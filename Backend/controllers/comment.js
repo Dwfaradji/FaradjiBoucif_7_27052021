@@ -12,7 +12,6 @@ async function createComment(req, res) {
       user_id: req.body.user_id,
       content: req.body.content,
       post_id: req.body.post_id,
-      // firstName: req.body.firstName,
     });
     return res.status(201).json({ id: comment, message: "Commentaire créé !" });
   } catch (error) {
@@ -60,23 +59,28 @@ async function deleteComment(req, res) {
   // Recupére un commentaire enregistré dans la base de donnée pour le supprimer
   let idUserStore = jwt.getUserId(req.headers.authorization);
   const userIdComments = req.params.id;
-  console.log(idUserStore, "id params local storage");
   try {
     //Paramètre
+    //Controle Administrateur
+    const adminFind = await User.findOne({
+      attributes: ["id", "email", "isAdmin"],
+      where: { id: idUserStore },
+    });
+    const isAdmin = adminFind.isAdmin;
+    
     const commentFind = await Comment.findOne({ where: { id: req.params.id } });
     const userFindComment = commentFind.user_id;
-    console.log(commentFind.user_id, "JE SUIS USER ID DU POST");
-    if (idUserStore !== userFindComment) {
-      res
-        .status(400)
-        .send({ message: "Vous n'êtes pas autorisé a supprimez ce post!" });
-    } else {
+
+    if (isAdmin == true || idUserStore == userFindComment) {
       await Comment.destroy({
         where: { id: userIdComments },
       });
-      res.status(200).json({ message: "Post supprimé !" });
+      res.status(200).json({ message: "Commentaire supprimé !" });
+    } else {
+      res
+        .status(400)
+        .send({ message: "Vous n'êtes pas autorisé a supprimez ce Commentaire!" });
     }
-    return res.status(200).json({ message: "Commentaire supprimé !" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error, error: "Commentaire nom supprimer" });

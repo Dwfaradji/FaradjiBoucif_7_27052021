@@ -18,7 +18,7 @@ userRoad.post("/signup", signup);
 userRoad.post("/login", login);
 userRoad.get("/profile", auth, multer, userInfos);
 userRoad.delete("/:id", auth, deleteUser);
-userRoad.post("/photo", auth, multer, updatePicture);
+userRoad.post("/photo/:id", auth, multer, updatePicture);
 
 // Export
 export default userRoad;

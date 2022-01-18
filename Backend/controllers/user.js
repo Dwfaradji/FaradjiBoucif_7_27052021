@@ -27,6 +27,7 @@ async function signup(req, res, next) {
   let lastName = req.body.lastName;
   let email = req.body.email;
   let password = req.body.password;
+
   // Valider les paramètres de la requète
   if (!emailValidator.validate(email)) {
     return res
@@ -75,10 +76,7 @@ async function signup(req, res, next) {
           lastName: req.body.lastName,
           email: req.body.email,
           password: criptPasseword,
-          // image: `${req.protocol}://${req.get("host")}/images/${
-          //   req.file.filename
-          // }`,
-          isAdmin: 0,
+          isAdmin: 0, //@_ TODO GERER LE COMPTE ADMIN
         });
         res
           .status(201)
@@ -160,13 +158,39 @@ async function deleteUser(req, res, next) {
 
 async function updatePicture(req, res) {
   // Enregistre l'image choisi par l'utilisateur dans la base de données
+  let imageURL;
   try {
-    // Paramètre
-    if (req.file) {
-      console.log(req.file);
-      res.status(201).json({ message: "Image téléchargé avec succés " });
-    } else {
-      res.status(500).json({ message: "Image non téléchargé" });
+    let id = jwt.getUserId(req.headers.authorization);
+    const userFind = await User.findOne({
+      attributes: ["id"],
+      where: { id: id },
+    });
+    //enregistre l'image dans le fichier image
+    if (userFind !== null) {
+      if (req.file) {
+        console.log(req.file);
+        //  res.status(201).json({ message: "Image téléchargé avec succés " });
+      } else {
+        // res.status(500).json({ message: "Image non téléchargé" });
+      }
+      if (req.file != undefined) {
+        imageURL = `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`;
+  
+        const modifyImage = {
+          image: imageURL,
+          // image: req.body.image,
+        };
+        const test = modifyImage;
+        const newPicture = await User.update(test, {
+          where: { id: req.params.id },
+        });
+        return res.status(201).json({ message: "image sauvegarder" });
+      } else {
+        imageURL == null;
+        // res.status(401).json({ message: "Error image BD" });
+      }
     }
   } catch (error) {
     console.log(error);
@@ -175,3 +199,5 @@ async function updatePicture(req, res) {
 }
 // Exportation
 export { login, signup, userInfos, deleteUser, updatePicture };
+
+

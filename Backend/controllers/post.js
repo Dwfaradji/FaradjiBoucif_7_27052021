@@ -13,7 +13,6 @@ async function createPost(req, res) {
       title: req.body.title,
       content: req.body.content,
       user_id: req.body.user_id,
-      likes: req.body.likes,
     });
     return res.status(201).json({ post, message: "Post créé !" });
   } catch (error) {
@@ -30,11 +29,10 @@ async function getAllPosts(req, res) {
       include: [
         {
           model: User,
-          attributes: ["firstName"],
+          attributes: ["firstName", "isAdmin"],
         },
         {
           model: Comment,
-          attributes: ["id", "content", "user_id", "post_id"],
           separate: true,
           order: [["id", "ASC"]],
           include: [User],
@@ -59,25 +57,23 @@ async function deletePost(req, res, next) {
       where: { id: req.params.id },
       include: [{ model: User, attributes: ["isAdmin"] }],
     });
-    console.log(postFind.User.isAdmin, "TEST suppression post");
-    const isAdmin = postFind.User.isAdmin;
     const userFindPost = postFind.user_id;
-    if (idUserStore !== userFindPost && isAdmin == false) {
-      console.log("Ko");
-    } else {
-      console.log("Ok");
-    }
+    //Cherche si admin ou pas
+    const adminFind = await User.findOne({
+      attributes: ["id", "email", "isAdmin"],
+      where: { id: idUserStore },
+    });
+    const isAdmin = adminFind.isAdmin;
 
-    // (user && (user.isAdmin == true || user.id == userOrder)
-    if (idUserStore !== userFindPost && isAdmin == false) {
-      res
-        .status(400)
-        .send({ message: "Vous n'êtes pas autorisé a supprimez ce post!" });
-    } else {
+    if (isAdmin == true || idUserStore == userFindPost) {
       await Post.destroy({
         where: { id: userIdPost },
       });
       res.status(200).json({ message: "Post supprimé !" });
+    } else {
+      res
+      .status(400)
+      .send({ message: "Vous n'êtes pas autorisé a supprimez ce post!" });
     }
   } catch (error) {
     console.log(error);

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container-fluid">
+  <div id="app" >
     <Header />
     <router-view></router-view>
   </div>
@@ -12,10 +12,6 @@ export default {
   components: {
     Header,
   },
-  mounted(){
-
-  }
-
 };
 </script>
 <style>

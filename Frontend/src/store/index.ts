@@ -61,6 +61,8 @@ export default createStore({
 
     userInfos: function (state, userInfos) {
       state.userInfos = userInfos;
+      console.log(userInfos,"user infos");
+      
     },
 
     logout: function (state) {

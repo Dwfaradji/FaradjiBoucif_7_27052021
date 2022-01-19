@@ -2,9 +2,9 @@
   <div>
     <div class="container-fluid mb-3">
       <form class="container cardbox shadow-lg bg-white post" method="post">
-        <div class="row justify-content-between">
+        <div class="row justify-content-between delete">
           <p class="ml-3">
-            Posté par <strong>{{ post.User.firstName }}</strong>
+            Posté par <strong>{{ post.User.firstName }}</strong> le
             {{ dateFormat(post.createdAt) }} à {{ hourFormat(post.createdAt) }}
           </p>
           <button
@@ -60,7 +60,7 @@
                   <span
                     >écrit par <b>{{ comment.User.firstName }} </b></span
                   >
-                  {{ dateFormat(comment.createdAt) }} à
+                  le {{ dateFormat(comment.createdAt) }} à
                   {{ hourFormat(comment.createdAt) }}
                   <button
                     v-if="comment.user_id == userStore || isAdmin"
@@ -74,23 +74,34 @@
                   {{ comment.content }}
                 </p>
               </div>
-              <button v-on:click="hide" class="btn btn-primary comment-button">
+              <button
+                v-if="post.Comments.length"
+                v-on:click="hide"
+                class="btn btn-primary comment-button"
+              >
                 Cacher le<span v-if="post.Comments.length >= 2">s</span>
                 commentaire<span v-if="post.Comments.length >= 2">s</span>
               </button>
             </article>
           </div>
         </div>
-        <div class="row justify-content-between align-items-center">
+        <div class="row justify-content-around align-items-center">
           <img
+            v-if="user.image"
+            :src="user.image"
+            alt="image de l'utilisateur"
+            class="rounded-circle m-2 col-xs-1"
+          />
+          <img
+            v-else
             src="https://www.icone-png.com/png/54/53787.png"
             alt="..."
-            class="rounded-circle m-2 col-1"
+            class="rounded-circle m-2 col-1,4"
           />
           <input
             type="text"
             v-model="commentaire"
-            class="form-control mr-3 col"
+            class="form-control m-3 col-md-6"
             aria-label="Default"
             aria-describedby="inputGroup-sizing-default"
             id="input_text"
@@ -135,18 +146,13 @@ export default {
       type: Object,
       required: true,
     },
-    // comment: {
-    //   type: Object,
-    // },
   },
   data() {
     return {
       isAdmin: true,
       userStore: "",
       id_param: this.post.id,
-      idComment: [],
       commentaire: "",
-      date: "",
       isDisplay: false,
       displaycomment: false,
     };
@@ -154,20 +160,17 @@ export default {
   mounted: function () {
     this.userStore = user.userId;
     this.isAdmin = user.isAdmin;
-
-    this.idComment = this.post.Comments.id;
-    this.deletePost;
   },
+
   methods: {
-    show: function () {
+    show() {
       return (this.isDisplay = true);
     },
-    hide: function () {
+    hide() {
       return (this.isDisplay = false);
     },
-    sendComment: async function () {
+    async sendComment() {
       await this.$store.dispatch("createComment", {
-        date: this.date,
         content: this.commentaire,
         user_id: user.userId,
         post_id: this.post.id,
@@ -175,7 +178,7 @@ export default {
       // Envois le nouveau commentaire
       this.$emit("comment-created");
     },
-    dateFormat(createdDate) {
+    dateFormat: function (createdDate) {
       const date = new Date(createdDate);
       const options = {
         day: "numeric",
@@ -190,35 +193,35 @@ export default {
       return hour.toLocaleTimeString("fr-FR", options);
     },
 
-    deletePost() {
-      if (confirm("Voulez-vous vraiment supprimer le post") == true) {
-        instance.defaults.headers.common["Authorization"] =
-          "Bearer " + user.token;
-        instance
-          .delete(`/posts/${this.id_param}`)
-          .then(() => {
-            console.log("instance");
-            alert("La suppression du post est bien prise en compte");
-            window.location.reload();
-            // EMIT DELETE POST
-            this.$emit("post-delete", { post: this.post.id });
-          })
-          .catch(() => alert("Vous ne pouvez pas supprimez ce post"));
+    async deletePost() {
+      try {
+        if (confirm("Voulez-vous vraiment supprimer le post") == true) {
+          instance.defaults.headers.common["Authorization"] =
+            "Bearer " + user.token;
+          await instance.delete(`/posts/${this.id_param}`);
+          alert("La suppression du post est bien prise en compte");
+          // EMIT DELETE POST
+          this.$emit("post-delete", { post: this.post.id });
+        }
+      } catch (error) {
+        alert("Vous ne pouvez pas supprimez ce post");
       }
     },
 
-    deleteComment(index) {
-      instance.defaults.headers.common["Authorization"] =
-        "Bearer " + user.token;
-      if (confirm("Voulez-vous vraiment supprimer ce commentaire") == true) {
-        instance
-          .delete(`/comments/delete/${this.post.Comments[index].id}`)
-          .then(() => {
-            alert("La suppression du commentaire est bien prise en compte");
-            window.location.reload();
-            this.$router.push("/wall");
-          })
-          .catch(() => alert("Vous ne pouvez pas supprimez ce commentaire"));
+    async deleteComment(index) {
+      try {
+        instance.defaults.headers.common["Authorization"] =
+          "Bearer " + user.token;
+        if (confirm("Voulez-vous vraiment supprimer ce commentaire") == true) {
+          await instance.delete(
+            `/comments/delete/${this.post.Comments[index].id}`
+          );
+          alert("La suppression du commentaire est bien prise en compte");
+          // EMIT DELETE POST
+          this.$emit("comment-delete");
+        }
+      } catch (error) {
+        alert("Vous ne pouvez pas supprimez ce commentaire");
       }
     },
   },
@@ -226,6 +229,9 @@ export default {
 </script>
 
 <style scoped>
+.delete {
+  flex-wrap: nowrap;
+}
 .post {
   border-radius: 10px 10px 10px;
   box-shadow: 30px;
@@ -267,8 +273,8 @@ img {
 }
 
 .comment-button {
-  margin: 10px 0 30px 0;
-  padding: 5px 30px;
+  margin-left: 10px;
+  /* padding: 5px 30px; */
   /* border: 2px solid #fd2d01; */
   border-radius: 10px;
   /* background: #ffd7d7; */
@@ -287,4 +293,5 @@ img {
 .comment-info {
   padding: 0 30px 0 30px;
 }
+
 </style>

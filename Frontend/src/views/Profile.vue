@@ -7,9 +7,10 @@
         <div class="col-sm">
           <div class="">
             <!--  affiche la photo de l'utilisateur  =>  /!\ ERROR  parent-div =boutton imput-->
-            <div class="media profile">
+            <div v-if="user.image" class="media profile">
               <img
-                :src="previewImage"
+                :src="user.image"
+                alt="image de l'utilisateur"
                 style="width: 45%"
                 class="rounded-circle align-self-center mr-3"
               />
@@ -58,7 +59,7 @@
   </div>
 </template>
 
-<script>
+<script >
 //@_TODO erreur lang="ts"
 import axios from "axios";
 const instance = axios.create({
@@ -84,7 +85,6 @@ export default {
     } else {
       this.$store.dispatch("getUserInfos");
     }
-    console.log(this.image, "image this");
   },
   computed: {
     ...mapState({
@@ -102,12 +102,15 @@ export default {
       };
     },
     onUploadImage() {
+      const picture = this.$store.state.user.userId;
       const fd = new FormData();
       fd.append("image", this.selectedFile, this.selectedFile.name);
       instance.defaults.headers.common["Authorization"] =
         "Bearer " + user.token;
-      instance.post("/auth/photo", fd).then((res) => {
-        console.log(res);
+      // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image
+      instance.post(`/auth/photo/${picture}`, fd).then((res) => {
+        console.log(res, "image ");
+        window.location.reload();
       });
     },
 
@@ -121,43 +124,21 @@ export default {
         console.log(this.previewImage);
       };
     },
-    //   // Récupération de l'image
-    //   const imageFiles = e.target.files[0];
 
-    //   const fd = new FormData();
-    //   fd.append("inputFile", imageFiles.name);
-    //   console.log("test récup", fd.get("inputFile"));
-    //   fd.get("inputFile");
-
-    //   // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image
-    //   instance.defaults.headers.common["Authorization"] =
-    //     "Bearer " + user.token;
-    //   instance
-    //     .post("/auth/photo", fd)
-    //     .then((resp) => {
-    //       return console.log(resp, "c'est la response Image");
-    //     })
-    //     .catch((err) => {
-    //       console.log(err, "c'est l'erreur");
-    //     });
-    // },
-    deleteUser() {
-      const Id = this.$store.state.user.userId;
-      if (confirm("Voulez-vous vraiment supprimer cet utilisateur") == true) {
-        instance.defaults.headers.common["Authorization"] =
-          "Bearer " + user.token;
-        instance
-          .delete(`/auth/${Id}`)
-          .then(() => {
-            console.log("instance");
-            localStorage.removeItem("user");
-            window.location.reload();
-            alert("La suppression de l'utilisateur a bien été pris en compte");
-            this.$router.push("/");
-          })
-          .catch(() =>
-            alert("La suppression de l'utilisateur a bien été pris en compte")
-          );
+    async deleteUser() {
+      try {
+        const Id = this.$store.state.user.userId;
+        if (confirm("Voulez-vous vraiment supprimer cet utilisateur") == true) {
+          instance.defaults.headers.common["Authorization"] =
+            "Bearer " + user.token;
+          await instance.delete(`/auth/${Id}`);
+          alert("La suppression de l'utilisateur a bien été pris en compte");
+          localStorage.removeItem("user");
+          window.location.reload();
+          this.$router.go("/");
+        }
+      } catch (error) {
+        alert("La suppression de l'utilisateur a bien été pris en compte");
       }
     },
   },

@@ -1,7 +1,6 @@
 <template>
   <div id="wall" class="wall">
     <CreatePost @post-created="loadPosts" />
-    <!-- <pre>{{ allPosts }} </pre> -->
     <article v-if="allPosts.length == 0" class="row justify-content-center">
       <p><b>Désolé il n'y a aucune publication pour le moment...</b></p>
     </article>
@@ -10,11 +9,13 @@
       v-bind:key="post.id"
       :post="post"
       @comment-created="loadPosts"
+      @post-delete="loadPosts"
+      @comment-delete="loadPosts"
     />
   </div>
 </template>
 
-<script>
+<script >
 import CreatePost from "../components/CreatePost.vue";
 import Post from "../components/Post.vue";
 import axios from "axios";
@@ -38,7 +39,7 @@ export default {
     };
   },
   methods: {
-    loadPosts: async function () {
+    async loadPosts() {
       let userStore = localStorage.getItem("user");
       const user = JSON.parse(userStore);
       try {
@@ -58,7 +59,7 @@ export default {
       this.$router.push("/");
       return;
     }
-    this.$store.dispatch("getUserInfos");
+    // this.$store.dispatch("getUserInfos");
     // Chargement du post dans le dom
     this.loadPosts();
   },

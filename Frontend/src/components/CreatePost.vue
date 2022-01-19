@@ -1,21 +1,28 @@
 <template>
   <div>
-    <div class="container-fluid mb-3">
+    <div class="container-fluid container-xl mb-3 col-ms-12">
       <form class="container cardbox shadow-lg bg-white post" method="post">
-        <div class="row justify-content-center">
-          <h1>Bonjour {{ user.firstName }}</h1>
+        <div>
+          <h1 class="col-xs-5">Bonjour {{ user.firstName }}</h1>
         </div>
         <div class="row justify-content-around align-items-center">
           <img
+            v-if="user.image"
+            :src="user.image"
+            alt="image de l'utilisateur"
+            class="rounded-circle m-2 col-1,4"
+          />
+          <img
+            v-else
             src="https://www.icone-png.com/png/54/53787.png"
             alt="..."
             class="rounded-circle m-2 col-1,4"
           />
-          <div class="d-flex flex-column col-6">
+          <div class="d-flex flex-column col-md-6">
             <input
               type="text"
               v-model="title"
-              class="form-control m-2"
+              class="form-control m-2 col-md-12"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               id="input_text"
@@ -34,7 +41,7 @@
           <div>
             <button
               type="submit"
-              class="btn btn-primary"
+              class="btn btn-primary m-2"
               @click.prevent="createPost"
             >
               Publier
@@ -46,7 +53,7 @@
   </div>
 </template>
 
-<script >
+<script>
 import { mapState } from "vuex";
 export default {
   name: "Create",
@@ -54,8 +61,6 @@ export default {
     return {
       title: "",
       content: "",
-      date: "",
-      attachment: "",
     };
   },
   computed: {
@@ -63,19 +68,15 @@ export default {
       user: "userInfos",
     }),
   },
-  props: {
-    msg: String,
-  },
+
   methods: {
-    createPost: async function () {
+    async createPost() {
       let userStore = localStorage.getItem("user");
       var user = JSON.parse(userStore);
       const Id = user.userId;
-       await this.$store.dispatch("createPost", {
+      await this.$store.dispatch("createPost", {
         title: this.title,
         content: this.content,
-        date: this.date,
-        attachment: this.attachment,
         user_id: Id,
         id: this.id,
       });
@@ -83,7 +84,7 @@ export default {
       this.$emit("post-created");
     },
   },
-  mounted: function () {
+  mounted() {
     this.$store.dispatch("getUserInfos");
   },
 };
@@ -97,7 +98,8 @@ export default {
 }
 img {
   margin-top: 20px;
-  width: 10%;
+  width: 100px;
+  height: 100px;
 }
 .input-text {
   width: 60%;

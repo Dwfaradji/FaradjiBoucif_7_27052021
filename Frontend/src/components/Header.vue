@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="container-fluid navbar navbar-expand-lg navbar-light bg-light fixed-top px-4"
+    class="container-fluid navbar navbar-expand-lg navbar-light bg-light fixed-top px-4 col-xs-10"
   >
     <button
       class="navbar-toggler"
@@ -15,7 +15,7 @@
     </button>
     <router-link class="navbar-brand" to="/">
       <img
-        class="w-50 col-6 row"
+        class="w-50 col-6 row mx-2"
         src="../assets/icon-left-font-monochrome-black.svg"
         alt="Logo Groupomania"
       />
@@ -46,7 +46,7 @@ export default {
     msg: String,
   },
   methods: {
-    logout: function () {
+    logout() {
       console.log("déconnecter");
       this.$store.commit("logout");
       this.$router.push("/");
@@ -56,6 +56,9 @@ export default {
 </script>
 
 <style lang="scss">
+.navbar{
+  flex-wrap: nowrap;
+}
 nav {
   position: fixed;
   top: 0;

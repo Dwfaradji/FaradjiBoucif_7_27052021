@@ -46,7 +46,7 @@
       Adresse mail et/ou mot de passe incorrect
     </div>
     <div class="form-row" v-if="mode == `create` && status == `error_create`">
-      Adresse deja utiliser /
+      Erreur de saisie
     </div>
     <div class="form-row">
       <button
@@ -71,7 +71,7 @@
   </div>
 </template>
 
-<script >
+<script>
 import { mapState } from "vuex";
 
 export default {
@@ -83,6 +83,8 @@ export default {
       firstName: "",
       lastName: "",
       password: "",
+      error_password: null,
+      error_email: null,
     };
   },
   mounted: function () {
@@ -122,41 +124,34 @@ export default {
     switchToLogin: function () {
       this.mode = "login";
     },
-    login: async function () {
-      const self = this;
-      await this.$store
-        .dispatch("login", {
+
+    async login() {
+      try {
+        await this.$store.dispatch("login", {
           email: this.email,
           password: this.password,
-        })
-        .then(
-          function () {
-            self.$router.push("/wall");
-            window.location.reload();
-          },
-          function (error) {
-            console.log(error);
-          }
-        );
+        }),
+          window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-    createAccount: async function () {
+
+    async createAccount() {
       const self = this;
-      await this.$store
-        .dispatch("createAccount", {
+      try {
+        await this.$store.dispatch("createAccount", {
           email: this.email,
           lastName: this.lastName,
           firstName: this.firstName,
           password: this.password,
-        })
-        .then(
-          function () {
-            self.login();
-          },
-          function (error) {
-            console.log(error);
-          }
-        );
+        });
+        self.login();
+      } catch (error) {
+        this.error_email = "adresse mail invalide";
+        console.log(error);
+      }
     },
   },
 };

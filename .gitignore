@@ -2,7 +2,7 @@
 node_modules
 /dist
 /Backend/images
-.env
+*.env
 
 lock
 

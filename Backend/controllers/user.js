@@ -40,12 +40,7 @@ async function signup(req, res, next) {
         "Le mot de passe doit avoir une longueur de 3 à 50 caractères avec au moins un chiffre, une minuscule, une majuscule !!!",
     });
   }
-  if (
-    email == null ||
-    firstName == null ||
-    lastName == null ||
-    password == null
-  ) {
+  if (!email || !firstName || !lastName || !password) {
     res.status(400).json({ error: "il manque un paramètre" });
   }
   //Vérification des saisies user
@@ -76,23 +71,22 @@ async function signup(req, res, next) {
           lastName: req.body.lastName,
           email: req.body.email,
           password: criptPasseword,
-          isAdmin: 0, //@_ TODO GERER LE COMPTE ADMIN
+          isAdmin: 0,
         });
         res
           .status(201)
           .json({ id: newUser.post_id, message: "Utilisateur créer" });
       } else {
-        res.status(409).json({ error: "Cette utilisateur existe déjà " });
+        res.status(400).json({ error: "Cette utilisateur existe déjà " });
       }
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error, error: "probléme inscription est survenue" });
+    res.status(500).json({ error: "probléme inscription est survenue" });
   }
 }
-// // ----------------------------------------------------------------------/
-// //       script pour le login
-// // ----------------------------------------------------------------------/
+
+//========== script pour le login =============//
 
 async function login(req, res) {
   // Récupération les informations de l'utilisateur enregistré dans la base de données
@@ -129,7 +123,7 @@ async function login(req, res) {
 async function userInfos(req, res) {
   // Récupère les informations de l'utilisateur  aprés identification
   try {
-    let userId = jwt.getUserId(req.headers.authorization);
+    let userId = req.user.userId;
     // Paramètre
     const user = await User.findOne({
       attributes: ["id", "email", "firstName", "lastName", "image", "isAdmin"],
@@ -148,7 +142,7 @@ async function deleteUser(req, res, next) {
   // Supprime l'utilisateur enregistrer dans la base de données
   try {
     //Paramètre
-    await User.destroy({ where: { id: req.params.id } });
+    await User.destroy({ where: { id: req.user.userId } });
     res.status(200).json({ message: "Utilisateur supprimé !" });
   } catch (error) {
     console.log(error);
@@ -167,24 +161,18 @@ async function updatePicture(req, res) {
     });
     //enregistre l'image dans le fichier image
     if (userFind !== null) {
-      if (req.file) {
-        console.log(req.file);
-        //  res.status(201).json({ message: "Image téléchargé avec succés " });
-      } else {
-        // res.status(500).json({ message: "Image non téléchargé" });
-      }
       if (req.file != undefined) {
         imageURL = `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`;
-  
+
         const modifyImage = {
           image: imageURL,
           // image: req.body.image,
         };
         const test = modifyImage;
-        const newPicture = await User.update(test, {
-          where: { id: req.params.id },
+        await User.update(test, {
+          where: { id: req.user.userId },
         });
         return res.status(201).json({ message: "image sauvegarder" });
       } else {
@@ -199,5 +187,3 @@ async function updatePicture(req, res) {
 }
 // Exportation
 export { login, signup, userInfos, deleteUser, updatePicture };
-
-

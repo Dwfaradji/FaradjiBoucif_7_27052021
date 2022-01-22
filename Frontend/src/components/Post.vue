@@ -13,6 +13,7 @@
             type="button"
             data-toggle="dropdown"
             aria-expanded="false"
+            aria-label="Toggle navigation"
           >
             <em class="fa fa-ellipsis-h"></em>
           </button>
@@ -20,64 +21,71 @@
             class="dropdown-menu dropdown-scale dropdown-menu-right"
             role="menu"
           >
-            <!-- <a class="dropdown-item" @click.prevent="deletePost()"
+            <a
+              v-if="post.user_id == userStore"
+              class="dropdown-item"
+              @click.prevent="modifyPost()"
               >Modifier le post</a
-            > -->
+            >
             <a class="dropdown-item" @click.prevent="deletePost()">
               Supprimer le post</a
             >
           </div>
         </div>
-        <div class="row justify-content-around">
-          <div class="col-7 content">
-            <p><strong>Contenue</strong></p>
-            <p>{{ post.title }}</p>
-            <p>{{ post.content }}</p>
+        <div class="row justify-content-around col-xs-12">
+          <div class="col-7 col-xs-12 content">
+            <p><i>Contenue</i></p>
+            <b
+              ><p>{{ post.title }}</p>
+              <p>{{ post.content }}</p></b
+            >
           </div>
         </div>
-        <div class="row justify-content-center">
-          <div class="col-7">
+        <div class="container text-center">
+          <div>
             <!--  affiche les deux premier commentaire =>  /!\ ERROR -->
             <p>{{ post.Comments.content }}</p>
             <button
               v-if="post.Comments.length != 0"
-              @click.prevent="show"
-              class="btn btn-primary comment-button"
+              @click.prevent="toggleComments"
+              class="btn btn-danger comment-button"
             >
               Voir {{ post.Comments.length }} commentaire<span
                 v-if="post.Comments.length >= 2"
                 >s</span
               >
             </button>
-            <article v-if="isDisplay">
+            <article v-if="isDisplay" class="">
               <div
                 v-bind:key="index"
                 v-for="(comment, index) in post.Comments"
-                class="comment p-1"
+                class="comment m-2"
               >
-                <p class="d-flex justify-content-between align-items-center">
-                  <!--  affiche le nom de l'utilisateur du commentaire  =>  /!\ ERROR -->
-                  <span
-                    >écrit par <b>{{ comment.User.firstName }} </b></span
+                <p
+                  class="container d-flex justify-content-between align-items-center"
+                >
+                  <span class=""
+                    >écrit par <b>{{ comment.User.firstName }} </b>
+
+                    le {{ dateFormat(comment.createdAt) }} à
+                    {{ hourFormat(comment.createdAt) }}</span
                   >
-                  le {{ dateFormat(comment.createdAt) }} à
-                  {{ hourFormat(comment.createdAt) }}
                   <button
                     v-if="comment.user_id == userStore || isAdmin"
                     @click.prevent="deleteComment(index)"
-                    class="btn btn-primary button-comment"
+                    class="btn btn-danger button-comment"
                   >
                     <i class="far fa-trash-alt"></i>
                   </button>
                 </p>
                 <p>
-                  {{ comment.content }}
+                  <b> {{ comment.content }}</b>
                 </p>
               </div>
               <button
                 v-if="post.Comments.length"
-                v-on:click="hide"
-                class="btn btn-primary comment-button"
+                v-on:click="toggleComments"
+                class="btn btn-danger comment-button"
               >
                 Cacher le<span v-if="post.Comments.length >= 2">s</span>
                 commentaire<span v-if="post.Comments.length >= 2">s</span>
@@ -85,38 +93,41 @@
             </article>
           </div>
         </div>
+
         <div class="row justify-content-around align-items-center">
           <img
             v-if="user.image"
             :src="user.image"
             alt="image de l'utilisateur"
-            class="rounded-circle m-2 col-xs-1"
+            class="rounded-circle m-2"
           />
+
           <img
             v-else
             src="https://www.icone-png.com/png/54/53787.png"
             alt="..."
             class="rounded-circle m-2 col-1,4"
           />
+
           <input
             type="text"
             v-model="commentaire"
             class="form-control m-3 col-md-6"
             aria-label="Default"
             aria-describedby="inputGroup-sizing-default"
-            id="input_text"
             placeholder="Ecrire un commentaire"
           />
           <div>
             <button
               type="submit"
-              class="btn btn-primary m-2"
+              class="btn btn-danger m-2"
               @click.prevent="sendComment"
             >
               Commenter
             </button>
           </div>
         </div>
+        <div class="text-center text-danger">{{ alert }}</div>
       </form>
     </div>
   </div>
@@ -124,13 +135,9 @@
 
 <script>
 // Recupereration des informations dans le local storage
-import axios from "axios";
-const instance = axios.create({
-  baseURL: "http://localhost:3000/api/",
-});
+import { instance } from "@/store";
 const userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
-// this.userStore = user.userId
 
 // Importation module
 import { mapState } from "vuex";
@@ -154,7 +161,7 @@ export default {
       id_param: this.post.id,
       commentaire: "",
       isDisplay: false,
-      displaycomment: false,
+      alert: "",
     };
   },
   mounted: function () {
@@ -163,20 +170,27 @@ export default {
   },
 
   methods: {
-    show() {
-      return (this.isDisplay = true);
+    modifyPost() {
+      this.$router.push(`/modifypost/${this.id_param}`);
     },
-    hide() {
-      return (this.isDisplay = false);
+    toggleComments() {
+      this.isDisplay = !this.isDisplay;
     },
+
     async sendComment() {
-      await this.$store.dispatch("createComment", {
-        content: this.commentaire,
-        user_id: user.userId,
-        post_id: this.post.id,
-      });
-      // Envois le nouveau commentaire
-      this.$emit("comment-created");
+      if (this.commentaire !== "") {
+        await this.$store.dispatch("createComment", {
+          content: this.commentaire,
+          user_id: user.userId,
+          post_id: this.post.id,
+        });
+        this.commentaire = "";
+        this.alert = "";
+        // Envois le nouveau commentaire
+        this.$emit("comment-created");
+      } else {
+        this.alert = "Veuillez remplir les champs";
+      }
     },
     dateFormat: function (createdDate) {
       const date = new Date(createdDate);
@@ -244,7 +258,8 @@ export default {
 }
 img {
   margin-top: 20px;
-  width: 10%;
+  width: 40px;
+  height: 40px;
 }
 .input-text {
   width: 60%;
@@ -265,19 +280,14 @@ img {
 .button-comment {
   margin: 10px 0 10px 10px;
   padding: 5px 5px;
-  /* border: 2px solid #fd2d01; */
   border-radius: 10px;
-  /* background: #ffd7d7; */
   font-size: 1rem;
   cursor: pointer;
 }
 
 .comment-button {
   margin-left: 10px;
-  /* padding: 5px 30px; */
-  /* border: 2px solid #fd2d01; */
   border-radius: 10px;
-  /* background: #ffd7d7; */
   font-size: 1rem;
   cursor: pointer;
 }
@@ -293,5 +303,4 @@ img {
 .comment-info {
   padding: 0 30px 0 30px;
 }
-
 </style>

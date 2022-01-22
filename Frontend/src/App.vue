@@ -1,12 +1,12 @@
 <template>
-  <div id="app" >
+  <div id="app">
     <Header />
+    <!-- <div id="navbarToggle"></div> -->
     <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
-
 import Header from "./components/Header.vue";
 export default {
   components: {
@@ -20,17 +20,21 @@ export default {
 }
 body {
   background-image: linear-gradient(62deg, #fbab7e 0%, #f7ce68 100%);
-  display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   padding: 32px;
+  min-width: 300px;
 }
 img {
   max-width: 100%;
   border-radius: 8px;
 }
 .card {
+  margin-top: 100px;
+
+  margin-left: auto;
+  margin-right: auto;
   max-width: 100%;
   width: 540px;
   background: white;
@@ -47,7 +51,7 @@ img {
   font-weight: 500;
 }
 .button {
-  background: #2196f3;
+  background: #dc3545;
   color: white;
   border-radius: 8px;
   font-weight: 800;
@@ -66,7 +70,7 @@ img {
 }
 .button:hover {
   cursor: pointer;
-  background: #1976d2;
+  background: #fa011a;
 }
 .button--disabled {
   background: #cecece;

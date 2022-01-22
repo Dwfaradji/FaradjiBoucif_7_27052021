@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import axios from "axios";
-const instance = axios.create({
+// Export axios
+export const instance = axios.create({
   baseURL: "http://localhost:3000/api/",
 });
 
@@ -31,21 +32,6 @@ export default createStore({
       lastName: "",
       image: "",
     },
-    createComment: {
-      id: "",
-      content: "",
-      date: "",
-      user_id: "",
-      post_id: "",
-      firstName: "",
-    },
-    createPost: {
-      id: "",
-      title: "",
-      content: "",
-      date: "",
-      attachment: "",
-    },
   },
   mutations: {
     setStatus: function (state, status) {
@@ -61,25 +47,12 @@ export default createStore({
 
     userInfos: function (state, userInfos) {
       state.userInfos = userInfos;
-      console.log(userInfos,"user infos");
-      
+      console.log(userInfos, "user infos");
     },
 
     logout: function (state) {
       state.user = authUser;
       localStorage.removeItem("user");
-    },
-
-    createComment: function (state, createComment) {
-      instance.defaults.headers.common["Authorization"] =
-        "Bearer " + user.token;
-      state.createComment = createComment;
-      console.log(createComment);
-    },
-
-    createPost: function (state, createPost) {
-      state.user = user;
-      state.createPost = createPost;
     },
   },
   actions: {
@@ -100,11 +73,9 @@ export default createStore({
           });
       });
     },
-
     createAccount: ({ commit }, userInfos) => {
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
-        commit;
         instance
           .post("/auth/signup", userInfos)
           .then(function (response) {
@@ -135,28 +106,11 @@ export default createStore({
         instance
           .post("/comments/", createComment)
           .then(function (response) {
-            commit("createComment", response.data);
+            commit("setStatus", response.data);
             resolve(response);
           })
           .catch(function (error) {
             console.log(error);
-            commit("createComment");
-            reject(error);
-          });
-      });
-    },
-
-    createPost: ({ commit }, createPost) => {
-      return new Promise((resolve, reject) => {
-        instance
-          .post("/posts/post", createPost)
-          .then(function (response) {
-            commit("createPost");
-            resolve(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-            commit("createPost");
             reject(error);
           });
       });

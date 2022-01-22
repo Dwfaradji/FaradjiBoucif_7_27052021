@@ -11,17 +11,15 @@
       @comment-created="loadPosts"
       @post-delete="loadPosts"
       @comment-delete="loadPosts"
+      @post-modify="loadPosts"
     />
   </div>
 </template>
 
-<script >
+<script>
 import CreatePost from "../components/CreatePost.vue";
 import Post from "../components/Post.vue";
-import axios from "axios";
-const instance = axios.create({
-  baseURL: "http://localhost:3000/api/",
-});
+import { instance } from "@/store";
 
 export default {
   name: "Wall",
@@ -47,7 +45,7 @@ export default {
           "Bearer " + user.token;
         const getAllPosts = await instance.get("/posts/allpost");
         this.allPosts = getAllPosts.data;
-        console.log("response API Post", getAllPosts.data);
+        console.log("response API Post", getAllPosts);
       } catch (error) {
         console.log(error);
       }
@@ -59,7 +57,6 @@ export default {
       this.$router.push("/");
       return;
     }
-    // this.$store.dispatch("getUserInfos");
     // Chargement du post dans le dom
     this.loadPosts();
   },

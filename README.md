@@ -1,32 +1,35 @@
-# Project
+# 🔨 Installation
 
-Projet 7 du parcours Web d'Openclassrooms
-Par Faradji boucif
+## Pré requis
 
-## Getting Started
+- Cloner la branche "master" de ce dépôt github
+- Installer Node.js
+- Installer Vue.js
+- Installer MySQL
 
-Les instructions pour lancer le projet sur votre ordinateur local
+### Lancement du Backend et Frontend
 
-### Prerequisites
+Dans le terminal, lancer les commandes suivantes sur chaque dossier :
 
-Pour installer ce projet veuillez vous procurer :
+### Sur le dossier Back :
 
-```
-Node.js
-MySQL
-Vue.js
-```
+Pour installer Node **npm install**
+Pour lancer le serveur **npm start**
 
-### Installing
+### Sur le dossier Front :
 
-1. Clone the repos
-2. Run `npm install`
-3. Configure `config/config.json`
-4. Run `sequelize db:create && sequelize db:migrate`
-5. Import sauvegarde.sql
-6. Enjoy
+Pour installer Node **npm install**
+Pour lancer le serveur **npm run serve**
 
-## Authors
+### Pour tester les fonctionnalités de l'application voir les étapes suivantes :
 
-- **Faradji boucif** - _Initial work_ - [PurpleBooth](https://github.com/Dwfaradji/FaradjiBoucif_7_27052021.git)
+Créez un fichier nommé .env dans le dossier back (Ou utiliser celui déjà installé pour faciliter).
+Insérer directement ces 4 variables d'environnements
 
+DB_HOST = localhost **Ne pas modifier**
+DB_USER = User
+DB_PASS = Password
+DB_TOKEN = Token
+
+Puis créez la base de données avec le fichier CreateDatabase.sql
+Dossier **/Backend/CreateDatabase.sql**

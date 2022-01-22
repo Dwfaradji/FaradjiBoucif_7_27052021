@@ -31,7 +31,7 @@ appli.use((req, res, next) => {
 // Lancement de la base de donnée
 async function runDatabase() {
   try {
-    await database.sync({alter:true});
+    await database.sync({ alter: true }); //Chargement automatique des tables
     console.log("Bienvenue sur le server groupomania.");
     console.log("Syncronisation des tables BD");
   } catch (error) {

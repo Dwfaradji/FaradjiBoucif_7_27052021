@@ -8,52 +8,58 @@ async function createComment(req, res) {
   // Enregistre les informations de la creation de commentaire
   try {
     //Paramètre
-    const comment = await Comment.create({
-      user_id: req.body.user_id,
-      content: req.body.content,
-      post_id: req.body.post_id,
-    });
-    return res.status(201).json({ id: comment, message: "Commentaire créé !" });
+    if (req.body.content !== "") {
+      const comment = await Comment.create({
+        user_id: req.body.user_id,
+        content: req.body.content,
+        post_id: req.body.post_id,
+      });
+      return res
+        .status(201)
+        .json({ id: comment, message: "Commentaire créé !" });
+    } else {
+      res.status(401).json({ error: "il y a pas de commentaire" });
+    }
   } catch (error) {
     console.log(error);
-    res.status(400).json({ error, error: "echec envoi commentaire" });
+    res.status(500).json({ error: "echec envoi commentaire" });
   }
 }
 
-async function getAllComments(req, res) {
-  // Recupére tout les commentaires enregistré dans la base de donnée
-  try {
-    //Paramètre
-    const allComment = await Comment.findAll({
-      include: [
-        {
-          model: User,
-          attributes: ["firstName"],
-        },
-      ],
-    });
-    return res.status(200).json(allComment);
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ error, error: "Commentaire introuvable" });
-  }
-}
+// async function getAllComments(req, res) {
+//   // Recupére tout les commentaires enregistré dans la base de donnée
+//   try {
+//     //Paramètre
+//     const allComment = await Comment.findAll({
+//       include: [
+//         {
+//           model: User,
+//           attributes: ["firstName"],
+//         },
+//       ],
+//     });
+//     return res.status(200).json(allComment);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(400).json({ error, error: "Commentaire introuvable" });
+//   }
+// }
 
-async function getOneComment(req, res) {
-  // Recupére un commentaire enregistré dans la base de donnée
-  try {
-    //Paramètre
-    const comment = await Comment.findOne({
-      where: {
-        id: req.params.id,
-      },
-    });
-    return res.status(200).json(comment);
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({ error, error: "Commentaire introuvable" });
-  }
-}
+// async function getOneComment(req, res) {
+//   // Recupére un commentaire enregistré dans la base de donnée
+//   try {
+//     //Paramètre
+//     const comment = await Comment.findOne({
+//       where: {
+//         id: req.params.id,
+//       },
+//     });
+//     return res.status(200).json(comment);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(400).json({ error, error: "Commentaire introuvable" });
+//   }
+// }
 
 async function deleteComment(req, res) {
   // Recupére un commentaire enregistré dans la base de donnée pour le supprimer
@@ -62,12 +68,13 @@ async function deleteComment(req, res) {
   try {
     //Paramètre
     //Controle Administrateur
-    const adminFind = await User.findOne({
-      attributes: ["id", "email", "isAdmin"],
-      where: { id: idUserStore },
-    });
-    const isAdmin = adminFind.isAdmin;
-    
+    // const adminFind = await User.findOne({
+    //   attributes: ["id", "email", "isAdmin"],
+    //   where: { id: idUserStore },
+    // });
+    // const isAdmin = adminFind.isAdmin;
+    const isAdmin = req.user.isAdmin;
+
     const commentFind = await Comment.findOne({ where: { id: req.params.id } });
     const userFindComment = commentFind.user_id;
 
@@ -77,15 +84,15 @@ async function deleteComment(req, res) {
       });
       res.status(200).json({ message: "Commentaire supprimé !" });
     } else {
-      res
-        .status(400)
-        .send({ message: "Vous n'êtes pas autorisé a supprimez ce Commentaire!" });
+      res.status(403).send({
+        message: "Vous n'êtes pas autorisé a supprimez ce Commentaire!",
+      });
     }
   } catch (error) {
     console.log(error);
-    res.status(400).json({ error, error: "Commentaire nom supprimer" });
+    res.status(500).json({ error: "Commentaire nom supprimer" });
   }
 }
 
 // Exportation
-export { getAllComments, createComment, getOneComment, deleteComment };
+export { createComment, deleteComment };

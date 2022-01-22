@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container-fluid container-xl mb-3 col-ms-12">
+    <div class="container-fluid mb-3 col-ms-12">
       <form class="container cardbox shadow-lg bg-white post" method="post">
         <div>
           <h1 class="col-xs-5">Bonjour {{ user.firstName }}</h1>
@@ -25,7 +25,6 @@
               class="form-control m-2 col-md-12"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
-              id="input_text"
               placeholder="Titre"
             />
             <input
@@ -34,26 +33,30 @@
               class="form-control m-2"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
-              id="input_text"
               placeholder="Quoi de neuf ?"
             />
           </div>
+
           <div>
             <button
               type="submit"
-              class="btn btn-primary m-2"
+              class="btn btn-danger m-2"
               @click.prevent="createPost"
             >
               Publier
             </button>
           </div>
         </div>
+        <transition class="text-center text-danger alert" name="fade">
+          <p v-if="alert">{{ alert }}</p>
+        </transition>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import { instance } from "@/store";
 import { mapState } from "vuex";
 export default {
   name: "Create",
@@ -61,6 +64,8 @@ export default {
     return {
       title: "",
       content: "",
+      alert: null,
+      visible: false,
     };
   },
   computed: {
@@ -74,14 +79,19 @@ export default {
       let userStore = localStorage.getItem("user");
       var user = JSON.parse(userStore);
       const Id = user.userId;
-      await this.$store.dispatch("createPost", {
-        title: this.title,
-        content: this.content,
-        user_id: Id,
-        id: this.id,
-      });
-      // Met a jour les nouveau post
-      this.$emit("post-created");
+      if (this.title !== "" || this.content !== "") {
+        await instance.post("/posts/post", {
+          title: this.title,
+          content: this.content,
+          user_id: Id,
+        });
+        (this.title = ""), (this.content = "");
+        // Met a jour les nouveau post
+        this.$emit("post-created");
+        this.alert = "";
+      } else {
+        this.alert = "Veuillez remplir les champs";
+      }
     },
   },
   mounted() {
@@ -91,6 +101,14 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
 .post {
   border-radius: 10px 10px 10px;
   box-shadow: 30px;

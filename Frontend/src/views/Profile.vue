@@ -6,7 +6,6 @@
       <div class="">
         <div class="col-sm">
           <div class="">
-            <!--  affiche la photo de l'utilisateur  =>  /!\ ERROR  parent-div =boutton imput-->
             <div v-if="user.image" class="media profile">
               <img
                 :src="user.image"
@@ -59,12 +58,8 @@
   </div>
 </template>
 
-<script >
-//@_TODO erreur lang="ts"
-import axios from "axios";
-const instance = axios.create({
-  baseURL: "http://localhost:3000/api/",
-});
+<script>
+import { instance } from "@/store";
 const userStore = localStorage.getItem("user");
 const user = JSON.parse(userStore);
 
@@ -146,6 +141,9 @@ export default {
 </script>
 
 <style scoped>
+body {
+  display: flex;
+}
 .profile {
   display: flex;
   justify-content: center;

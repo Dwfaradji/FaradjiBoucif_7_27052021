@@ -13,7 +13,6 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <router-link class="navbar-brand" to="/">
       <img
         class="w-50 pl-3"
@@ -21,7 +20,6 @@
         alt="Logo Groupomania"
       />
     </router-link>
-
     <div
       v-if="this.$store.state.user.userId !== -1"
       class="collapse navbar-collapse justify-content-start justify-content-md-end"
@@ -32,8 +30,12 @@
           <router-link class="nav-link text-dark" to="/wall">Home</router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link text-dark" aria-label="Profile" to="/profile">
-            <i class="user-icon fas fa-user "></i>
+          <router-link
+            class="nav-link text-dark"
+            aria-label="Profile"
+            to="/profile"
+          >
+            <i class="user-icon fas fa-user"></i>
           </router-link>
         </li>
         <li class="nav-item">
@@ -45,8 +47,8 @@
     </div>
   </nav>
 </template>
-
 <script>
+//Export
 export default {
   props: {
     msg: String,
@@ -60,7 +62,6 @@ export default {
   },
 };
 </script>
-
 <style lang="scss">
 @media only screen and (max-width: 700px) {
   .navbar {
@@ -68,7 +69,6 @@ export default {
     grid-template-columns: 0fr 5fr;
   }
 }
-
 nav {
   position: fixed;
   top: 0;

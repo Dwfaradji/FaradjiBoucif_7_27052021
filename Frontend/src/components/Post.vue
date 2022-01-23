@@ -43,7 +43,6 @@
         </div>
         <div class="container text-center">
           <div>
-            <!--  affiche les deux premier commentaire =>  /!\ ERROR -->
             <p>{{ post.Comments.content }}</p>
             <button
               v-if="post.Comments.length != 0"
@@ -65,9 +64,8 @@
                   class="container d-flex justify-content-between align-items-center"
                 >
                   <span class=""
-                    >écrit par <b>{{ comment.User.firstName }} </b>
-
-                    le {{ dateFormat(comment.createdAt) }} à
+                    >écrit par <b>{{ comment.User.firstName }} </b> le
+                    {{ dateFormat(comment.createdAt) }} à
                     {{ hourFormat(comment.createdAt) }}</span
                   >
                   <button
@@ -93,7 +91,6 @@
             </article>
           </div>
         </div>
-
         <div class="row justify-content-around align-items-center">
           <img
             v-if="user.image"
@@ -101,14 +98,12 @@
             alt="image de l'utilisateur"
             class="rounded-circle m-2"
           />
-
           <img
             v-else
             src="https://www.icone-png.com/png/54/53787.png"
             alt="..."
             class="rounded-circle m-2 col-1,4"
           />
-
           <input
             type="text"
             v-model="commentaire"
@@ -132,15 +127,12 @@
     </div>
   </div>
 </template>
-
 <script>
-// Recupereration des informations dans le local storage
+//Import
 import { instance } from "@/store";
-const userStore = localStorage.getItem("user");
-const user = JSON.parse(userStore);
-
-// Importation module
 import { mapState } from "vuex";
+
+//Export
 export default {
   name: "Post",
   computed: {
@@ -157,7 +149,7 @@ export default {
   data() {
     return {
       isAdmin: true,
-      userStore: "",
+      userStore: this.$store.state.user.userId,
       id_param: this.post.id,
       commentaire: "",
       isDisplay: false,
@@ -165,14 +157,15 @@ export default {
     };
   },
   mounted: function () {
-    this.userStore = user.userId;
-    this.isAdmin = user.isAdmin;
+    this.userStore = this.$store.state.user.userId;
+    this.isAdmin = this.$store.state.user.isAdmin;
+    console.log(this.$store.state.user, "user store");
   },
-
   methods: {
     modifyPost() {
       this.$router.push(`/modifypost/${this.id_param}`);
     },
+
     toggleComments() {
       this.isDisplay = !this.isDisplay;
     },
@@ -181,7 +174,6 @@ export default {
       if (this.commentaire !== "") {
         await this.$store.dispatch("createComment", {
           content: this.commentaire,
-          user_id: user.userId,
           post_id: this.post.id,
         });
         this.commentaire = "";
@@ -192,6 +184,7 @@ export default {
         this.alert = "Veuillez remplir les champs";
       }
     },
+
     dateFormat: function (createdDate) {
       const date = new Date(createdDate);
       const options = {
@@ -201,6 +194,7 @@ export default {
       };
       return date.toLocaleDateString("fr-FR", options);
     },
+
     hourFormat(createdHour) {
       const hour = new Date(createdHour);
       const options = { hour: "numeric", minute: "numeric", second: "numeric" };
@@ -208,10 +202,10 @@ export default {
     },
 
     async deletePost() {
+      const token = this.$store.state.user.token;
       try {
         if (confirm("Voulez-vous vraiment supprimer le post") == true) {
-          instance.defaults.headers.common["Authorization"] =
-            "Bearer " + user.token;
+          instance.defaults.headers.common["Authorization"] = "Bearer " + token;
           await instance.delete(`/posts/${this.id_param}`);
           alert("La suppression du post est bien prise en compte");
           // EMIT DELETE POST
@@ -223,9 +217,9 @@ export default {
     },
 
     async deleteComment(index) {
+      const token = this.$store.state.user.token;
       try {
-        instance.defaults.headers.common["Authorization"] =
-          "Bearer " + user.token;
+        instance.defaults.headers.common["Authorization"] = "Bearer " + token;
         if (confirm("Voulez-vous vraiment supprimer ce commentaire") == true) {
           await instance.delete(
             `/comments/delete/${this.post.Comments[index].id}`
@@ -241,7 +235,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .delete {
   flex-wrap: nowrap;
@@ -284,14 +277,12 @@ img {
   font-size: 1rem;
   cursor: pointer;
 }
-
 .comment-button {
   margin-left: 10px;
   border-radius: 10px;
   font-size: 1rem;
   cursor: pointer;
 }
-
 .comment-content {
   padding: 0 30px 0 30px;
 }

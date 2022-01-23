@@ -59,11 +59,11 @@
 </template>
 
 <script>
+//Import
 import { instance } from "@/store";
-const userStore = localStorage.getItem("user");
-const user = JSON.parse(userStore);
-
 import { mapState } from "vuex";
+
+//Export
 export default {
   name: "Profile",
   data() {
@@ -86,7 +86,6 @@ export default {
       user: "userInfos",
     }),
   },
-
   methods: {
     onFileSelected(event) {
       this.selectedFile = event.target.files[0];
@@ -96,12 +95,13 @@ export default {
         this.previewImage = e.target.result;
       };
     },
+
     onUploadImage() {
       const picture = this.$store.state.user.userId;
+      const token = this.$store.state.user.token;
       const fd = new FormData();
       fd.append("image", this.selectedFile, this.selectedFile.name);
-      instance.defaults.headers.common["Authorization"] =
-        "Bearer " + user.token;
+      instance.defaults.headers.common["Authorization"] = "Bearer " + token;
       // Envoi des données sur l'url du serveur (mettez la votre) en POST en envoyant le formData contenant notre image
       instance.post(`/auth/photo/${picture}`, fd).then((res) => {
         console.log(res, "image ");
@@ -123,9 +123,10 @@ export default {
     async deleteUser() {
       try {
         const Id = this.$store.state.user.userId;
+        const token = this.$store.state.user.token;
+        console.log(token, "Token");
         if (confirm("Voulez-vous vraiment supprimer cet utilisateur") == true) {
-          instance.defaults.headers.common["Authorization"] =
-            "Bearer " + user.token;
+          instance.defaults.headers.common["Authorization"] = "Bearer " + token;
           await instance.delete(`/auth/${Id}`);
           alert("La suppression de l'utilisateur a bien été pris en compte");
           localStorage.removeItem("user");
@@ -139,7 +140,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 body {
   display: flex;
@@ -156,7 +156,6 @@ img {
   position: relative;
   overflow: hidden;
 }
-
 .parent-div input[type="file"] {
   left: 0;
   top: 0;
@@ -164,7 +163,6 @@ img {
   position: absolute;
   font-size: 90px;
 }
-
 .btn-upload {
   background-color: rgb(241, 133, 133);
   border: 3px solid #000;

@@ -10,12 +10,11 @@ const auth = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.DB_TOKEN);
     //Récupère le userId
     req.user = decodedToken;
-    
     next();
   } catch (error) {
     console.log(error);
     res.status(401).json({ error: "Requête non authentifiée" });
   }
 };
-
+//Export
 export { auth };

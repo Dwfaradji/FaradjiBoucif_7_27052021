@@ -1,5 +1,7 @@
+//Import
 import { createStore } from "vuex";
 import axios from "axios";
+
 // Export axios
 export const instance = axios.create({
   baseURL: "http://localhost:3000/api/",
@@ -19,12 +21,11 @@ if (!userStore) {
     user = authUser;
   }
 }
-
+//Export
 export default createStore({
   state: {
     status: "",
     user: user,
-
     userInfos: {
       id: "",
       email: "",
@@ -73,12 +74,15 @@ export default createStore({
           });
       });
     },
+
     createAccount: ({ commit }, userInfos) => {
       commit("setStatus", "loading");
       return new Promise((resolve, reject) => {
         instance
           .post("/auth/signup", userInfos)
           .then(function (response) {
+            instance.defaults.headers.common["Authorization"] =
+              "Bearer " + user.token;
             commit("setStatus", "created");
             resolve(response);
           })
@@ -97,7 +101,7 @@ export default createStore({
           commit("userInfos", response.data);
         })
         .catch((error) => {
-          console.log(error); //affiche pas le message 'normalement' envoyé par le back
+          console.log(error);
         });
     },
 

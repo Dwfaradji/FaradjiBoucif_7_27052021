@@ -70,10 +70,11 @@
     </div>
   </div>
 </template>
-
 <script>
+// Import
 import { mapState } from "vuex";
 
+//Export
 export default {
   name: "Login",
   data: function () {
@@ -137,7 +138,6 @@ export default {
       }
     },
 
-
     async createAccount() {
       const self = this;
       try {
@@ -156,7 +156,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .form-row {
   display: flex;

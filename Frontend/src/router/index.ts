@@ -1,10 +1,11 @@
+//Import
 import { createRouter, createWebHistory } from "vue-router";
-
 import Login from "../views/Login.vue";
 import Wall from "../views/Wall.vue";
 import Profile from "../views/Profile.vue";
 import Modifypost from "../views/ModifyPost.vue";
 
+//Routes
 const routes = [
   {
     path: "/",
@@ -47,5 +48,5 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
-
+//Export
 export default router;

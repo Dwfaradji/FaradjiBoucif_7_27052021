@@ -36,7 +36,6 @@
               placeholder="Quoi de neuf ?"
             />
           </div>
-
           <div>
             <button
               type="submit"
@@ -54,10 +53,12 @@
     </div>
   </div>
 </template>
-
 <script>
+//Import
 import { instance } from "@/store";
 import { mapState } from "vuex";
+
+//Export
 export default {
   name: "Create",
   data() {
@@ -76,9 +77,7 @@ export default {
 
   methods: {
     async createPost() {
-      let userStore = localStorage.getItem("user");
-      var user = JSON.parse(userStore);
-      const Id = user.userId;
+      const Id = this.$store.state.user.userId;
       if (this.title !== "" || this.content !== "") {
         await instance.post("/posts/post", {
           title: this.title,
@@ -99,7 +98,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {

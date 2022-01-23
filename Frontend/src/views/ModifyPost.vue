@@ -36,7 +36,6 @@
             Modifier le post
           </button>
         </div>
-
         <div class="button lien">
           <router-link :to="`/wall/`" class="lien">Retour au post</router-link>
         </div>
@@ -44,10 +43,12 @@
     </section>
   </div>
 </template>
-
 <script>
+// Import
 import HeaderProfile from "../components/Header.vue";
 import { instance } from "@/store";
+
+//Export 
 export default {
   name: "modifypost",
   components: {
@@ -63,26 +64,25 @@ export default {
     };
   },
   methods: {
+
     async modifyPost() {
       const modify = this.post;
-      console.log(modify, "modify");
       try {
-        if (confirm("Voulez-vous vraiment modifier ce post") == true) {
-          const test = await instance.put(`posts/${this.id_param}`, modify);
-
-          console.log(test, "modify api");
-          alert("Votre modification est bien prise en compte");
-          this.$emit("post-modify");
-          this.$router.push(`/wall`);
+        if (this.post.title !== "" || this.post.content !== "") {
+          if (confirm("Voulez-vous vraiment modifier ce post") == true) {
+            await instance.put(`posts/${this.id_param}`, modify);
+            alert("Votre modification est bien prise en compte");
+            this.$emit("post-modify");
+            this.$router.push(`/wall`);
+          }
         }
       } catch (error) {
-        alert("Vous ne pouvez pas supprimez ce commentaire");
+        alert("Vous ne pouvez pas modifier ce commentaire");
       }
     },
   },
 };
 </script>
-
 <style scoped>
 .container-box {
   border-radius: 15px 15px 15px;
@@ -94,11 +94,9 @@ h1 {
   border-radius: 20px;
   color: #ffffff;
 }
-
 label {
   font-size: 1.3rem;
 }
-
 ul {
   display: flex;
   flex-direction: column;
@@ -106,26 +104,22 @@ ul {
   list-style: none;
   padding: 0px;
 }
-
 li {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
 }
-
 input {
   border-radius: 15px 15px 15px;
   height: 30px;
   font-size: 1.5rem;
 }
-
 textarea {
   border-radius: 15px 15px 15px;
   font-size: 1.3rem;
   height: 120px;
 }
-
 .button {
   width: 60%;
   margin-left: auto;
@@ -136,7 +130,6 @@ textarea {
   font-size: 1rem;
   cursor: pointer;
 }
-
 .lien {
   text-decoration: none;
   color: #ffffff;

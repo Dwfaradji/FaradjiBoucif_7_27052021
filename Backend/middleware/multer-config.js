@@ -10,7 +10,6 @@ const mineTypes = {
 // Déclaration de storage qui permet de sauvegarder les images
 // // en leur indiquant la destination, et en changeant le nom
 // // de l'image ainsi que l'extension
-
 const storage = multerFile.diskStorage({
   // Paramètre
   destination: (req, file, callback) => {
@@ -26,7 +25,7 @@ const storage = multerFile.diskStorage({
     }
   },
 });
-
 const multer = multerFile({ storage: storage }).single("image");
 
+//Export
 export { multer };

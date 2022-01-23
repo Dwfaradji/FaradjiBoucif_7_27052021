@@ -17,10 +17,12 @@
 </template>
 
 <script>
+//Import
 import CreatePost from "../components/CreatePost.vue";
 import Post from "../components/Post.vue";
 import { instance } from "@/store";
 
+//Export
 export default {
   name: "Wall",
   components: {
@@ -51,7 +53,6 @@ export default {
       }
     },
   },
-
   mounted: function () {
     if (this.$store.state.user.userId == -1) {
       this.$router.push("/");
@@ -62,7 +63,6 @@ export default {
   },
 };
 </script>
-
 <style lang="scss">
 .wall {
   min-height: 100%;

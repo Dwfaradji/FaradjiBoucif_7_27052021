@@ -21,7 +21,7 @@ schemaPassword
   .digits(1);
 
 // Routes
-async function signup(req, res, next) {
+async function signup(req, res) {
   // Enregistre les informations de l'utilisateur dans la base de données
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
@@ -71,7 +71,7 @@ async function signup(req, res, next) {
           lastName: req.body.lastName,
           email: req.body.email,
           password: criptPasseword,
-          isAdmin: 0,
+          isAdmin: true,
         });
         res
           .status(201)
@@ -86,8 +86,7 @@ async function signup(req, res, next) {
   }
 }
 
-//========== script pour le login =============//
-
+//Routes
 async function login(req, res) {
   // Récupération les informations de l'utilisateur enregistré dans la base de données
   let userEmail = req.body.email;
@@ -119,7 +118,7 @@ async function login(req, res) {
     res.status(500).json({ error, error: "erreur identification" });
   }
 }
-
+//Routes
 async function userInfos(req, res) {
   // Récupère les informations de l'utilisateur  aprés identification
   try {
@@ -138,18 +137,21 @@ async function userInfos(req, res) {
     res.status(500).json({ error, erreur: "erreur serveur infos user" });
   }
 }
-async function deleteUser(req, res, next) {
+//Routes
+async function deleteUser(req, res) {
   // Supprime l'utilisateur enregistrer dans la base de données
   try {
     //Paramètre
-    await User.destroy({ where: { id: req.user.userId } });
-    res.status(200).json({ message: "Utilisateur supprimé !" });
+    if (req.user.userId) {
+      await User.destroy({ where: { id: req.user.userId } });
+      res.status(200).json({ message: "Utilisateur supprimé !" });
+    }
   } catch (error) {
     console.log(error);
     res.status(400).json({ error, error: "erreur suppression Utilisateur" });
   }
 }
-
+// Routes
 async function updatePicture(req, res) {
   // Enregistre l'image choisi par l'utilisateur dans la base de données
   let imageURL;
@@ -165,19 +167,15 @@ async function updatePicture(req, res) {
         imageURL = `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`;
-
         const modifyImage = {
           image: imageURL,
-          // image: req.body.image,
         };
-        const test = modifyImage;
-        await User.update(test, {
+        await User.update(modifyImage, {
           where: { id: req.user.userId },
         });
         return res.status(201).json({ message: "image sauvegarder" });
       } else {
         imageURL == null;
-        // res.status(401).json({ message: "Error image BD" });
       }
     }
   } catch (error) {

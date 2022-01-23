@@ -2,17 +2,16 @@
 import { Post } from "../models/post.js";
 import { User } from "../models/user.js";
 import { Comment } from "../models/comment.js";
-import jwt from "../utils/jwt.js";
 
 // Routes
 async function createPost(req, res) {
   // Enregistre les informations de la creation d'un post
   try {
-    if (req.body.title !== "" || req.body.content !== "") {
+    if (req.body.title !== "" && req.body.content !== "") {
       const post = await Post.create({
         title: req.body.title,
         content: req.body.content,
-        user_id: req.body.user_id,
+        user_id: req.user.userId,
       });
       return res.status(201).json({ post, message: "Post créé !" });
     } else {
@@ -24,7 +23,7 @@ async function createPost(req, res) {
     console.log(error);
   }
 }
-
+// Routes
 async function getAllPosts(req, res) {
   // Recupération de tout les posts enregistrer dans la base de données
   try {
@@ -50,8 +49,8 @@ async function getAllPosts(req, res) {
     console.log(error);
   }
 }
-
-async function deletePost(req, res, next) {
+// Routes
+async function deletePost(req, res) {
   // Supprime le post enregistrer dans la base de données
   let idUserStore = req.user.userId;
   const userIdPost = req.params.id;
@@ -63,11 +62,6 @@ async function deletePost(req, res, next) {
     });
     const userFindPost = postFind.user_id;
     //Cherche si admin ou pas
-    // const adminFind = await User.findOne({
-    //   attributes: ["id", "email", "isAdmin"],
-    //   where: { id: idUserStore },
-    // });
-    // const isAdmin = adminFind.isAdmin;
     const isAdmin = req.user.isAdmin;
     if (isAdmin == true || idUserStore == userFindPost) {
       await Post.destroy({
@@ -84,16 +78,20 @@ async function deletePost(req, res, next) {
     res.status(400).json({ error, error: "erreur suppression post" });
   }
 }
- async function modifyPost(req, res, next)  {
+// Routes
+async function modifyPost(req, res) {
   const modifyPost = {
-      title: req.body.title,
-      content: req.body.content,
+    title: req.body.title,
+    content: req.body.content,
   };
-
-  Post.update(modifyPost , { where: { id: req.params.id } })
-
-      .then(() => res.status(200).json({message : 'Post modifié !'}))
-      .catch( error => res.status(400).json({error})); 
-};
+  try {
+    if (req.user.userId) {
+      await Post.update(modifyPost, { where: { id: req.params.id } });
+      res.status(200).json({ message: "Post modifié !" });
+    }
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+}
 // Exportation
-export { createPost, getAllPosts, deletePost,modifyPost };
+export { createPost, getAllPosts, deletePost, modifyPost };

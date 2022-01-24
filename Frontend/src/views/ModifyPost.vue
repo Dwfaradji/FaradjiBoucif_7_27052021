@@ -48,7 +48,7 @@
 import HeaderProfile from "../components/Header.vue";
 import { instance } from "@/store";
 
-//Export 
+//Export
 export default {
   name: "modifypost",
   components: {
@@ -64,10 +64,9 @@ export default {
     };
   },
   methods: {
-
     async modifyPost() {
-      const modify = this.post;
-      try {
+    const modify = this.post;
+        try {
         if (this.post.title !== "" || this.post.content !== "") {
           if (confirm("Voulez-vous vraiment modifier ce post") == true) {
             await instance.put(`posts/${this.id_param}`, modify);

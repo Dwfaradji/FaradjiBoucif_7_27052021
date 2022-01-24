@@ -47,7 +47,6 @@ export default {
           "Bearer " + user.token;
         const getAllPosts = await instance.get("/posts/allpost");
         this.allPosts = getAllPosts.data;
-        console.log("response API Post", getAllPosts);
       } catch (error) {
         console.log(error);
       }

@@ -80,13 +80,14 @@ async function deletePost(req, res) {
 }
 // Routes
 async function modifyPost(req, res) {
+
   const modifyPost = {
     title: req.body.title,
     content: req.body.content,
   };
   try {
     if (req.user.userId) {
-      await Post.update(modifyPost, { where: { id: req.params.id } });
+    await Post.update(modifyPost, { where: { id: req.params.id } });
       res.status(200).json({ message: "Post modifié !" });
     }
   } catch (error) {

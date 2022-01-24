@@ -159,7 +159,6 @@ export default {
   mounted: function () {
     this.userStore = this.$store.state.user.userId;
     this.isAdmin = this.$store.state.user.isAdmin;
-    console.log(this.$store.state.user, "user store");
   },
   methods: {
     modifyPost() {

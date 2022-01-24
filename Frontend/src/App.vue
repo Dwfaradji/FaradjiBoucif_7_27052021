@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <Header />
-    <!-- <div id="navbarToggle"></div> -->
     <router-view></router-view>
   </div>
 </template>

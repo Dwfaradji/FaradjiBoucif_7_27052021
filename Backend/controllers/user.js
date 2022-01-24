@@ -71,7 +71,7 @@ async function signup(req, res) {
           lastName: req.body.lastName,
           email: req.body.email,
           password: criptPasseword,
-          isAdmin: true,
+          isAdmin: 0,
         });
         res
           .status(201)

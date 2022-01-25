@@ -17,10 +17,7 @@
           >
             <em class="fa fa-ellipsis-h"></em>
           </button>
-          <div
-            class="dropdown-menu dropdown-scale dropdown-menu-right"
-            role="menu"
-          >
+          <div class="dropdown-menu dropdown-scale dropdown-menu-right">
             <a
               v-if="post.user_id == userStore"
               class="dropdown-item"
@@ -108,8 +105,7 @@
             type="text"
             v-model="commentaire"
             class="form-control m-3 col-md-6"
-            aria-label="Default"
-            aria-describedby="inputGroup-sizing-default"
+            aria-label="commenter"
             placeholder="Ecrire un commentaire"
           />
           <div>

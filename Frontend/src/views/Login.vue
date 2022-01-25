@@ -14,6 +14,7 @@
     </p>
     <div class="form-row">
       <input
+        aria-label="email"
         v-model="email"
         class="form-row__input"
         type="text"
@@ -22,12 +23,14 @@
     </div>
     <div class="form-row" v-if="mode == 'create'">
       <input
+        aria-label="prenon"
         v-model="firstName"
         class="form-row__input"
         type="text"
         placeholder="Prénom"
       />
       <input
+        aria-label="nom"
         v-model="lastName"
         class="form-row__input"
         type="text"
@@ -36,6 +39,7 @@
     </div>
     <div class="form-row">
       <input
+        aria-label="mot de passe"
         v-model="password"
         class="form-row__input"
         type="password"

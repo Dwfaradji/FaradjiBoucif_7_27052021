@@ -61,8 +61,8 @@ img {
   transition: 0.4s background-color;
 }
 .card__action {
-  color: #2196f3;
-  text-decoration: underline;
+  color: #7a000c;
+  text-decoration: none;
 }
 .card__action:hover {
   cursor: pointer;

@@ -28,8 +28,8 @@
             >
               Télécharger
             </button>
-
             <input
+              aria-label="choisir une image"
               style="display: none"
               ref="fileInput"
               name="inputFile"

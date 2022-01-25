@@ -23,16 +23,14 @@
               type="text"
               v-model="title"
               class="form-control m-2 col-md-12"
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
+              aria-label="title"
               placeholder="Titre"
             />
             <input
               type="text"
               v-model="content"
               class="form-control m-2"
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
+              aria-label="contenue"
               placeholder="Quoi de neuf ?"
             />
           </div>
